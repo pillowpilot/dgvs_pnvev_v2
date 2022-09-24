@@ -1,0 +1,84 @@
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    --dominant-color: #FFFDD0;
+    --texture-color: #0e3570;
+    --accent-color: #7500C4;
+}
+
+main>.article-wrapper {
+    flex-grow: 1;
+    padding: 0 15%;
+    background-color: var(--dominant-color);
+}
+
+main>.article-wrapper:first-child {
+    padding-top: 20px;
+}
+
+main article {
+    background-color: var(--texture-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+}
+
+main article>header {
+    padding: 15px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5em;
+    color: rgb(255, 255, 255);
+}
+
+main article>footer {
+    display: flex;
+    justify-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+}
+
+main article .filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 85px;
+    background-color: var(--dominant-color);
+    border-radius: 10px;
+}
+
+main article .filters .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    min-width: 170px;
+    background-color: var(--accent-color);
+    border-radius: 7px;
+    padding: 0.3rem;
+}
+
+.filter > span {
+    font-size: 0.75rem;
+}
+
+.filters .filter > select {
+    border: none;
+    
+}
+
+main article .graphics {
+    height: 400px;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+}
+
+main article .map-graphics {
+    aspect-ratio: 1 / 1;
+    height: calc(100vh - 100px);
+    border-radius: 10px;
+}
