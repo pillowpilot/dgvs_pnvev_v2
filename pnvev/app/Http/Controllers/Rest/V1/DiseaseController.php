@@ -57,6 +57,25 @@ class DiseaseController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithAgeGroups($id)
+    {
+        $model = \App\Disease::find($id);
+        if ($model) {
+            $model->ageGroups;
+            return response()->json($model->ageGroups);
+        }
+        else
+        {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
