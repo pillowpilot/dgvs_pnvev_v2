@@ -12,4 +12,9 @@ class Disease extends Model
     {
         return $this->belongsToMany('App\AgeGroup', 'pnvev_disease_age_groups', 'disease_id', 'age_group_id');
     }
+
+    public function cases()
+    {
+        return $this->hasMany('App\Caso', 'EnfermedadId');
+    }
 }

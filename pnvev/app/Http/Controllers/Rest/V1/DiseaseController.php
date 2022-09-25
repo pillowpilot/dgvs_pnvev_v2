@@ -66,8 +66,25 @@ class DiseaseController extends Controller
     {
         $model = \App\Disease::find($id);
         if ($model) {
-            $model->ageGroups;
             return response()->json($model->ageGroups);
+        }
+        else
+        {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithYears($id)
+    {
+        $model = \App\Disease::find($id);
+        if ($model) {
+            return response()->json($model->cases()->select('Year')->distinct()->get());
         }
         else
         {

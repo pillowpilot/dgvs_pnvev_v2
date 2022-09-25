@@ -40,4 +40,5 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/diseases', 'Rest\V1\DiseaseController@index');
     Route::get('/diseases/{id}', 'Rest\V1\DiseaseController@show');
     Route::get('/diseases/{id}/ageGroups', 'Rest\V1\DiseaseController@showWithAgeGroups');
+    Route::get('/diseases/{id}/years', 'Rest\V1\DiseaseController@showWithYears');
 });

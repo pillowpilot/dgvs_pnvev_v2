@@ -19,6 +19,11 @@ class CreateCasosTable extends Migration
                     WHEN ff.TipoFicha = 'CUTANEA' THEN 'LEISHMANIASIS CUTANEA'
                     WHEN ff.TipoFicha = 'MUCOSA' THEN 'LEISHMANIASIS MUCOSA'
                 END AS TipoEnfermedad,
+                CASE 
+                    WHEN ff.TipoFicha = 'VICERALH' THEN 3
+                    WHEN ff.TipoFicha = 'CUTANEA' THEN 2
+                    WHEN ff.TipoFicha = 'MUCOSA' THEN 1
+                END AS EnfermedadId,
                 ff.TipoEntrada AS TipoCaso,
                 ff.ClasificacionFinal, ff.Sexo, ff.Edad, 
                 CASE 
