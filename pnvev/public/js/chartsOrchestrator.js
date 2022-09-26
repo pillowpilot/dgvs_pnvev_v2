@@ -4,7 +4,7 @@ import { chartGenerator as horizontalBarChartGenerator } from './charts/horizont
 const initializeSelect = (selectName, filterName, fieldName, placeholderText) => {
     $(`select[name="${selectName}"]`).select2({
         ajax: {
-            url: `/api/v1/values/${filterName}`,
+            url: `${ROOT_URL}/api/v1/values/${filterName}`,
             delay: 250,
             cache: true,
             dataType: 'json',
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $(`select[name="horizontalBar-year"]`).select2({
         ajax: {
-            url: `/api/v1/diseases/${DISEASE_ID}/years`,
+            url: `${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`,
             dataType: 'json',
             processResults: (data, page) => {
 
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         GETParams.append('groupBy[]', 'Sexo');
         GETParams.append('groupBy[]', 'GrupoEtareo');
 
-        fetch('/api/v1/tendencies?' + GETParams)
+        fetch(`${ROOT_URL}/api/v1/tendencies?` + GETParams)
             .then(res => res.json())
             .then(data => {
                 console.log(data);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
         GETParams.append('groupBy[]', 'SemanaEpidemiologica');
 
 
-        fetch('/api/v1/tendencies?' + GETParams)
+        fetch(`${ROOT_URL}/api/v1/tendencies?` + GETParams)
             .then(res => res.json())
             .then(data => {
                 const groupedData =
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    fetch('/api/v1/tendencies?')
+    fetch(`${ROOT_URL}/api/v1/tendencies?`)
         .then(res => res.json())
         .then(data => {
             // console.log('Here!');
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ['py-it', 26], ['py-as', 27]
     ];
 
-    fetch('/data/py-all.topo.json')
+    fetch(DATA_PY_TOPO_JSON_URL)
         .then(res => res.json())
         .then(geojson => {
             Highcharts.mapChart('map', {

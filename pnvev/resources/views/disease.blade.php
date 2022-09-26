@@ -9,6 +9,8 @@
     const DISEASE_ID = {{ $diseaseId }};
     const DISEASEFULLNAME = '{{ $diseaseFullName }}';
     const DISEASETITLE = DISEASEFULLNAME;
+    const ROOT_URL = '{{ route('home') }}';
+    const DATA_PY_TOPO_JSON_URL = "{{ asset('data/py-all.topo.json') }}";
     const tendenciaDataURL = '';
     const barHorizontalDataURL = '';
 </script>
