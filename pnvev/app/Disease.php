@@ -17,4 +17,9 @@ class Disease extends Model
     {
         return $this->hasMany('App\Caso', 'EnfermedadId');
     }
+
+    public function scopeOrphan($query)
+    {
+        return $query->whereNull('family');
+    }
 }

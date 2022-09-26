@@ -10,6 +10,10 @@ export const chartYTitleStyle = {
     color: 'black',
 };
 
+export const chartXTitleStyle = {
+    color: 'black',
+};
+
 export const chartXLabelStyle = {
     color: 'black',
 };

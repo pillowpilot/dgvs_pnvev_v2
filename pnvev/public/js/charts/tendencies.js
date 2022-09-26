@@ -1,4 +1,4 @@
-import { epiweeks, chartTitleStyle, chartCaptionStyle, chartYTitleStyle, chartXLabelStyle } from '../utils.js';
+import { epiweeks, chartTitleStyle, chartCaptionStyle, chartYTitleStyle, chartXTitleStyle, chartXLabelStyle } from '../utils.js';
 
 const chartGenerator = (chartContainerId, diseaseTitle) => {
     return Highcharts.chart(chartContainerId, {
@@ -11,7 +11,8 @@ const chartGenerator = (chartContainerId, diseaseTitle) => {
         },
         xAxis: {
             title: {
-                text: 'Semanas Epidemiológicas'
+                text: 'Semanas Epidemiológicas',
+                style: chartXTitleStyle,
             },
             categories: epiweeks,
             labels: {

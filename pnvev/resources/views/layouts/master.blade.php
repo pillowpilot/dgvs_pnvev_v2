@@ -13,10 +13,11 @@
     @show
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <title>PNVEV</title>
+    <!-- <base href="http://somestuff.com/subdir1/"> -->
 </head>
 
 <body>
-    @include('layouts.header', ['active' => $active, 'activemenu' => isset($activemenu)? $activemenu : ''])
+    @include('layouts.header', ['orphanDiseases' => $orphanDiseases, 'diseaseFamilies' => $diseaseFamilies])
 
     @section('main')
     @show

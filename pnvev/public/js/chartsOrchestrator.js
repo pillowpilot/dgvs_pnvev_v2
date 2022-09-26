@@ -1,8 +1,5 @@
-import { chartTitleStyle, chartCaptionStyle, chartYTitleStyle, chartXLabelStyle } from './utils.js';
 import { chartGenerator as tendenciesChartGenerator } from './charts/tendencies.js';
 import { chartGenerator as horizontalBarChartGenerator } from './charts/horizontalBars.js';
-
-// console.log(Highcharts.getOptions().lang);
 
 const initializeSelect = (selectName, filterName, fieldName, placeholderText) => {
     $(`select[name="${selectName}"]`).select2({
@@ -26,8 +23,18 @@ const initializeSelect = (selectName, filterName, fieldName, placeholderText) =>
 document.addEventListener('DOMContentLoaded', function () {
     const horizontalChartContainerId = 'barHorizontal';
 
-    initializeSelect('horizontalBar-year', 'Year', 'Year', 'Año Inicial');
-    // initializeSelect('horizontalBar-finalYear', 'Year', 'Year', 'Año Final');
+    $(`select[name="horizontalBar-year"]`).select2({
+        ajax: {
+            url: `/api/v1/diseases/${DISEASE_ID}/years`,
+            dataType: 'json',
+            processResults: (data, page) => {
+
+                const results = data.map((o, i) => ({ id: i, text: o['Year'] }));
+                return { results: results };
+            }
+        },
+        placeholder: 'Año',
+    });
 
     const horizontalChart = horizontalBarChartGenerator(horizontalChartContainerId, DISEASETITLE);
 

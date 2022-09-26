@@ -5,4 +5,5 @@
 @stop
 
 @section('main')
+<main></main>
 @stop

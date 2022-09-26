@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => '/disease'], function () {
     
@@ -19,17 +19,21 @@ Route::group(['prefix' => '/disease'], function () {
         Route::get('/{subDiseaseParam}', 'LeishmaniasisController@index')->where('subDiseaseParam', 'mucosa|cutanea|visceral');
     });
     
-    Route::group(['prefix' => '/chagas'], function () {
-        Route::get('/{subDiseaseParam}', 'ChagasController@index')->where('subDiseaseParam', 'agudo|cronico|congenito');
-    });
-
+    // Route::group(['prefix' => '/chagas'], function () {
+    //     Route::get('/{subDiseaseParam}', 'ChagasController@index')->where('subDiseaseParam', 'agudo|cronico|congenito');
+    // });
+    
     Route::get('/{diseaseParam}', 'DiseaseController@index');
+});
+
+Route::group(['prefix' => '/v2'], function () {
+    Route::get('/{id}', 'DiseaseV2Controller@show')->name('disease.show');
 });
 
 Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/values/{filterName}', 'Rest\V1\FilterPossibleValuesController@index')->where('filterName', 'GrupoEtareo|Sexo|Year');
     Route::get('tendencies', 'Rest\V1\TendenciesController@index');
-    Route::get('horizontalBars', 'Rest\V1\HorizontalBarsController@index');
+    // Route::get('horizontalBars', 'Rest\V1\HorizontalBarsController@index');
     
     Route::get('/genders', 'Rest\V1\GenderController@index');
     Route::get('/genders/{id}', 'Rest\V1\GenderController@show');

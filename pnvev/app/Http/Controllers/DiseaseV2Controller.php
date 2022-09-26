@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class DiseaseV2Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,14 +16,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $orphanDiseases = \App\Disease::orphan()->get();
-        $diseaseFamilies = \App\DiseaseFamily::all();
-
-        return view('home', [
-                'activeId' => 0,
-                'orphanDiseases' => $orphanDiseases,
-                'diseaseFamilies' => $diseaseFamilies
-            ]);
+        //
     }
 
     /**
@@ -55,7 +48,29 @@ class HomeController extends Controller
      */
     public function show($id)
     {
-        //
+        $orphanDiseases = \App\Disease::orphan()->get();
+        $diseaseFamilies = \App\DiseaseFamily::all();
+        // $diseaseFamilies = [];
+        // foreach (\App\DiseaseFamily::all() as $diseaseFamily) {
+        //     $diseaseFamilies[] = $diseaseFamily->diseases()->get();
+        // }
+        // $diseaseFamilies = \App\DiseaseFamily::all()->diseases()->get();
+
+        // return response()->json($diseaseFamilies);
+
+        $model = \App\Disease::find($id);
+        if ($model) {
+            return view('disease', [
+                'activeId' => $id,
+                'orphanDiseases' => $orphanDiseases,
+                'diseaseFamilies' => $diseaseFamilies,
+
+                // 'active' => 'leishmaniasis-cutanea', 
+                'diseaseFullName' => $model->name,
+                'diseaseId' => $id]);
+        } else {
+            abort(404); // TODO Remove this line and replace with a 404 page
+        }
     }
 
     /**

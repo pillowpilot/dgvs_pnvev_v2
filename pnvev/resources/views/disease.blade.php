@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['orphanDiseases' => $orphanDiseases, 'diseaseFamilies' => $diseaseFamilies])
 
 @section('stylesheets')
 <link rel="stylesheet" href="{{ asset('css/disease-content.css') }}">
@@ -6,6 +6,7 @@
 
 @section('scripts')
 <script>
+    const DISEASE_ID = {{ $diseaseId }};
     const DISEASEFULLNAME = '{{ $diseaseFullName }}';
     const DISEASETITLE = DISEASEFULLNAME;
     const tendenciaDataURL = '';
@@ -29,7 +30,7 @@
 <main>
     <div class="article-wrapper">
         <article class="canal-endemico">
-            <header>Gráfico de tendencia en el tiempo por S.E.</header>
+            <header>Gráfico de tendencia en el tiempo por Semana Epidemiológica</header>
             <section class="filters">
                 <div class="filter">
                     <select name="tendencias-initialYear">
@@ -52,7 +53,7 @@
     </div>
     <div class="article-wrapper">
         <article class="tendencias">
-            <header>Barras Horizontales (apiladas) distribución por rango de edad y sexo</header>
+            <header>Gráfico de distribución anual por Rango de Edad y Sexo</header>
             <section class="filters">
                 <div class="filter">
                     <select name="horizontalBar-year">
@@ -71,7 +72,7 @@
     </div>
     <div class="article-wrapper">
         <article class="casos">
-            <header>Titulo de Articulo</header>
+            <header>Mapa de Calor</header>
             <section class="filters"></section>
             <section id="map" class="map-graphics"></section>
             <footer>
