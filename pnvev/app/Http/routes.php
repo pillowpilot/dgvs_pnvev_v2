@@ -32,7 +32,6 @@ Route::group(['prefix' => '/v2'], function () {
 
 Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/values/{filterName}', 'Rest\V1\FilterPossibleValuesController@index')->where('filterName', 'GrupoEtareo|Sexo|Year');
-    Route::get('tendencies', 'Rest\V1\TendenciesController@index');
     // Route::get('horizontalBars', 'Rest\V1\HorizontalBarsController@index');
     
     Route::get('/genders', 'Rest\V1\GenderController@index');
@@ -45,4 +44,5 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/diseases/{id}', 'Rest\V1\DiseaseController@show');
     Route::get('/diseases/{id}/ageGroups', 'Rest\V1\DiseaseController@showWithAgeGroups');
     Route::get('/diseases/{id}/years', 'Rest\V1\DiseaseController@showWithYears');
+    Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
 });

@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         GETParams.append('groupBy[]', 'Sexo');
         GETParams.append('groupBy[]', 'GrupoEtareo');
 
-        fetch(`${ROOT_URL}/api/v1/tendencies?` + GETParams)
+        fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams)
             .then(res => res.json())
             .then(data => {
                 console.log(data);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
         GETParams.append('groupBy[]', 'SemanaEpidemiologica');
 
 
-        fetch(`${ROOT_URL}/api/v1/tendencies?` + GETParams)
+        fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams)
             .then(res => res.json())
             .then(data => {
                 const groupedData =
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    fetch(`${ROOT_URL}/api/v1/tendencies?`)
+    fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?`)
         .then(res => res.json())
         .then(data => {
             // console.log('Here!');

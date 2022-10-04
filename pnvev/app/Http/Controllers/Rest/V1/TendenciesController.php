@@ -11,9 +11,9 @@ use App\Caso;
 
 class TendenciesController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $id)
     {
-        $diseaseName = $request->input('TipoEnfermedad'); // Required
+        // $diseaseName = $request->input('TipoEnfermedad'); // Required
 
         $ageGroup = $request->input('GrupoEtareo'); // Optional
         $gender = $request->input('Sexo'); // Optional
@@ -24,7 +24,7 @@ class TendenciesController extends Controller
         $initialEpiweek = $request->input('InitialEpiweek'); // Required
         $finalEpiweek = $request->input('FinalEpiweek'); // Required
 
-        if (!$diseaseName || !$initialYear || !$finalYear || !$initialEpiweek || !$finalEpiweek) 
+        if (!$initialYear || !$finalYear || !$initialEpiweek || !$finalEpiweek) 
             return response()->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
 
         
@@ -56,7 +56,7 @@ class TendenciesController extends Controller
 
         $query = $query
             ->selectRaw('count(*) as Total')
-            ->where('TipoEnfermedad', $diseaseName);
+            ->where('EnfermedadId', $id);
 
         if ($request->has('GrupoEtareo')) {
             $query = $query
@@ -80,10 +80,15 @@ class TendenciesController extends Controller
             ->where('Year', '>=', $initialYear)
             ->where('Year', '<=', $finalYear)
             ->where('SemanaEpidemiologica', '>=', $initialEpiweek)
-            ->where('SemanaEpidemiologica', '<=', $finalEpiweek)
-            ->where('TipoCaso', 'Caso Nuevo')
-            ->where('ClasificacionFinal', 'CONFIRMADO')
-            ->groupBy('Year');
+            ->where('SemanaEpidemiologica', '<=', $finalEpiweek);
+
+        if ( $id === '1' || $id === '2' || $id === '3' ) { // If disease is any type of leishmaniasis
+            $query = $query->where('TipoCaso', 'Caso Nuevo')
+                ->where('ClasificacionFinal', 'CONFIRMADO')
+                ->groupBy('Year');
+        } else if ( $id === '4' || $id === '5' || $id === '6') { // If disease is any type of chagas
+
+        }
 
         $results = $query->get();
 
