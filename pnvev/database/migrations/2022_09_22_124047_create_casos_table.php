@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCasosTable extends Migration
+class CreateCasosTable extENDs Migration
 {
     /**
      * Run the migrations.
@@ -35,7 +35,29 @@ class CreateCasosTable extends Migration
                 e.`date` AS FechaCarga, e.epiweek AS SemanaEpidemiologica, YEAR(e.`date`) AS Year
             FROM frm_fleishmaniasis ff
             INNER JOIN epiweek e
-            ON date(ff.FechaCarga) = e.`date`");
+            ON DATE(ff.FechaCarga) = e.`date`
+            UNION
+            SELECT 
+                CASE 
+                    WHEN ff.CaracterizacionCaso = 'CRONICO' THEN 'CHAGAS CRONICO'
+                    WHEN ff.CaracterizacionCaso = 'AGUDO' THEN 'CHAGAS AGUDO'
+                    WHEN ff.CaracterizacionCaso = 'SD' THEN 'CHAGAS SD'
+                END AS TipoEnfermedad,
+                CASE
+                    WHEN ff.CaracterizacionCaso = 'CRONICO' THEN 5
+                    WHEN ff.CaracterizacionCaso = 'AGUDO' THEN 4
+                    ELSE NULL
+                END AS `EnfermedadId`,
+                NULL AS TipoCaso,
+                ff.ClasificacionFinal, ff.Sexo, ff.Edad, 
+                CASE 
+                    WHEN ff.GrupoEtareo not in ('<2', '2 a 4', '5 a 19', '20 a 39', '40 a 59', '60 y mas') THEN 'SD'
+                    ELSE ff.GrupoEtareo
+                END AS GrupoEtareo,
+                e.`date` AS FechaCarga, e.epiweek AS SemanaEpidemiologica, YEAR(e.`date`) AS Year
+            FROM frm_fchagas ff
+            INNER JOIN epiweek e
+            ON DATE(ff.FechaCarga) = e.`date`");
     }
 
     /**
