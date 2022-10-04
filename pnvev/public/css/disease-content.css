@@ -1,3 +1,27 @@
+.sidebar {
+    position: fixed;
+    top: 260px;
+    width: max-content;
+    --texture-color: #0e3570;
+}
+
+.sidebar ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0.75rem 1rem 0.5rem;
+    background-color: var(--texture-color);
+    border-top-right-radius: 1rem 1rem;
+    border-bottom-right-radius: 1rem 1rem;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
 main {
     flex-grow: 1;
     display: flex;

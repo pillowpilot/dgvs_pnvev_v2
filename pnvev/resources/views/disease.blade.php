@@ -29,10 +29,19 @@
 @stop
 
 @section('main')
+
+<nav class="sidebar">
+    <ul>
+        <li><a href="#tendencies">Gráfico de Tendencias</a></li>
+        <li><a href="#bars">Barras horizontales</a></li>
+        <li><a href="#heatmap">Mapa de Calor</a></li>
+    </ul>
+</nav>
+
 <main>
     <div class="article-wrapper">
         <article class="canal-endemico">
-            <header>Gráfico de tendencia en el tiempo por Semana Epidemiológica</header>
+            <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica</a></header>
             <section class="filters">
                 <div class="filter">
                     <select name="tendencias-initialYear">
@@ -55,7 +64,7 @@
     </div>
     <div class="article-wrapper">
         <article class="tendencias">
-            <header>Gráfico de distribución anual por Rango de Edad y Sexo</header>
+            <header><a id="bars">Gráfico de distribución anual por Rango de Edad y Sexo</a></header>
             <section class="filters">
                 <div class="filter">
                     <select name="horizontalBar-year">
@@ -74,7 +83,7 @@
     </div>
     <div class="article-wrapper">
         <article class="casos">
-            <header>Mapa de Calor</header>
+            <header><a id="heatmap">Mapa de Calor</a></header>
             <section class="filters"></section>
             <section id="map" class="map-graphics"></section>
             <footer>
