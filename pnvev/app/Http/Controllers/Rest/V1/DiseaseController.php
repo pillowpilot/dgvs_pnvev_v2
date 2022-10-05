@@ -84,7 +84,7 @@ class DiseaseController extends Controller
     {
         $model = \App\Disease::find($id);
         if ($model) {
-            return response()->json($model->cases()->select('Year')->distinct()->get());
+            return response()->json($model->cases()->select('Year')->distinct()->orderBy('Year')->get());
         }
         else
         {

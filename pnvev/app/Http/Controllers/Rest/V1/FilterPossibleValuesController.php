@@ -18,6 +18,7 @@ class FilterPossibleValuesController extends Controller
             $cases = Caso::where('TipoEnfermedad', $diseaseName)
                 ->select($filterName)
                 ->distinct()
+                ->orderBy($filterName)
                 ->get();
         } else {
             $cases = Caso::select($filterName)
