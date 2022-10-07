@@ -62,6 +62,7 @@ class DiseaseV2Controller extends Controller
         if ($model) {
             return view('disease', [
                 'activeId' => $id,
+                'activeDisease' => $model,
                 'orphanDiseases' => $orphanDiseases,
                 'diseaseFamilies' => $diseaseFamilies,
 

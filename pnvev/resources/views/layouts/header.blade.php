@@ -7,19 +7,19 @@
     </div>
     <nav>
         <ul>
-            <li class="{{ $activeId == 0 ? 'active' : '' }}">
+            <li class="{{ Route::is('home') ? 'active' : '' }}">
                 <a href="{{ route('home') }}">Tablero Principal</a>
             </li>
             @foreach ($orphanDiseases as $disease)
-                <li class="{{ $activeId == $disease->id ? 'active' : '' }}">
+                <li class="{{ isset($activeDisease) && $activeDisease->id == $disease->id ? 'active' : '' }}">
                     <a href="{{ route('disease.show', ['id' => $disease->id]) }}">{{ $disease->name }}</a>
                 </li>
             @endforeach
             @foreach ($diseaseFamilies as $diseaseFamily)
-                <li class="{{ $activeId == 0 ? 'active' : '' }}">{{ $diseaseFamily->name }}
+                <li class="{{ isset($activeDisease) && $activeDisease->family == $diseaseFamily->id ? 'active' : '' }}">{{ $diseaseFamily->name }}
                     <ul>
                         @foreach ($diseaseFamily->diseases()->get() as $disease)
-                            <li class="{{ $activeId == $disease->id ? 'active' : '' }}">
+                            <li class="{{ isset($activeDisease) && $activeDisease->id == $disease->id ? 'active' : '' }}">
                                 <a href="{{ route('disease.show', ['id' => $disease->id]) }}">{{ $disease->name }}</a>
                             </li>
                         @endforeach
