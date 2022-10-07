@@ -187,12 +187,32 @@ document.addEventListener('DOMContentLoaded', function () {
         ['py-it', 26], ['py-as', 27]
     ];
 
-    fetch(DATA_PY_TOPO_JSON_URL)
-        .then(res => res.json())
-        .then(geojson => {
+    let GETParams = new URLSearchParams({
+        TipoEnfermedad: DISEASEFULLNAME,
+        InitialYear: '2022',
+        FinalYear: '2022',
+        InitialEpiweek: 1,
+        FinalEpiweek: 53,
+    });
+    GETParams.append('groupBy[]', 'RegionAdministrativaId');
+
+    const regions_pr = fetch(`${ROOT_URL}/api/v1/regions`).then(res => res.json());
+    const topo_pr = fetch(DATA_PY_TOPO_JSON_URL).then(res => res.json());
+    const map_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams).then(res => res.json());
+
+    Promise.all([regions_pr, topo_pr, map_pr])
+        .then(([regions_data, topo_data, map_data]) => {
+            const regionIdToMapCode = (id) => regions_data.filter(o => o.id === id)[0].map_code;
+            const data2 = map_data.map(o => [regionIdToMapCode(o.RegionAdministrativaId), parseInt(o.Total)]);
+
+            console.table(regions_data);
+            console.table(topo_data);
+            console.table(map_data);
+            console.table(data2);
+
             Highcharts.mapChart('map', {
                 chart: {
-                    map: geojson
+                    map: topo_data
                 },
 
                 title: {
@@ -215,8 +235,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
 
                 series: [{
-                    data: data,
-                    name: 'Datos aleatorios!',
+                    data: data2,
+                    name: `${DISEASEFULLNAME}`,
                     states: {
                         hover: {
                             color: '#BADA55'
@@ -229,4 +249,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }]
             });
         });
+
+    // fetch(DATA_PY_TOPO_JSON_URL)
+    //     .then(res => res.json())
+    //     .then(geojson => {
+            
+    //     });
 });
