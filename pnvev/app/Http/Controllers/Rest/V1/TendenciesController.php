@@ -13,8 +13,6 @@ class TendenciesController extends Controller
 {
     public function index(Request $request, $id)
     {
-        // $diseaseName = $request->input('TipoEnfermedad'); // Required
-
         $ageGroup = $request->input('GrupoEtareo'); // Optional
         $gender = $request->input('Sexo'); // Optional
         $groupByFields = $request->get('groupBy', []); // Optional
@@ -27,17 +25,9 @@ class TendenciesController extends Controller
         if (!$initialYear || !$finalYear || !$initialEpiweek || !$finalEpiweek) 
             return response()->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
 
-        
-        // if (!$request->has('Sexo') && array_search('Sexo', $groupByFields) === false) 
-        //     return response()->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
-
         if ($request->has('Sexo') && array_search('Sexo', $groupByFields) !== false) 
             return response()->json(['error' => 'Sexo cannot be a query parameter and a groupBy parameter at the same time'], 
                 Response::HTTP_BAD_REQUEST);
-        
-
-        // if (!$request->has('GrupoEtareo') && array_search('GrupoEtareo', $groupByFields) === false) 
-        //     return response()->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
 
         if ($request->has('GrupoEtareo') && array_search('GrupoEtareo', $groupByFields) !== false) 
             return response()->json(['error' => 'GrupoEtareo cannot be a query parameter and a groupBy parameter at the same time'], 
@@ -65,6 +55,10 @@ class TendenciesController extends Controller
             $query = $query
                 ->addSelect('GrupoEtareo')
                 ->groupBy('GrupoEtareo');
+        } else if (array_search('RegionAdministrativaId', $groupByFields) !== false ) {
+            $query = $query
+                ->addSelect('RegionAdministrativaId')
+                ->groupBy('RegionAdministrativaId');
         }
 
         if ($request->has('Sexo')) {

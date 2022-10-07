@@ -38,6 +38,8 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/genders/{id}', 'Rest\V1\GenderController@show');
     Route::get('/ageGroups', 'Rest\V1\AgeGroupController@index');
     Route::get('/ageGroups/{id}', 'Rest\V1\AgeGroupController@show');
+    Route::get('/regions', 'Rest\V1\AdministrativeRegionController@index');
+    Route::get('/regions/{id}', 'Rest\V1\AdministrativeRegionController@show');
     Route::get('/diseaseFamilies', 'Rest\V1\DiseaseFamilyController@index');
     Route::get('/diseaseFamilies/{id}', 'Rest\V1\DiseaseFamilyController@show');
     Route::get('/diseases', 'Rest\V1\DiseaseController@index');
