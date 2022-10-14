@@ -76,14 +76,6 @@ class TendenciesController extends Controller
             ->where('SemanaEpidemiologica', '>=', $initialEpiweek)
             ->where('SemanaEpidemiologica', '<=', $finalEpiweek);
 
-        if ( $id === '1' || $id === '2' || $id === '3' ) { // If disease is any type of leishmaniasis
-            $query = $query->where('TipoCaso', 'Caso Nuevo')
-                ->where('ClasificacionFinal', 'CONFIRMADO')
-                ->groupBy('Year');
-        } else if ( $id === '4' || $id === '5' || $id === '6') { // If disease is any type of chagas
-
-        }
-
         $results = $query->get();
 
         return response()->json($results);

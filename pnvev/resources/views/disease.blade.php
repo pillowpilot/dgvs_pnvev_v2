@@ -21,7 +21,7 @@
 <script src="{{ asset('js/highcharts/modules/no-data-to-display.js') }}"></script>
 <script src="{{ asset('js/highcharts/maps/modules/map.js') }}"></script>
 <script src="{{ asset('js/highcharts/maps/modules/exporting.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="{{ asset('js/lodash/lodash.min.js') }}"></script>
 <script src="{{ asset('js/charts/initialization.js') }}" type="module"></script>
 <script src="{{ asset('js/utils.js') }}" type="module"></script>
 <script src="{{ asset('js/charts/tendencies.js') }}" type="module"></script>
@@ -57,8 +57,7 @@
             </section>
             <section id="tendencia" class="graphics"></section>
             <footer>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
-                <span><strong>Fuente:</strong>DGVS (yyyy/mm/dd)</span>
+                <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
             </footer>
         </article>
     </div>
@@ -76,8 +75,7 @@
             </section>
             <section id="barHorizontal" class="graphics"></section>
             <footer>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
-                <span><strong>Fuente:</strong>DGVS (yyyy/mm/dd)</span>
+                <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
             </footer>
         </article>
     </div>
@@ -87,8 +85,7 @@
             <section class="filters"></section>
             <section id="map" class="map-graphics"></section>
             <footer>
-                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
-                <span><strong>Fuente:</strong>DGVS (yyyy/mm/dd)</span>
+                <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
             </footer>
         </article>
     </div>

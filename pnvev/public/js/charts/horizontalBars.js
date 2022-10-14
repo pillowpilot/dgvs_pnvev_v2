@@ -26,10 +26,20 @@ const chartGenerator = (chartContainerId, diseaseTitle) => {
                 stacking: 'normal'
             }
         },
-        caption: {
-            text: '<strong>Lorem.</strong><br><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</em>',
-            style: chartCaptionStyle,
-        }
+        colors: ['#6d9eeb', '#46bdc6'],
+        // caption: {
+        //     text: '<strong>Lorem.</strong><br><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</em>',
+        //     style: chartCaptionStyle,
+        // },
+        credits: {
+            text: `Fuente: PNVEV - DGVS | Según los datos de la fecha: dd/mm/yyyy`,
+            position: {
+                align: 'right',
+            },
+            style: {
+                fontSize: '11px',
+            },
+        },
     })
 }
 

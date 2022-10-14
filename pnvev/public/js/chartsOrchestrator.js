@@ -4,14 +4,10 @@ import { chartGenerator as horizontalBarChartGenerator } from './charts/horizont
 const initializeSelect = (selectName, filterName, fieldName, placeholderText) => {
     $(`select[name="${selectName}"]`).select2({
         ajax: {
-            url: `${ROOT_URL}/api/v1/values/${filterName}`,
-            delay: 250,
-            cache: true,
+            url: `${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`,
             dataType: 'json',
-            data: (params) => ({
-                TipoEnfermedad: DISEASEFULLNAME
-            }),
             processResults: (data, page) => {
+
                 const results = data.map((o, i) => ({ id: i, text: o[fieldName] }));
                 return { results: results };
             }
@@ -231,7 +227,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
 
                 colorAxis: {
+                    minColor: '#e0f7fa', //'#e3973b',
+                    maxColor: '#26a69a', //'#cc332b',//
+                    type: 'linear',
                     min: 0
+                },
+
+                credits: {
+                    text: `Fuente: PNVEV - DGVS | Según los datos de la fecha: dd/mm/yyyy`,
+                    position: {
+                        align: 'right',
+                    },
+                    style: {
+                        fontSize: '11px',
+                    },
                 },
 
                 series: [{
@@ -239,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     name: `${DISEASEFULLNAME}`,
                     states: {
                         hover: {
-                            color: '#BADA55'
+                            color: '#6d9eeb'
                         }
                     },
                     dataLabels: {

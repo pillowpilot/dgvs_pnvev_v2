@@ -2,7 +2,7 @@
     position: fixed;
     top: 260px;
     width: max-content;
-    --texture-color: #0e3570;
+    --texture-color: #3c78d8;
 }
 
 .sidebar ul {
@@ -26,9 +26,8 @@ main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    /* --dominant-color: #FFFDD0; */
     --dominant-color: white;
-    --texture-color: #0e3570;
+    --texture-color: #3c78d8;
     --accent-color: #7500C4;
 }
 

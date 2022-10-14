@@ -31,13 +31,15 @@ Route::group(['prefix' => '/v2'], function () {
 });
 
 Route::group(['prefix' => 'api/v1'], function () {
-    Route::get('/values/{filterName}', 'Rest\V1\FilterPossibleValuesController@index')->where('filterName', 'GrupoEtareo|Sexo|Year');
+    // Route::get('/values/{filterName}', 'Rest\V1\FilterPossibleValuesController@index')->where('filterName', 'GrupoEtareo|Sexo|Year');
     // Route::get('horizontalBars', 'Rest\V1\HorizontalBarsController@index');
     
     Route::get('/genders', 'Rest\V1\GenderController@index');
     Route::get('/genders/{id}', 'Rest\V1\GenderController@show');
     Route::get('/ageGroups', 'Rest\V1\AgeGroupController@index');
     Route::get('/ageGroups/{id}', 'Rest\V1\AgeGroupController@show');
+    Route::get('/years', 'Rest\V1\YearController@index');
+    Route::get('/years/{id}', 'Rest\V1\YearController@show');
     Route::get('/regions', 'Rest\V1\AdministrativeRegionController@index');
     Route::get('/regions/{id}', 'Rest\V1\AdministrativeRegionController@show');
     Route::get('/diseaseFamilies', 'Rest\V1\DiseaseFamilyController@index');

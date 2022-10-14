@@ -13,7 +13,6 @@
     @show
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <title>PNVEV</title>
-    <!-- <base href="http://somestuff.com/subdir1/"> -->
 </head>
 
 <body>
