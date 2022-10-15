@@ -34,7 +34,7 @@ cp -r /home/ubuntu/dgvs_pnvev_v2 .
 chown -R daemon:daemon dgvs_pnvev_v2
 chmod +x dgvs_pnvev_v2
 cd dgvs_pnvev_v2
-php install-composer.sh
+sh install-composer.sh
 cd pnvev
 php ../composer.phar install # Accept if asks to keep running as root
 cp .env.example .env
@@ -52,3 +52,5 @@ source /home/ubuntu/dgvs_pnvev_v2/epiweek_DDL.sql
 source /home/ubuntu/dgvs_pnvev_v2/epiweek_DATA.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fleishmaniasis_DDL.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fleishmaniasis_DATA.sql
+source /home/ubuntu/dgvs_pnvev_v2/frm_fchagas_DDL.sql
+source /home/ubuntu/dgvs_pnvev_v2/frm_fchagas_DATA.sql
