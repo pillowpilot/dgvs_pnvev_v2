@@ -16,14 +16,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $orphanDiseases = \App\Disease::orphan()->get();
-        $diseaseFamilies = \App\DiseaseFamily::all();
-
-        return view('home', [
-                'activeId' => 0,
-                'orphanDiseases' => $orphanDiseases,
-                'diseaseFamilies' => $diseaseFamilies
-            ]);
+        return view('home');
     }
 
     /**
