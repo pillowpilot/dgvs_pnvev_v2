@@ -1,4 +1,4 @@
-@extends('layouts.master', ['activeDisease' => $activeDisease, 'orphanDiseases' => $orphanDiseases, 'diseaseFamilies' => $diseaseFamilies])
+@extends('layouts.master', ['activeDisease' => $activeDisease])
 
 @section('stylesheets')
 <link rel="stylesheet" href="{{ asset('css/disease-content.css') }}">

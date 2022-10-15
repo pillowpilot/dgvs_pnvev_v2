@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(DiseaseTableSeeder::class); // Depends on DiseaseFamilyTableSeeder
         $this->call(DiseaseAgeGroupSeeder::class);
         $this->call(AdministrativeRegionSeeder::class);
+        $this->call(DiseaseV2Seeder::class);
+
         Model::reguard();
     }
 }

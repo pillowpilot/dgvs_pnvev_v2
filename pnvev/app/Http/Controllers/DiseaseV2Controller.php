@@ -48,25 +48,11 @@ class DiseaseV2Controller extends Controller
      */
     public function show($id)
     {
-        $orphanDiseases = \App\Disease::orphan()->get();
-        $diseaseFamilies = \App\DiseaseFamily::all();
-        // $diseaseFamilies = [];
-        // foreach (\App\DiseaseFamily::all() as $diseaseFamily) {
-        //     $diseaseFamilies[] = $diseaseFamily->diseases()->get();
-        // }
-        // $diseaseFamilies = \App\DiseaseFamily::all()->diseases()->get();
-
-        // return response()->json($diseaseFamilies);
-
-        $model = \App\Disease::find($id);
+        $model = \App\DiseaseV2::find($id);
         if ($model) {
             return view('disease', [
-                'activeId' => $id,
                 'activeDisease' => $model,
-                'orphanDiseases' => $orphanDiseases,
-                'diseaseFamilies' => $diseaseFamilies,
 
-                // 'active' => 'leishmaniasis-cutanea', 
                 'diseaseFullName' => $model->name,
                 'diseaseId' => $id]);
         } else {

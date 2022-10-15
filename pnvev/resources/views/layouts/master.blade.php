@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    @include('layouts.header', ['orphanDiseases' => $orphanDiseases, 'diseaseFamilies' => $diseaseFamilies])
+    @include('layouts.header')
 
     @section('main')
     @show
