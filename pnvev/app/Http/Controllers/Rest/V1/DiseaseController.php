@@ -48,7 +48,7 @@ class DiseaseController extends Controller
      */
     public function show($id)
     {
-        $model = \App\Disease::find($id);
+        $model = \App\DiseaseV2::find($id);
         if ($model) 
             return response()->json($model);
         else {
@@ -64,9 +64,9 @@ class DiseaseController extends Controller
      */
     public function showWithAgeGroups($id)
     {
-        $model = \App\Disease::find($id);
+        $model = \App\DiseaseV2::find($id);
         if ($model) {
-            return response()->json($model->ageGroups);
+            return response()->json(['error' => 'TBI'], 500);
         }
         else
         {
@@ -82,9 +82,14 @@ class DiseaseController extends Controller
      */
     public function showWithYears($id)
     {
-        $model = \App\Disease::find($id);
+        $model = \App\DiseaseV2::find($id);
         if ($model) {
-            return response()->json($model->cases()->select('Year')->distinct()->orderBy('Year')->get());
+            return response()->json(
+                \App\Caso::select('Year')
+                ->distinct()
+                ->whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
+                ->orderBy('Year')
+                ->get());
         }
         else
         {

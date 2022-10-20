@@ -49,12 +49,15 @@ class DiseaseV2Controller extends Controller
     public function show($id)
     {
         $model = \App\DiseaseV2::find($id);
+        error_log($model->children()->get());
         if ($model) {
             return view('disease', [
                 'activeDisease' => $model,
 
                 'diseaseFullName' => $model->name,
-                'diseaseId' => $id]);
+                'diseaseId' => $id,
+                'diseaseChildren' => $model->children()->get(),
+            ]);
         } else {
             abort(404); // TODO Remove this line and replace with a 404 page
         }

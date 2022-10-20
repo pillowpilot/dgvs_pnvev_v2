@@ -36,17 +36,17 @@ Route::group(['prefix' => 'api/v1'], function () {
     
     Route::get('/genders', 'Rest\V1\GenderController@index');
     Route::get('/genders/{id}', 'Rest\V1\GenderController@show');
-    Route::get('/ageGroups', 'Rest\V1\AgeGroupController@index');
-    Route::get('/ageGroups/{id}', 'Rest\V1\AgeGroupController@show');
-    Route::get('/years', 'Rest\V1\YearController@index');
-    Route::get('/years/{id}', 'Rest\V1\YearController@show');
+    // Route::get('/ageGroups', 'Rest\V1\AgeGroupController@index');
+    // Route::get('/ageGroups/{id}', 'Rest\V1\AgeGroupController@show');
+    // Route::get('/years', 'Rest\V1\YearController@index');
+    // Route::get('/years/{id}', 'Rest\V1\YearController@show');
     Route::get('/regions', 'Rest\V1\AdministrativeRegionController@index');
     Route::get('/regions/{id}', 'Rest\V1\AdministrativeRegionController@show');
     Route::get('/diseaseFamilies', 'Rest\V1\DiseaseFamilyController@index');
     Route::get('/diseaseFamilies/{id}', 'Rest\V1\DiseaseFamilyController@show');
     Route::get('/diseases', 'Rest\V1\DiseaseController@index');
-    Route::get('/diseases/{id}', 'Rest\V1\DiseaseController@show');
-    Route::get('/diseases/{id}/ageGroups', 'Rest\V1\DiseaseController@showWithAgeGroups');
+    // Route::get('/diseases/{id}', 'Rest\V1\DiseaseController@show');
+    // Route::get('/diseases/{id}/ageGroups', 'Rest\V1\DiseaseController@showWithAgeGroups');
     Route::get('/diseases/{id}/years', 'Rest\V1\DiseaseController@showWithYears');
     Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
 });

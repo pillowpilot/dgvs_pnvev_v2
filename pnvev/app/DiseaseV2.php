@@ -18,8 +18,18 @@ class DiseaseV2 extends Model
         return $this->hasMany('App\DiseaseV2', 'parent_id');
     }
 
+    public function leafs()
+    {
+        return $this->children()->get()->push($this);
+    }
+
     public function scopeRoots($query)
     {
         return $query->whereNull('parent_id')->orderBy('order');
+    }
+
+    public function cases()
+    {
+        return $this->hasMany('App\Caso', 'EnfermedadId');
     }
 }

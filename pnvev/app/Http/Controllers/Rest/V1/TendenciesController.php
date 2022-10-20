@@ -44,9 +44,12 @@ class TendenciesController extends Controller
                 ->groupBy('SemanaEpidemiologica');
         }
 
+        $model = \App\DiseaseV2::find($id);
+        error_log($model->leafs()->map(function($model) { return $model->id; }));
+
         $query = $query
             ->selectRaw('count(*) as Total')
-            ->where('EnfermedadId', $id);
+            ->whereIn('EnfermedadId', $model->leafs()->map(function($model) { return $model->id; }));
 
         if ($request->has('GrupoEtareo')) {
             $query = $query
@@ -75,6 +78,8 @@ class TendenciesController extends Controller
             ->where('Year', '<=', $finalYear)
             ->where('SemanaEpidemiologica', '>=', $initialEpiweek)
             ->where('SemanaEpidemiologica', '<=', $finalEpiweek);
+
+        error_log($query->toSql());
 
         $results = $query->get();
 
