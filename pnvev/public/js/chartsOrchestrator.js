@@ -1,6 +1,7 @@
-import { chartGenerator as tendenciesChartGenerator } from './charts/tendencies.js';
-import { chartGenerator as horizontalBarChartGenerator } from './charts/horizontalBars.js';
+import { chartGenerator as tendenciesChartGenerator, TendencyChart } from './charts/tendencies.js';
+import { chartGenerator as horizontalBarChartGenerator, HorizontalBarsChart } from './charts/horizontalBars.js';
 
+// Utilities
 const initializeSelect = (selectName, filterName, fieldName, placeholderText) => {
     $(`select[name="${selectName}"]`).select2({
         ajax: {
@@ -16,8 +17,57 @@ const initializeSelect = (selectName, filterName, fieldName, placeholderText) =>
     });
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-    const horizontalChartContainerId = 'barHorizontal';
+// Load tendencies
+document.addEventListener('DOMContentLoaded', () => {
+    // const tendenciesChartContainerId = 'tendencia';
+
+    // initializeSelect('tendencias-initialYear', 'Year', 'Year', 'Año Inicial');
+    // initializeSelect('tendencias-finalYear', 'Year', 'Year', 'Año Final');
+
+    const tendenciesChart_v2 = new TendencyChart('tendencia');
+    tendenciesChart_v2.setTitleText(`Casos Confirmados de ${DISEASETITLE}`);
+    tendenciesChart_v2.setSubtitleText(`por semana epidemiológica de notificación por año`);
+    tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
+    tendenciesChart_v2.setYAxisText(`N&deg; de Casos`);
+    tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
+    tendenciesChart_v2.draw();
+    const tendenciesChart = tendenciesChart_v2.getChartObject();
+
+    let GETParams = new URLSearchParams({
+        TipoEnfermedad: DISEASEFULLNAME,
+        InitialYear: '2018',
+        FinalYear: '2022', //$('select[name="tendencias-finalYear"]').find(':selected').text(),
+        InitialEpiweek: 1,
+        FinalEpiweek: 53,
+    });
+    GETParams.append('groupBy[]', 'SemanaEpidemiologica');
+
+    fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams)
+        .then(res => res.json())
+        .then(data => {
+            const groupedData =
+                _(data)
+                    .groupBy('Year')
+                    .mapValues(
+                        yearData => _(yearData)
+                            .map(({ SemanaEpidemiologica, Total }) => ({x: parseInt(SemanaEpidemiologica), y: Total})).value()
+                    )
+                    .mapValues(
+                        yearData => _(yearData).sortBy('x').value()
+                    )
+                    .value();
+
+            tendenciesChart_v2.removeAllSeries();
+
+            _(groupedData).mapValues((yearData, year) =>
+                tendenciesChart_v2.addSeries(yearData, year)
+            ).value();
+        });
+});
+
+// Load horizontal
+document.addEventListener('DOMContentLoaded', () => {
+    // const horizontalChartContainerId = 'barHorizontal';
 
     $(`select[name="horizontalBar-year"]`).select2({
         ajax: {
@@ -32,7 +82,15 @@ document.addEventListener('DOMContentLoaded', function () {
         placeholder: 'Año',
     });
 
-    const horizontalChart = horizontalBarChartGenerator(horizontalChartContainerId, DISEASETITLE);
+    // const horizontalChart = horizontalBarChartGenerator(horizontalChartContainerId, DISEASETITLE);
+
+    const horizontalChart_v2 = new HorizontalBarsChart('barHorizontal');
+    horizontalChart_v2.setTitleText(`Distribución de casos confirmados de ${DISEASETITLE}`);
+    horizontalChart_v2.setSubtitleText(`por rango de edad y sexo`);
+    horizontalChart_v2.setYAxisText(`Cantidad de Casos`);
+    horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
+    horizontalChart_v2.draw();
+    const horizontalChart = horizontalChart_v2.getChartObject();
 
     $('button[name="horizontalBar-submit"]').on('click', (e) => {
         const filters = {
@@ -63,118 +121,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 const x = _(data).groupBy('Year').mapValues((yearData, year) => _(yearData).groupBy('Sexo').mapValues(v => v.map(o => [o.GrupoEtareo, o.Total])).value()).value();
                 console.table(x);
 
-                while (horizontalChart.series.length) {
-                    horizontalChart.series[0].remove(false); // false = do not redraw
-                }
-                horizontalChart.redraw();
+                horizontalChart_v2.removeAllSeries();
 
                 _(x[$('select[name="horizontalBar-year"]').find(':selected').text()]).mapValues((genderData, gender) => {
-                    console.log(gender, genderData);
-                    horizontalChart.addSeries({
-                        name: gender,
-                        data: genderData,
-                    });
+                    horizontalChart_v2.addSeries(genderData, gender);
                 }).value();
 
             });
     });
 });
 
+// Load map
 document.addEventListener('DOMContentLoaded', function () {
-    const tendenciesChartContainerId = 'tendencia';
-
-    initializeSelect('tendencias-initialYear', 'Year', 'Year', 'Año Inicial');
-    initializeSelect('tendencias-finalYear', 'Year', 'Year', 'Año Final');
-
-    const tendenciesChart = tendenciesChartGenerator(tendenciesChartContainerId, DISEASETITLE);
-
-    $('button[name="tendencias-submit"]').on('click', (e) => {
-        const filters = {
-            InitialYear: $('select[name="tendencias-initialYear"]').find(':selected').val(),
-            FinalYear: $('select[name="tendencias-finalYear"]').find(':selected').val(),
-        };
-        // Check if any is undefined
-        console.log(filters);
-
-        let GETParams = new URLSearchParams({
-            TipoEnfermedad: DISEASEFULLNAME,
-            InitialYear: $('select[name="tendencias-initialYear"]').find(':selected').text(),
-            FinalYear: $('select[name="tendencias-finalYear"]').find(':selected').text(),
-            InitialEpiweek: 1,
-            FinalEpiweek: 53,
-        });
-        GETParams.append('groupBy[]', 'SemanaEpidemiologica');
-
-
-        fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams)
-            .then(res => res.json())
-            .then(data => {
-                const groupedData =
-                    _(data)
-                        .groupBy('Year')
-                        .mapValues(
-                            yearData => _(yearData)
-                                .map(({ SemanaEpidemiologica, Total }) => [SemanaEpidemiologica, Total]).value()
-                        )
-                        .value();
-
-                while (tendenciesChart.series.length) {
-                    tendenciesChart.series[0].remove(false); // false = do not redraw
-                }
-                tendenciesChart.redraw();
-
-                _(groupedData).mapValues((yearData, year) =>
-                    tendenciesChart.addSeries({
-                        name: year,
-                        data: yearData,
-                    })
-                ).value();
-            });
-    });
-
-
-
-    fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?`)
-        .then(res => res.json())
-        .then(data => {
-            // console.log('Here!');
-            // console.log(data);
-
-            const structuredData =
-                _(data)
-                    .groupBy(o => (new Date(o.date)).getFullYear())
-                    .mapValues(yearData =>
-                        _(yearData)
-                            .groupBy(o => o.epiweek)
-                            .mapValues(l => l.length)
-                            .value())
-                    .value()
-
-            // console.log(
-            //     'struct data',
-            //     structuredData
-            // );
-
-            const seriesData = _(structuredData)
-                .mapValues((yearData) =>
-                    _(yearData)
-                        .reduce((acc, y, x) => {
-                            acc.push([x, y]);
-                            return acc;
-                        }, [])
-                )
-                .value();
-            // console.log(seriesData);
-            const series = _(seriesData).reduce((acc, data_, year) => {
-                acc.push({ name: year, data: data_ })
-                return acc;
-            }, []);
-
-            // console.log(series);
-
-            // chart2.addSeries(series);
-        });
-
     const data = [
         ['py-ag', 10], ['py-bq', 11], ['py-cn', 12], ['py-ph', 13],
         ['py-cr', 14], ['py-sp', 15], ['py-ce', 16], ['py-mi', 17],
