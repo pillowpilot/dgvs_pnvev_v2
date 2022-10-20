@@ -15,7 +15,7 @@
 <script src="{{ asset('js/highcharts/modules/no-data-to-display.js') }}"></script>
 <script src="{{ asset('js/highcharts/maps/modules/map.js') }}"></script>
 <script src="{{ asset('js/highcharts/maps/modules/exporting.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="{{ asset('js/lodash/lodash.min.js') }}"></script>
 <script src="{{ asset('js/charts/initialization.js') }}" type="module"></script>
 <script src="{{ asset('js/utils.js') }}" type="module"></script>
 <script src="{{ asset('js/charts/tendencies.js') }}" type="module"></script>
@@ -27,65 +27,36 @@
     <article>
         <section class="text-intro">
             <header>
-                <h1>Leishmaniasis</h1>
+                <h1>Programa Nacional de Enfermedades Vectoriales</h1>
             </header>
             <section>
-                <header>
-                    <h2>Key Facts</h2>
-                </header>
-                <ul>
-                    <li>
-                        <p>
-                            There are 3 main forms of leishmaniases – visceral (also known as kala-azar, which is and
-                            the
-                            most serious form of the disease), cutaneous (the most common), and mucocutaneous.
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Leishmaniasis is caused by protozoan parasites which are transmitted by the bite of infected
-                            female phlebotomine sandflies.
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            The disease affects some of the poorest people and is associated with malnutrition,
-                            population
-                            displacement, poor housing, a weak immune system and lack of financial resources.</p>
-                    </li>
-                    <li>
-                        <p>Leishmaniasis is also linked to environmental changes such as deforestation, building of
-                            dams,
-                            irrigation schemes and urbanization.
-                        </p>
-                    </li>
-                    <li>
-                        <p>An estimated 700 000 to 1 million new cases occur annually.</p>
-                    </li>
-                    <li>
-                        <p>
-                            Only a small fraction of those infected by parasites causing leishmaniasis will eventually
-                            develop the disease.
-                        </p>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <header>
-                    <h2>Transmission</h2>
-                </header>
                 <p>
-                    <em>Leishmania</em> parasites are transmitted through the bites of infected female phlebotomine
-                    sandflies,
-                    which feed on blood to produce eggs. The epidemiology of leishmaniasis depends on the
-                    characteristics of the parasite and sandfly species, the local ecological characteristics of the
-                    transmission sites, current and past exposure of the human population to the parasite, and human
-                    behaviour. Some 70 animal species, including humans, have been found as natural reservoir hosts of
-                    <em>Leishmania</em> parasites.
+                    El PNVEV fue creado por Resolución SG N° 483/2018 por medio de la cual se aprueba la Misión y la Visión y se actualiza el organigrama genérico de la Dirección General de Vigilancia de la Salud. En la misma, la Dirección de Vigilancia de Enfermedades transmitidas por Vectores pasa a denominarse “Programa Nacional de Enfermedades Vectoriales”, y depende de la Dirección de Vigilancia de Enfermedades Transmisibles.
+                </p>
+                <p>
+                    <strong>Responsable: </strong> Lic. Martha Torales Ruotti
+                </p>
+                <p>
+                    Para mas información en referencia a las enfermedades vectoriales, bajo vigilancia del PNVEV, haga click <a href="https://dgvs.mspbs.gov.py/webdgvs/views/paginas/divet.html">aquí</a>.
                 </p>
             </section>
         </section>
-        <section id="graphics">
+        <section class="text-intro">
+            <header>
+                <h1>Boletin Epidemiológico Semanal</h1>
+                <h2>Enfermedades de Notificación Obligatoria - Comparativo por Años</h2>
+            </header>
+            <section>
+                <p>
+                    Casos acumulados hasta la Semana Epidemiológica <span id="max-epiweek">ENTRY</span>
+                </p>
+                <p>
+                    <strong>Periodo: </strong><span id="min-year">MINYEAR</span> - <span id="max-year">MAXYEAR</span>
+                </p>
+                <p>
+                    <strong>Fuente: </strong>Datos Obtenidos de la Vigilancia de PAF/Notificaciones. Datos compilados por VENOCD/DGVS.
+                </p>
+            </section>
         </section>
     </article>
 </main>

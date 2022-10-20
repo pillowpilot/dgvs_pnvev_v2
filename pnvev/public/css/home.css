@@ -14,7 +14,7 @@ body main article
 body main article .text-intro {
     --text-color: #3c4245;
     display: grid;
-    grid-template: max-content max-content / 1fr 1fr;
+    grid-template: max-content max-content / 1fr;
     color: var(--text-color);
 }
 
@@ -35,7 +35,7 @@ body main article .text-intro section {
 
 body main article .text-intro section p {
     font-family: Arial,Helvetica,sans-serif;
-    line-height: 24px;
+    line-height: 2rem;
     text-align: justify;
 }
 
