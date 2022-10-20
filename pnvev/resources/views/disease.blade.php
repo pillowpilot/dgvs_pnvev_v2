@@ -9,10 +9,13 @@
     const DISEASE_ID = {{ $diseaseId }};
     const DISEASEFULLNAME = '{{ $diseaseFullName }}';
     const DISEASETITLE = DISEASEFULLNAME;
+    const DISEASE_CHILDREN = {!! $diseaseChildren->toJson() !!};
     const ROOT_URL = '{{ route('home') }}';
     const DATA_PY_TOPO_JSON_URL = "{{ asset('data/py-all.topo.json') }}";
     const tendenciaDataURL = '';
     const barHorizontalDataURL = '';
+    console.log('DISEASE_CHILDREN');
+    console.table(DISEASE_CHILDREN);
 </script>
 <script src="{{ asset('js/highcharts/highcharts.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/exporting.js') }}"></script>
