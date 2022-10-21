@@ -14,8 +14,8 @@ class GenderTableSeeder extends Seeder
     {
         DB::table('pnvev_genders')->insert([
             ['name' => 'Masculino', 'order' => 1],
-            ['name' => 'Femenino', 'order' => 2],
-            ['name' => 'SD', 'order' => 3],
+            ['name' => 'Femenino',  'order' => 2],
+            ['name' => 'SD',        'order' => 3],
         ]);
     }
 }
