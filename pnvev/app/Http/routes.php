@@ -13,19 +13,6 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => '/disease'], function () {
-    
-    Route::group(['prefix' => '/leishmaniasis'], function () {
-        Route::get('/{subDiseaseParam}', 'LeishmaniasisController@index')->where('subDiseaseParam', 'mucosa|cutanea|visceral');
-    });
-    
-    // Route::group(['prefix' => '/chagas'], function () {
-    //     Route::get('/{subDiseaseParam}', 'ChagasController@index')->where('subDiseaseParam', 'agudo|cronico|congenito');
-    // });
-    
-    Route::get('/{diseaseParam}', 'DiseaseController@index');
-});
-
 Route::group(['prefix' => '/v2'], function () {
     Route::get('/{id}', 'DiseaseV2Controller@show')->name('disease.show');
 });
@@ -36,10 +23,6 @@ Route::group(['prefix' => 'api/v1'], function () {
     
     Route::get('/genders', 'Rest\V1\GenderController@index');
     Route::get('/genders/{id}', 'Rest\V1\GenderController@show');
-    // Route::get('/ageGroups', 'Rest\V1\AgeGroupController@index');
-    // Route::get('/ageGroups/{id}', 'Rest\V1\AgeGroupController@show');
-    // Route::get('/years', 'Rest\V1\YearController@index');
-    // Route::get('/years/{id}', 'Rest\V1\YearController@show');
     Route::get('/regions', 'Rest\V1\AdministrativeRegionController@index');
     Route::get('/regions/{id}', 'Rest\V1\AdministrativeRegionController@show');
     Route::get('/diseaseFamilies', 'Rest\V1\DiseaseFamilyController@index');
@@ -48,5 +31,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     // Route::get('/diseases/{id}', 'Rest\V1\DiseaseController@show');
     // Route::get('/diseases/{id}/ageGroups', 'Rest\V1\DiseaseController@showWithAgeGroups');
     Route::get('/diseases/{id}/years', 'Rest\V1\DiseaseController@showWithYears');
+    Route::get('/diseases/{id}/years/max', 'Rest\V1\DiseaseController@showMaxYear');
+    Route::get('/diseases/{id}/years/min', 'Rest\V1\DiseaseController@showMinYear');
     Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
 });

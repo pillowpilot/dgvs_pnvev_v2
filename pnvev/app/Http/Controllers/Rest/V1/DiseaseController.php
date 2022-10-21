@@ -97,6 +97,34 @@ class DiseaseController extends Controller
         }
     }
 
+    public function showMaxYear($id)
+    {
+        $model = \App\DiseaseV2::find($id);
+        if ($model) {
+            return response()->json(
+                \App\Caso::whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
+                ->max('Year'));
+        }
+        else
+        {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+    }
+
+    public function showMinYear($id)
+    {
+        $model = \App\DiseaseV2::find($id);
+        if ($model) {
+            return response()->json(
+                \App\Caso::whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
+                ->min('Year'));
+        }
+        else
+        {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
