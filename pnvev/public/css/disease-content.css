@@ -66,14 +66,43 @@ main article>footer {
     color: rgb(255, 255, 255);
 }
 
-main article .filters {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
+main article .toolbox {
     height: 85px;
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+main article .toolbox > * {
     background-color: var(--dominant-color);
     border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+main article .toolbox > .filters {
+    flex-grow: 1;
+}
+
+main article .toolbox button {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    color: black;
+    font-size: 1.3em;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid var(--accent-color);
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+}
+
+main article .toolbox button:hover {
+    background-color: var(--accent-color);
+    color: white;
 }
 
 main article .filters .filter {

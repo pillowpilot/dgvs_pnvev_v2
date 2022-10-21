@@ -45,18 +45,24 @@
     <div class="article-wrapper">
         <article class="canal-endemico">
             <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica</a></header>
-            <section class="filters">
-                <div class="filter">
-                    <select name="tendencias-initialYear">
-                    </select>
-                </div>
-                <div class="filter">
-                    <select  name="tendencias-finalYear">
-                    </select>
-                </div>
-                <div class="submit">
-                    <button type="button" name="tendencias-submit">Actualizar</button>
-                </div>
+            <section class="toolbox">
+                <section class="filters">
+                    <div class="filter">
+                        <select name="tendencias-initialYear">
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <select  name="tendencias-finalYear">
+                        </select>
+                    </div>
+                    <div class="submit">
+                        <button type="button" name="tendencias-submit">Actualizar</button>
+                    </div>
+                </section>
+                <section class="export">
+                    <button type="button" name="export-pdf">PDF</button>
+                    <button type="button" name="export-xlsx">XLSX</button>
+                </section>
             </section>
             <section id="tendencia" class="graphics"></section>
             <footer>
@@ -67,6 +73,7 @@
     <div class="article-wrapper">
         <article class="tendencias">
             <header><a id="bars">Gráfico de distribución anual por Rango de Edad y Sexo</a></header>
+            <section class="toolbox">
             <section class="filters">
                 <div class="filter">
                     <select name="horizontalBar-year">
@@ -75,6 +82,11 @@
                 <div class="submit">
                     <button type="button" name="horizontalBar-submit">Actualizar</button>
                 </div>
+            </section>
+            <section class="export">
+                    <button type="button" name="export-pdf">PDF</button>
+                    <button type="button" name="export-xlsx">XLSX</button>
+                </section>
             </section>
             <section id="barHorizontal" class="graphics"></section>
             <footer>
@@ -85,7 +97,13 @@
     <div class="article-wrapper">
         <article class="casos">
             <header><a id="heatmap">Mapa de Calor</a></header>
-            <section class="filters"></section>
+            <section class="toolbox">
+                <section class="filters"></section>
+                <section class="export">
+                        <button type="button" name="export-pdf">PDF</button>
+                        <button type="button" name="export-xlsx">XLSX</button>
+                </section>
+            </section>
             <section id="map" class="map-graphics"></section>
             <footer>
                 <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
