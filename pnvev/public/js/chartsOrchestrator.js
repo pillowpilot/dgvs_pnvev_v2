@@ -19,8 +19,6 @@ const initializeSelect = (selectName, filterName, fieldName, placeholderText) =>
 
 // Load tendencies
 document.addEventListener('DOMContentLoaded', () => {
-    // const tendenciesChartContainerId = 'tendencia';
-
     // initializeSelect('tendencias-initialYear', 'Year', 'Year', 'Año Inicial');
     // initializeSelect('tendencias-finalYear', 'Year', 'Year', 'Año Final');
 
@@ -70,8 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Load horizontal
 document.addEventListener('DOMContentLoaded', () => {
-    // const horizontalChartContainerId = 'barHorizontal';
-
     $(`select[name="horizontalBar-year"]`).select2({
         ajax: {
             url: `${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`,
@@ -85,8 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         placeholder: 'Año',
     });
 
-    // const horizontalChart = horizontalBarChartGenerator(horizontalChartContainerId, DISEASETITLE);
-
     const horizontalChart_v2 = new HorizontalBarsChart('barHorizontal');
     horizontalChart_v2.setTitleText(`Distribución de casos confirmados de ${DISEASETITLE}`);
     horizontalChart_v2.setSubtitleText(`por rango de edad y sexo`);
@@ -98,12 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const horizontalChart = horizontalChart_v2.getChartObject();
 
     $('button[name="horizontalBar-submit"]').on('click', (e) => {
-        const filters = {
-            InitialYear: $('select[name="horizontalBar-year"]').find(':selected').val(),
-        };
-        // Check if any is undefined
-        console.log(filters);
-
         let GETParams = new URLSearchParams({
             TipoEnfermedad: DISEASEFULLNAME,
             InitialYear: $('select[name="horizontalBar-year"]').find(':selected').text(),
@@ -138,14 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Load map
 document.addEventListener('DOMContentLoaded', function () {
-    const data = [
-        ['py-ag', 10], ['py-bq', 11], ['py-cn', 12], ['py-ph', 13],
-        ['py-cr', 14], ['py-sp', 15], ['py-ce', 16], ['py-mi', 17],
-        ['py-ne', 18], ['py-gu', 19], ['py-pg', 20], ['py-am', 21],
-        ['py-aa', 22], ['py-cg', 23], ['py-cz', 24], ['py-cy', 25],
-        ['py-it', 26], ['py-as', 27]
-    ];
-
     let GETParams = new URLSearchParams({
         TipoEnfermedad: DISEASEFULLNAME,
         InitialYear: '2022',
@@ -221,10 +201,4 @@ document.addEventListener('DOMContentLoaded', function () {
                 }]
             });
         });
-
-    // fetch(DATA_PY_TOPO_JSON_URL)
-    //     .then(res => res.json())
-    //     .then(geojson => {
-            
-    //     });
 });
