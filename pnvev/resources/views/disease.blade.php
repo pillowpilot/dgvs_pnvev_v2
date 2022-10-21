@@ -43,7 +43,7 @@
 
 <main>
     <div class="article-wrapper">
-        <article class="canal-endemico">
+        <article class="tendencies">
             <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica</a></header>
             <section class="toolbox">
                 <section class="filters">
@@ -61,6 +61,7 @@
                 </section>
                 <section class="export">
                     <button type="button" name="export-pdf">PDF</button>
+                    <button type="button" name="export-svg">SVG</button>
                     <button type="button" name="export-xlsx">XLSX</button>
                 </section>
             </section>
@@ -71,20 +72,21 @@
         </article>
     </div>
     <div class="article-wrapper">
-        <article class="tendencias">
+        <article class="horizontalBar">
             <header><a id="bars">Gráfico de distribución anual por Rango de Edad y Sexo</a></header>
             <section class="toolbox">
-            <section class="filters">
-                <div class="filter">
-                    <select name="horizontalBar-year">
-                    </select>
-                </div>
-                <div class="submit">
-                    <button type="button" name="horizontalBar-submit">Actualizar</button>
-                </div>
-            </section>
-            <section class="export">
+                <section class="filters">
+                    <div class="filter">
+                        <select name="horizontalBar-year">
+                        </select>
+                    </div>
+                    <div class="submit">
+                        <button type="button" name="horizontalBar-submit">Actualizar</button>
+                    </div>
+                </section>
+                <section class="export">
                     <button type="button" name="export-pdf">PDF</button>
+                    <button type="button" name="export-svg">SVG</button>
                     <button type="button" name="export-xlsx">XLSX</button>
                 </section>
             </section>
@@ -95,12 +97,13 @@
         </article>
     </div>
     <div class="article-wrapper">
-        <article class="casos">
+        <article class="heatmap">
             <header><a id="heatmap">Mapa de Calor</a></header>
             <section class="toolbox">
                 <section class="filters"></section>
                 <section class="export">
                         <button type="button" name="export-pdf">PDF</button>
+                        <button type="button" name="export-svg">SVG</button>
                         <button type="button" name="export-xlsx">XLSX</button>
                 </section>
             </section>

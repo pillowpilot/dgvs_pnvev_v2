@@ -47,6 +47,15 @@ class HorizontalBarsChart {
         return this.chart;
     }
 
+    bindExportingButton(btnElement, exportFormat) {
+        btnElement.addEventListener('click', () => {
+            this.chart.exportChart({
+                type: exportFormat,
+                filename: `chart`,
+            });
+        });
+    }
+
     generateChartOptions() {
         return {
             chart: {

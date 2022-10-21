@@ -1,5 +1,5 @@
-import { chartGenerator as tendenciesChartGenerator, TendencyChart } from './charts/tendencies.js';
-import { chartGenerator as horizontalBarChartGenerator, HorizontalBarsChart } from './charts/horizontalBars.js';
+import { TendencyChart } from './charts/tendencies.js';
+import { HorizontalBarsChart } from './charts/horizontalBars.js';
 
 // Utilities
 const initializeSelect = (selectName, filterName, fieldName, placeholderText) => {
@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     tendenciesChart_v2.setYAxisText(`N&deg; de Casos`);
     tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
+    tendenciesChart_v2.bindExportingButton(document.querySelector('article[class="tendencies"] button[name="export-pdf"]'), 'application/pdf');
+    tendenciesChart_v2.bindExportingButton(document.querySelector('article[class="tendencies"] button[name="export-svg"]'), 'image/svg+xml');
+    // tendenciesChart_v2.bindExportingButton(document.querySelector('article[class="tendencies"] button[name="export-xlsx"]'), '');
     tendenciesChart_v2.draw();
     const tendenciesChart = tendenciesChart_v2.getChartObject();
 
@@ -89,6 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     horizontalChart_v2.setSubtitleText(`por rango de edad y sexo`);
     horizontalChart_v2.setYAxisText(`Cantidad de Casos`);
     horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
+    horizontalChart_v2.bindExportingButton(document.querySelector('article[class="horizontalBar"] button[name="export-pdf"]'), 'application/pdf');
+    horizontalChart_v2.bindExportingButton(document.querySelector('article[class="horizontalBar"] button[name="export-svg"]'), 'image/svg+xml');
     horizontalChart_v2.draw();
     const horizontalChart = horizontalChart_v2.getChartObject();
 
