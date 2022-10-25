@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <div><span>Página de Administracion</span></div>
+        <div><span>Página de Administración</span></div>
         <div>
             <ul>
                 <a href="{{ route('home') }}">
