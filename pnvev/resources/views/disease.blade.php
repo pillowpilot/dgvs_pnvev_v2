@@ -17,6 +17,8 @@
     console.log('DISEASE_CHILDREN');
     console.table(DISEASE_CHILDREN);
 </script>
+<script src="{{ asset('js/jquery/jquery-3.6.1.js') }}"></script>
+<script src="{{ asset('js/jquery/select2/select2.full.js') }}"></script>
 <script src="{{ asset('js/highcharts/highcharts.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/exporting.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/export-data.js') }}"></script>

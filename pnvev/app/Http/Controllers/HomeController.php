@@ -16,7 +16,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $model = \App\KeyValueStorage::find('homePage');
+        if($model) {
+            return view('home', ['content' => $model->value]);
+        } else {
+            return view('home');
+        }
     }
 
     /**

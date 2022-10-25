@@ -77,9 +77,6 @@
         </section>
     </footer>
 
-    <script src="{{ asset('js/jquery/jquery-3.6.1.js') }}"></script>
-    <script src="{{ asset('js/jquery/select2/select2.full.js') }}"></script>
-
     @section('scripts')
     @show
 

@@ -13,14 +13,19 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
+// Admin pages
+Route::group(['prefix' => '/admin'], function () {
+    Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
+    Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
+});
+
+// Public pages
 Route::group(['prefix' => '/v2'], function () {
     Route::get('/{id}', 'DiseaseV2Controller@show')->name('disease.show');
 });
 
+// REST API
 Route::group(['prefix' => 'api/v1'], function () {
-    // Route::get('/values/{filterName}', 'Rest\V1\FilterPossibleValuesController@index')->where('filterName', 'GrupoEtareo|Sexo|Year');
-    // Route::get('horizontalBars', 'Rest\V1\HorizontalBarsController@index');
-    
     Route::get('/genders', 'Rest\V1\GenderController@index');
     Route::get('/genders/{id}', 'Rest\V1\GenderController@show');
     Route::get('/regions', 'Rest\V1\AdministrativeRegionController@index');
@@ -28,10 +33,10 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/diseaseFamilies', 'Rest\V1\DiseaseFamilyController@index');
     Route::get('/diseaseFamilies/{id}', 'Rest\V1\DiseaseFamilyController@show');
     Route::get('/diseases', 'Rest\V1\DiseaseController@index');
-    // Route::get('/diseases/{id}', 'Rest\V1\DiseaseController@show');
-    // Route::get('/diseases/{id}/ageGroups', 'Rest\V1\DiseaseController@showWithAgeGroups');
     Route::get('/diseases/{id}/years', 'Rest\V1\DiseaseController@showWithYears');
     Route::get('/diseases/{id}/years/max', 'Rest\V1\DiseaseController@showMaxYear');
     Route::get('/diseases/{id}/years/min', 'Rest\V1\DiseaseController@showMinYear');
     Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
+
+    Route::get('/homePage', 'Admin\Rest\AdminHomePageRestController@index')->name('rest.homePage');
 });
