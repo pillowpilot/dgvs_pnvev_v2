@@ -54,3 +54,14 @@ source /home/ubuntu/dgvs_pnvev_v2/frm_fleishmaniasis_DDL.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fleishmaniasis_DATA.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fchagas_DDL.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fchagas_DATA.sql
+
+### Manually create an user
+- Run `php artisan tinker`.
+- Type 
+```
+$u = new App\User();
+$u->name = 'Administrator';
+$u->email = 'admin';
+$u->password = Hash::make('admin');
+$u->save();
+```

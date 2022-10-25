@@ -13,8 +13,14 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
+// Autentication routes
+Route::get('auth/login', 'Auth\AuthController@getLogin')->name('auth.login');
+Route::post('auth/login', 'Auth\AuthController@postLogin')->name('auth.loginform');
+Route::get('auth/logout', 'Auth\AuthController@getLogout')->name('auth.logout');
+
 // Admin pages
-Route::group(['prefix' => '/admin'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
+    Route::get('/', 'Admin\AdminHomeController@index')->name('admin.index');
     Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
     Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
 });
