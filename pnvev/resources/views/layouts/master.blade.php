@@ -75,6 +75,11 @@
                 </a>
             </div>
         </section>
+        <div class="adminLink">
+            <a href="{{ route('admin.index') }}">
+                Administracion
+            </a>
+        </div>
     </footer>
 
     @section('scripts')
