@@ -12,8 +12,8 @@
         <div><span>Página de Administración</span></div>
         <div>
             <ul>
-                <a href="{{ route('home') }}">
-                    <li>Volver</li>
+                <a href="{{ route('auth.logout') }}">
+                    <li>Salir</li>
                 </a>
             </ul>
         </div>
@@ -30,7 +30,7 @@
         </ul>
     </aside>
     <main>
-        <form action="" method="post">
+        <form action="{{ route('admin.homePage.store') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <textarea name="value" id="value"></textarea>
             <footer>
