@@ -66,14 +66,12 @@
         </section>
         <section>
             <h3>Interés</h3>
-            <div class="footer-intereses">
-                <a href="https://dgvs.mspbs.gov.py/">
-                    <img src="{{ asset('images/logo-dgvs-white.svg') }}" alt="Link to DGVS">
-                </a>
-                <a href="https://www.mspbs.gov.py/index.php">
-                    <img src="{{ asset('images/logo-mspbs-white.svg') }}" alt="Link to MSPBS">
-                </a>
-            </div>
+            <a href="https://dgvs.mspbs.gov.py/">
+                <img src="{{ asset('images/logo-dgvs-white.svg') }}" alt="Link to DGVS">
+            </a>
+            <a href="https://www.mspbs.gov.py/index.php">
+                <img src="{{ asset('images/logo-mspbs-white.svg') }}" alt="Link to MSPBS">
+            </a>
         </section>
         <div class="adminLink">
             <a href="{{ route('admin.index') }}">

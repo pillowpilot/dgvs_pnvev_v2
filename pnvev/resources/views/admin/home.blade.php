@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
+    <link rel="stylesheet" href="{{ asset('css/generic.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 <body>
@@ -21,7 +22,7 @@
     <aside>
         <ul>
             <a href="{{ route('admin.homePage') }}">
-                <li>Pagina Principal</li>
+                <li>Modificar Pagina Principal</li>
             </a>
             <a href="{{ route('home') }}">
                 <li>Volver</li>
@@ -49,6 +50,7 @@
         document.addEventListener('DOMContentLoaded', () => {
         const editor = tinymce.init({
             selector: 'textarea#value',
+            content_css: "{{ asset('css/editor.css') }}",
             setup: (editor) => {
                 editor.on('change', () => editor.save());
                 fetch(REST_HOMEPAGE_CONTENT_URL)
@@ -59,7 +61,7 @@
             },
             plugins: [
                 'advlist', 'autolink', 'link', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
-                'wordcount', 'visualblocks', 'visualchars', 'fullscreen', 'insertdatetime',
+                'visualblocks', 'visualchars', 'fullscreen', 'insertdatetime',
                 'media', 'table', 'template', 'help'
             ],
             });

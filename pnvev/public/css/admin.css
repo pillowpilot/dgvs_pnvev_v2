@@ -1,30 +1,16 @@
 :root {
-    --color-text-main: #313649;
+    --text-main-color: #313649;
     --color-link-active: #2071cc;
 }
 
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
 body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background-color: white;
     display: grid;
     grid-template-areas: 
-        "header header"
-        "aside main";
-    grid-template-rows: 50px 1fr;
+    "header header"
+    "aside main";
+    grid-template-rows: 3rem 1fr;
     grid-template-columns: 250px 1fr;
+    background-color: var(--dominant-color);
     color: var(--color-text-main);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -39,7 +25,7 @@ body > header {
 
 body > header:first-child span {
     font-size: 2rem;
-    padding: 0 1rem;
+    margin: 0 1rem;
 }
 
 body > header ul {
@@ -77,6 +63,7 @@ body > main {
     grid-template-areas: 
         "left form right";
     grid-template-columns: 1fr 10fr 1fr;
+    padding: 1rem 0;
 }
 
 body > main > form {
