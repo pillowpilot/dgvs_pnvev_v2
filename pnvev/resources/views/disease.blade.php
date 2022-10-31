@@ -45,10 +45,10 @@
 
 <main>
     <div class="article-wrapper">
-        <article class="tendencies">
+        <article class="tendencies rounded-corners">
             <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica</a></header>
             <section class="toolbox">
-                <section class="filters">
+                <section class="filters rounded-corners">
                     <div class="filter">
                         <select name="tendencias-initialYear">
                         </select>
@@ -61,23 +61,52 @@
                         <button type="button" name="tendencias-submit">Actualizar</button>
                     </div>
                 </section>
-                <section class="export">
+                <section class="export rounded-corners">
                     <button type="button" name="export-pdf">PDF</button>
                     <button type="button" name="export-svg">SVG</button>
                     <button type="button" name="export-xlsx">XLSX</button>
                 </section>
             </section>
-            <section id="tendencia" class="graphics"></section>
+            <section id="tendencia" class="graphics rounded-corners"></section>
             <footer>
                 <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
             </footer>
         </article>
     </div>
     <div class="article-wrapper">
-        <article class="horizontalBar">
+        <article class="tendencies-children rounded-corners">
+            <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica (familia de enfermedades)</a></header>
+            <section class="toolbox">
+                <section class="filters rounded-corners">
+                    <div class="filter">
+                        <select name="tendencias-2-initialYear">
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <select  name="tendencias-2-finalYear">
+                        </select>
+                    </div>
+                    <div class="submit">
+                        <button type="button" name="tendencias-submit">Actualizar</button>
+                    </div>
+                </section>
+                <section class="export rounded-corners">
+                    <button type="button" name="export-pdf">PDF</button>
+                    <button type="button" name="export-svg">SVG</button>
+                    <button type="button" name="export-xlsx">XLSX</button>
+                </section>
+            </section>
+            <section id="tendencia-hijos" class="graphics rounded-corners"></section>
+            <footer>
+                <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
+            </footer>
+        </article>
+    </div>
+    <div class="article-wrapper">
+        <article class="horizontalBar rounded-corners">
             <header><a id="bars">Gráfico de distribución anual por Rango de Edad y Sexo</a></header>
             <section class="toolbox">
-                <section class="filters">
+                <section class="filters rounded-corners">
                     <div class="filter">
                         <select name="horizontalBar-year">
                         </select>
@@ -86,30 +115,30 @@
                         <button type="button" name="horizontalBar-submit">Actualizar</button>
                     </div>
                 </section>
-                <section class="export">
+                <section class="export rounded-corners">
                     <button type="button" name="export-pdf">PDF</button>
                     <button type="button" name="export-svg">SVG</button>
                     <button type="button" name="export-xlsx">XLSX</button>
                 </section>
             </section>
-            <section id="barHorizontal" class="graphics"></section>
+            <section id="barHorizontal" class="graphics rounded-corners"></section>
             <footer>
                 <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
             </footer>
         </article>
     </div>
     <div class="article-wrapper">
-        <article class="heatmap">
+        <article class="heatmap rounded-corners">
             <header><a id="heatmap">Mapa de Calor</a></header>
-            <section class="toolbox">
-                <section class="filters"></section>
-                <section class="export">
+            <section class="toolbox rounded-corners">
+                <section class="filters rounded-corners"></section>
+                <section class="export rounded-corners">
                         <button type="button" name="export-pdf">PDF</button>
                         <button type="button" name="export-svg">SVG</button>
                         <button type="button" name="export-xlsx">XLSX</button>
                 </section>
             </section>
-            <section id="map" class="map-graphics"></section>
+            <section id="map" class="map-graphics rounded-corners"></section>
             <footer>
                 <span>Las gráficas son interactivas. Mueva el cursor sobre ellas o haga click sobre las leyendas para filtrar la vizualización.</span>
             </footer>
