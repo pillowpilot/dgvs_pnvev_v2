@@ -20,8 +20,8 @@ export const chartXLabelStyle = {
 
 export const epiweeks = function (){
     let epiweeks = [];
-    for (let i = 1; i < 53; ++i)
-        epiweeks.push(i);
+    for (let i = 1; i <= 53; ++i)
+        epiweeks.push(`${i}`);
     // console.log(epiweeks);
     return epiweeks;
 }();

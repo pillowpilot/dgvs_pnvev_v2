@@ -64,7 +64,8 @@
                 <section class="export rounded-corners">
                     <button type="button" name="export-pdf">PDF</button>
                     <button type="button" name="export-svg">SVG</button>
-                    <button type="button" name="export-xlsx">XLSX</button>
+                    <button type="button" name="export-xls">XLS</button>
+                    <button type="button" name="export-csv">CSV</button>
                 </section>
             </section>
             <section id="tendencia" class="graphics rounded-corners"></section>
@@ -79,11 +80,7 @@
             <section class="toolbox">
                 <section class="filters rounded-corners">
                     <div class="filter">
-                        <select name="tendencias-2-initialYear">
-                        </select>
-                    </div>
-                    <div class="filter">
-                        <select  name="tendencias-2-finalYear">
+                        <select name="tendencias-2-year">
                         </select>
                     </div>
                     <div class="submit">
@@ -93,7 +90,8 @@
                 <section class="export rounded-corners">
                     <button type="button" name="export-pdf">PDF</button>
                     <button type="button" name="export-svg">SVG</button>
-                    <button type="button" name="export-xlsx">XLSX</button>
+                    <button type="button" name="export-xls">XLS</button>
+                    <button type="button" name="export-csv">CSV</button>
                 </section>
             </section>
             <section id="tendencia-hijos" class="graphics rounded-corners"></section>
@@ -118,7 +116,8 @@
                 <section class="export rounded-corners">
                     <button type="button" name="export-pdf">PDF</button>
                     <button type="button" name="export-svg">SVG</button>
-                    <button type="button" name="export-xlsx">XLSX</button>
+                    <button type="button" name="export-xls">XLS</button>
+                    <button type="button" name="export-csv">CSV</button>
                 </section>
             </section>
             <section id="barHorizontal" class="graphics rounded-corners"></section>
@@ -135,7 +134,8 @@
                 <section class="export rounded-corners">
                         <button type="button" name="export-pdf">PDF</button>
                         <button type="button" name="export-svg">SVG</button>
-                        <button type="button" name="export-xlsx">XLSX</button>
+                        <button type="button" name="export-xls">XLS</button>
+                        <button type="button" name="export-csv">CSV</button>
                 </section>
             </section>
             <section id="map" class="map-graphics rounded-corners"></section>
