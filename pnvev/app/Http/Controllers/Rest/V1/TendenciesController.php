@@ -38,6 +38,12 @@ class TendenciesController extends Controller
         $query = $query
             ->addSelect('Year');
 
+        if (array_search('Year', $groupByFields) !== false) {
+            $query = $query
+                // ->addSelect('SemanaEpidemiologica')
+                ->groupBy('Year');
+        }
+
         if (array_search('SemanaEpidemiologica', $groupByFields) !== false) {
             $query = $query
                 ->addSelect('SemanaEpidemiologica')
