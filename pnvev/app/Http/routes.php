@@ -20,7 +20,7 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout')->name('auth.logout');
 
 // Admin pages
 Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
-    Route::get('/', 'Admin\AdminHomeController@index')->name('admin.index');
+    Route::get('/', function() { return redirect()->route('admin.homePage');})->name('admin.index');
     Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
     Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
 });
