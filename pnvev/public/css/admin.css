@@ -21,11 +21,16 @@ body > header {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #ccc;
+    padding: 1rem;
+}
+
+body> header:first-child {
+    display: flex;
+    align-items: center;
 }
 
 body > header:first-child span {
     font-size: 2rem;
-    margin: 0 1rem;
 }
 
 body > header ul {
