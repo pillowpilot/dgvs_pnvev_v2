@@ -50,6 +50,7 @@
         document.addEventListener('DOMContentLoaded', () => {
         const editor = tinymce.init({
             selector: 'textarea#value',
+            language: 'es_MX',
             content_css: "{{ asset('css/editor.css') }}",
             setup: (editor) => {
                 editor.on('change', () => editor.save());
