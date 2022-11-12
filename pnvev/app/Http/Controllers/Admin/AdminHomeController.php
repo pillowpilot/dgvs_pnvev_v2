@@ -14,9 +14,10 @@ class AdminHomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.home');
+        $user = $request->user();
+        return view('admin.home', ['user' => $user]);
     }
 
     /**
@@ -37,8 +38,9 @@ class AdminHomeController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
         \App\KeyValueStorage::updateOrCreate(['key' => 'homePage'], ['value' => $request->input('value')]);
-        return view('admin.home', ['submitStatus' => 'ok']);
+        return view('admin.home', ['user' => $user, 'submitStatus' => 'ok']);
     }
 
     /**
