@@ -21,6 +21,12 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout')->name('auth.logout');
 // Admin pages
 Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::get('/', function() { return redirect()->route('admin.homePage');})->name('admin.index');
+    
+    Route::get('/user', 'Admin\AdminUserController@index')->name('admin.user');
+    Route::post('/user-update-name', 'Admin\AdminUserController@storeName')->name('admin.user.storeName');
+    Route::post('/user-update-email', 'Admin\AdminUserController@storeEmail')->name('admin.user.storeEmail');
+    Route::post('/user-update-password', 'Admin\AdminUserController@storePassword')->name('admin.user.storePassword');
+
     Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
     Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
 });
