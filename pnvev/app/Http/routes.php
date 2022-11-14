@@ -27,6 +27,9 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::post('/user-update-email', 'Admin\AdminUserController@storeEmail')->name('admin.user.storeEmail');
     Route::post('/user-update-password', 'Admin\AdminUserController@storePassword')->name('admin.user.storePassword');
 
+    Route::get('/tables', 'Admin\AdminTableController@index')->name('admin.table');
+    Route::post('/table', 'Admin\AdminTableController@show')->name('admin.table.show');
+
     Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
     Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
 });
