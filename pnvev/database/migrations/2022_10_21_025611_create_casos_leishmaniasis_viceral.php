@@ -39,7 +39,8 @@ class CreateCasosLeishmaniasisViceral extends Migration
                     using utf8mb4))))
             where
                 ((`ff`.`TipoFicha` = 'VICERALH')
-                    and (`ff`.`ClasificacionFinal` = 'CONFIRMADO'));");
+                    and (`ff`.`ClasificacionFinal` = 'CONFIRMADO') 
+                    and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y') >= 2020)));");
     }
 
     /**

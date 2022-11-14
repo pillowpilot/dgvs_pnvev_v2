@@ -40,7 +40,8 @@ class CreateCasosLeishmaniasisMucosa extends Migration
             where
                 ((`ff`.`TipoFicha` = 'MUCOSA')
                     and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
-                        and (`ff`.`TipoEntrada` = 'Caso Nuevo'));");
+                    and (`ff`.`TipoEntrada` = 'Caso Nuevo') 
+                    and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2021));");
     }
 
     /**

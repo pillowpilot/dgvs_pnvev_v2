@@ -37,7 +37,8 @@ class CreateCasosChagasAgudo extends Migration
                     using utf8mb4))))
             where
                 ((`ff`.`CaracterizacionCaso` = 'AGUDO')
-                    and (`ff`.`ClasificacionFinal` = 'CONFIRMADO'));");
+                    and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+                    and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2022));");
     }
 
     /**
