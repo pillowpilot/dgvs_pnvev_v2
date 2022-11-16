@@ -27,8 +27,8 @@
             <a href="{{ route('admin.homePage') }}">
                 <li>Modificar Pagina Principal</li>
             </a>
-            <a href="{{ route('admin.table') }}">
-                <li>Modificar Datos</li>
+            <a href="{{ route('admin.epiweek') }}">
+                <li>Modificar Semana Epidemiológica</li>
             </a>
             <a href="{{ route('admin.user') }}">
                 <li>Modificar Perfil</li>
