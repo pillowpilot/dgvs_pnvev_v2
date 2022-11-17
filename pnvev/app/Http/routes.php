@@ -30,10 +30,6 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::get('/epiweek', 'Admin\AdminEpiweekController@index')->name('admin.epiweek');
     Route::post('/epiweek-update-data', 'Admin\AdminEpiweekController@store')->name('admin.epiweek.store');
 
-    // Route::get('/tables', 'Admin\AdminTableController@index')->name('admin.table');
-    // Route::post('/table/show', 'Admin\AdminTableController@show')->name('admin.table.show');
-    // Route::post('/table-update-data', 'Admin\AdminTableController@store')->name('admin.table.store');
-
     Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
     Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
 });
@@ -58,4 +54,6 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
 
     Route::get('/homePage', 'Admin\Rest\AdminHomePageRestController@index')->name('rest.homePage');
+    Route::get('/epiweek', 'Admin\Rest\AdminEpiweekRestController@index');
+    Route::get('/epiweek/{id}', 'Admin\Rest\AdminEpiweekRestController@show');
 });

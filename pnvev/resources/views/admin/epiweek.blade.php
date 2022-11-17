@@ -47,7 +47,10 @@ body>main>article>footer button {
     </main>
     <footer>
         <button id="add-row">Agregar fila al final</button>
+        <button id="clear-table">Limpiar</button>
         <button id="reset-table">Restaurar</button>
+        <label for="file-selector">Cargar desde archivo CVS:</label>
+        <input type="file" id="file-selector" accept=".csv, .txt" >
         <form action="{{ route('admin.epiweek.store') }}" method="post" id="table-data-form">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <button id="submit">Guardar</button>
@@ -63,6 +66,7 @@ body>main>article>footer button {
 @stop
 
 @section('scripts')
+<script src="{{ asset('js/papaparse/papaparse.min.js') }}"></script>
 <script src="{{ asset('js/luxon/luxon.min.js') }}"></script>
 <script src="{{ asset('js/tabulator/tabulator.min.js') }}"></script>
 <script>
@@ -70,24 +74,24 @@ body>main>article>footer button {
     const data = {!! $json !!};
     const columnsDefinitions = [
         {title: "SemanaEpidemiologica", field: "SemanaEpidemiologica", editor: "input"},
-        {title: "Inicio", field: "Inicio", editor: "input"},
-        {title: "Fin", field: "Fin", editor: "input"},
-        // {title: "Inicio", field: "Inicio", editor:"date", editorParams:{
-        //     // min:"01/01/2020", // the minimum allowed value for the date picker
-        //     // max:"02/12/2030", // the maximum allowed value for the date picker
-        //     format:"yyyy-mm-dd", // the format of the date value stored in the cell
-        //     elementAttributes:{
-        //         title:"slide bar to choose option" // custom tooltip
-        //     }
-        // }},
-        // {title: "Fin", field: "Fin", editor:"date", editorParams:{
-        //     // min:"01/01/2020", // the minimum allowed value for the date picker
-        //     // max:"02/12/2030", // the maximum allowed value for the date picker
-        //     format:"yyyy-mm-dd", // the format of the date value stored in the cell
-        //     elementAttributes:{
-        //         title:"slide bar to choose option" // custom tooltip
-        //     }
-        // }},
+        // {title: "Inicio", field: "Inicio", editor: "input"},
+        // {title: "Fin", field: "Fin", editor: "input"},
+        {title: "Inicio", field: "Inicio", editor:"date", editorParams:{
+            // min:"01/01/2020", // the minimum allowed value for the date picker
+            // max:"02/12/2030", // the maximum allowed value for the date picker
+            format:"yyyy-MM-dd", // the format of the date value stored in the cell
+            elementAttributes:{
+                title:"slide bar to choose option" // custom tooltip
+            }
+        }},
+        {title: "Fin", field: "Fin", editor:"date", editorParams:{
+            // min:"01/01/2020", // the minimum allowed value for the date picker
+            // max:"02/12/2030", // the maximum allowed value for the date picker
+            format:"yyyy-MM-dd", // the format of the date value stored in the cell
+            elementAttributes:{
+                title:"slide bar to choose option" // custom tooltip
+            }
+        }},
     ];
     document.addEventListener('DOMContentLoaded', () => {
         const elementId = '#table-container';
@@ -129,8 +133,21 @@ body>main>article>footer button {
         document.getElementById('add-row').addEventListener('click', () => {
             table.addRow({}, false); // false => add row to the bottom
         });
+        document.getElementById('clear-table').addEventListener('click', () => {
+            table.clearData();
+        });
         document.getElementById('reset-table').addEventListener('click', () => {
+            table.clearData();
             table.setData(data);
+        });
+        document.getElementById('file-selector').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            Papa.parse(file, {
+                header: true, // First line contains column names
+                complete: function(results) {
+                    table.setData(results.data);
+                }
+            });
         });
         document.getElementById('table-data-form').addEventListener('submit', () => {
             

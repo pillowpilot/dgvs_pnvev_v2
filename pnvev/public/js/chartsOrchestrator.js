@@ -71,7 +71,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     tendenciesChart_v2.setYAxisText(`N&deg; de Casos`);
     tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
-    tendenciesChart_v2.setCurrentWeek(40);
+    if(EPIWEEK >= 1)
+        tendenciesChart_v2.setCurrentWeek(EPIWEEK);
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-pdf"]'), 'application/pdf');
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-svg"]'), 'image/svg+xml');
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -115,6 +116,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Load tendencies of children
 document.addEventListener('DOMContentLoaded', async () => {
 
+    if(DISEASE_CHILDREN.length === 0) return;
+
     const yearSelect = new YearSelect(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`);
     yearSelect.setPlaceholder('Año');
     await yearSelect.bind($(`article.tendencies-children select[name="tendencias-2-year"]`));
@@ -125,7 +128,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     childrenChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     childrenChart_v2.setYAxisText(`N&deg; de Casos`);
     childrenChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
-    childrenChart_v2.setCurrentWeek(40);
+    if(EPIWEEK >= 1)
+        childrenChart_v2.setCurrentWeek(EPIWEEK);
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-pdf"]'), 'application/pdf');
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-svg"]'), 'image/svg+xml');
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -221,9 +225,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const regions_pr = fetch(`${ROOT_URL}/api/v1/regions`).then(res => res.json());
     const topo_pr = fetch(DATA_PY_TOPO_JSON_URL).then(res => res.json());
+    const topo2_pr = fetch(`/data/py_geojson_adm2.geojson`).then(res => res.json());
     const map_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams).then(res => res.json());
 
-    Promise.all([regions_pr, topo_pr, map_pr])
+    Promise.all([regions_pr, topo2_pr, map_pr])
         .then(([regions_data, topo_data, map_data]) => {
             const regionIdToMapCode = (id) => regions_data.filter(o => o.id === id)[0].map_code;
             const data2 = map_data.map(o => [regionIdToMapCode(o.RegionAdministrativaId), parseInt(o.Total)]);

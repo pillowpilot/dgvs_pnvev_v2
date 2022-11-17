@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Rest;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class DiseaseV2Controller extends Controller
+class AdminEpiweekRestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,8 @@ class DiseaseV2Controller extends Controller
      */
     public function index()
     {
-        //
+        $data = \DB::table('pnvev_epiweek')->get();
+        return response()->json($data);
     }
 
     /**
@@ -48,34 +49,8 @@ class DiseaseV2Controller extends Controller
      */
     public function show($id)
     {
-        $model = \App\DiseaseV2::find($id);
-        error_log($model->children()->get());
-
-        $current_epiweek = \DB::table('pnvev_epiweek')
-            ->select('SemanaEpidemiologica')
-            ->where('Inicio', '<=', date('Y-m-d'))
-            ->where('Fin', '>=', date('Y-m-d'))
-            ->first();
-
-        if($current_epiweek) {
-            $current_epiweek = $current_epiweek->SemanaEpidemiologica;
-        } else {
-            $current_epiweek = -1;
-        }
-
-        if ($model) {
-            return view('disease', [
-                'activeDisease' => $model,
-
-                'diseaseFullName' => $model->name,
-                'diseaseId' => $id,
-                'diseaseChildren' => $model->children()->get(),
-
-                'epiweek' => $current_epiweek,
-            ]);
-        } else {
-            abort(404); // TODO Remove this line and replace with a 404 page
-        }
+        $data = \DB::table('pnvev_epiweek')->where('SemanaEpidemiologica', $id)->get();
+        return response()->json($data);
     }
 
     /**

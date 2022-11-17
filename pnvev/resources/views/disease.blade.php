@@ -6,6 +6,7 @@
 
 @section('scripts')
 <script>
+    const EPIWEEK = {{ $epiweek }};
     const DISEASE_ID = {{ $diseaseId }};
     const DISEASEFULLNAME = '{{ $diseaseFullName }}';
     const DISEASETITLE = DISEASEFULLNAME;
@@ -35,13 +36,13 @@
 
 @section('main')
 
-<nav class="sidebar">
+<!-- <nav class="sidebar">
     <ul>
         <li><a href="#tendencies">Gráfico de Tendencias</a></li>
         <li><a href="#bars">Barras horizontales</a></li>
         <li><a href="#heatmap">Mapa de Calor</a></li>
     </ul>
-</nav>
+</nav> -->
 
 <main>
     <div class="article-wrapper">
@@ -74,9 +75,10 @@
             </footer>
         </article>
     </div>
+    @if(count($diseaseChildren) > 0)
     <div class="article-wrapper">
         <article class="tendencies-children rounded-corners">
-            <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica (familia de enfermedades)</a></header>
+            <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica por Enfermedades Constituyentes</a></header>
             <section class="toolbox">
                 <section class="filters rounded-corners">
                     <div class="filter">
@@ -100,6 +102,7 @@
             </footer>
         </article>
     </div>
+    @endif
     <div class="article-wrapper">
         <article class="horizontalBar rounded-corners">
             <header><a id="bars">Gráfico de distribución anual por Rango de Edad y Sexo</a></header>

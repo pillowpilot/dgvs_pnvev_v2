@@ -28,7 +28,7 @@
                 <li>Modificar Pagina Principal</li>
             </a>
             <a href="{{ route('admin.epiweek') }}">
-                <li>Modificar Semana Epidemiológica</li>
+                <li>Modificar Calendario</li>
             </a>
             <a href="{{ route('admin.user') }}">
                 <li>Modificar Perfil</li>
