@@ -28,6 +28,7 @@
 <script src="{{ asset('js/highcharts/maps/modules/map.js') }}"></script>
 <script src="{{ asset('js/highcharts/maps/modules/exporting.js') }}"></script>
 <script src="{{ asset('js/lodash/lodash.min.js') }}"></script>
+<script src="{{ asset('js/geometric/geometric.min.js') }}"></script>
 <script src="{{ asset('js/charts/initialization.js') }}" type="module"></script>
 <script src="{{ asset('js/utils.js') }}" type="module"></script>
 <script src="{{ asset('js/charts/tendencies.js') }}" type="module"></script>
@@ -68,6 +69,9 @@
                     <button type="button" name="export-xls">XLS</button>
                     <button type="button" name="export-csv">CSV</button>
                 </section>
+            </section>
+            <section class="totals rounded-corners">
+                <span>La cantidad total de casos entre los años <span id="total-begining"></span> y <span id="total-ending"></span> es: <span id="total-total"></span>.</span>
             </section>
             <section id="tendencia" class="graphics rounded-corners"></section>
             <footer>

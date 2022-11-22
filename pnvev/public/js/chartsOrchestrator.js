@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     finalYearSelect.setPlaceholder('Año Final');
     await finalYearSelect.bind($(`article.tendencies select[name="tendencias-finalYear"]`));
 
-    const tendenciesChart_v2 = new TendencyChart('tendencia', {cumulative: false});
+    const tendenciesChart_v2 = new TendencyChart('tendencia', {cumulative: false, total: true});
     tendenciesChart_v2.setTitleText(`Casos Confirmados de ${DISEASETITLE}`);
     tendenciesChart_v2.setSubtitleText(`por semana epidemiológica de notificación por año`);
     tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
@@ -108,6 +108,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 _(groupedData).mapValues((yearData, year) =>
                     tendenciesChart_v2.addSeries(yearData, year)
                 ).value();
+
+                const calculateTotal = (groupedData) => {
+                    let grandTotal = 0;
+                    for(const [year, yearData] of Object.entries(groupedData)) {
+                        const total = yearData.reduce((acc, {y}) => acc + y, 0);
+                        grandTotal += total;
+                    }
+                    return grandTotal;
+                };
+
+                document.getElementById('total-begining').innerHTML = initialYear;
+                document.getElementById('total-ending').innerHTML = finalYear;
+                document.getElementById('total-total').innerHTML = calculateTotal(groupedData);;
+                document.getElementsByClassName('totals')[0].classList.add('visible');
             });
     });
 
@@ -227,16 +241,36 @@ document.addEventListener('DOMContentLoaded', function () {
     const topo_pr = fetch(DATA_PY_TOPO_JSON_URL).then(res => res.json());
     const topo2_pr = fetch(`/data/py_geojson_adm2.geojson`).then(res => res.json());
     const map_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams).then(res => res.json());
+    const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
 
-    Promise.all([regions_pr, topo2_pr, map_pr])
-        .then(([regions_data, topo_data, map_data]) => {
-            const regionIdToMapCode = (id) => regions_data.filter(o => o.id === id)[0].map_code;
-            const data2 = map_data.map(o => [regionIdToMapCode(o.RegionAdministrativaId), parseInt(o.Total)]);
+    Promise.all([regions_pr, topo2_pr, map_pr, points_pr])
+        .then(([regions_data, topo_data, map_data, points_data]) => {
+            // const regionIdToMapCode = (id) => regions_data.filter(o => o.id === id)[0].map_code;
+            // const data2 = map_data.map(o => [regionIdToMapCode(o.RegionAdministrativaId), parseInt(o.Total)]);
 
-            // console.table(regions_data);
-            // console.table(topo_data);
-            // console.table(map_data);
-            // console.table(data2);
+            const regionNameExtractor = (feature) => feature.properties.ADM2_ES;
+            const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
+
+            const data = [];
+            for(const feature of topo_data.features){
+                const regionName = regionNameExtractor(feature);
+                const regionPolygon = regionPolygonExtractor(feature);
+                
+                var numberOfPoints = 0;
+                for(const point of points_data){
+                    const isInside = geometric.pointInPolygon(point, regionPolygon);
+                    if(isInside){
+                        numberOfPoints++;
+                    }
+                }
+
+                const regionData = {
+                    name: regionName,
+                    // value: numberOfPoints,
+                    value: Math.random() * 100,
+                };
+                data.push(regionData);
+            }
 
             Highcharts.mapChart('map', {
                 chart: {
@@ -276,7 +310,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
 
                 series: [{
-                    data: data2,
+                    data: data,
+                    joinBy: ['ADM2_ES', 'name'], // [property name in topojson, property name in data]
                     name: `${DISEASEFULLNAME}`,
                     states: {
                         hover: {
