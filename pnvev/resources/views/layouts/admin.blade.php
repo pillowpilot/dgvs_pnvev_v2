@@ -33,6 +33,9 @@
             <a href="{{ route('admin.user') }}">
                 <li>Modificar Perfil</li>
             </a>
+            <a href="{{ route('admin.maps') }}">
+                <li>Actualizar Mapas</li>
+            </a>
             <a href="{{ route('home') }}">
                 <li>Volver</li>
             </a>

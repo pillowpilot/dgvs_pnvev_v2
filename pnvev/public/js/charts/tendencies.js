@@ -85,8 +85,23 @@ class TendencyChart {
         this.creditsText = creditsText;
     }
 
-    setCurrentWeek(currentWeek) {
-        this.currentWeek = currentWeek;
+    addCurrentWeek(currentWeek) {
+        const xAxis = this.chart.xAxis[0];
+        xAxis.addPlotLine({
+            value: currentWeek,
+            color: 'red',
+            width: 2,
+            dashStyle: 'ShortDash',
+            id: 'current-week',
+            label: {
+                text: 'SE Actual',
+            }
+        });
+    }
+
+    removeCurrentWeek() {
+        const xAxis = this.chart.xAxis[0];
+        xAxis.removePlotLine('current-week');
     }
 
     // https://highcharts.com/docs/chart-concepts/series
@@ -200,9 +215,10 @@ class TendencyChart {
             },
             plotOptions: {
                 column: {
-                    pointPadding: 0, // Distance between columns in the same group
+                    // pointPadding: 0, // Distance between columns in the same group
                     // groupPadding: 0, // Distance between groups of columns
-                    borderWidth: 0,
+                    // borderWidth: 0,
+                    pointRange: 1, // The X axis range that each point is valid for (https://api.highcharts.com/highcharts/plotOptions.column.pointRange).
                 },
                 line: {
                     marker: {
@@ -220,18 +236,6 @@ class TendencyChart {
                 },
             }
         };
-
-        if(this.currentWeek) {
-            options.xAxis.plotLines = [{
-                color: '#FF0000',
-                dashStyle: 'ShortDash',
-                width: 2,
-                value: this.currentWeek,
-                label: {
-                    text: 'SE Actual',
-                },
-            }];
-        }
 
         return options;
     }

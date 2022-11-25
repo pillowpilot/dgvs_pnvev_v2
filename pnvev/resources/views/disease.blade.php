@@ -48,7 +48,7 @@
 <main>
     <div class="article-wrapper">
         <article class="tendencies rounded-corners">
-            <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica</a></header>
+            <header><a id="tendencies">Gráfico de tendencia en el tiempo de {{ $diseaseFullName }}, por Semana Epidemiológica</a></header>
             <section class="toolbox">
                 <section class="filters rounded-corners">
                     <div class="filter">
@@ -71,7 +71,7 @@
                 </section>
             </section>
             <section class="totals rounded-corners">
-                <span>La cantidad total de casos entre los años <span id="total-begining"></span> y <span id="total-ending"></span> es: <span id="total-total"></span>.</span>
+                <span>La cantidad total de casos de <span id="total-disease"></span> es: <span id="total-total"></span>.</span>
             </section>
             <section id="tendencia" class="graphics rounded-corners"></section>
             <footer>
@@ -82,7 +82,7 @@
     @if(count($diseaseChildren) > 0)
     <div class="article-wrapper">
         <article class="tendencies-children rounded-corners">
-            <header><a id="tendencies">Gráfico de tendencia en el tiempo por Semana Epidemiológica por Enfermedades Constituyentes</a></header>
+            <header><a id="tendencies">Gráfico de tendencia en el tiempo de {{ $diseaseFullName }}, por Semana Epidemiológica, por Enfermedades Constituyentes</a></header>
             <section class="toolbox">
                 <section class="filters rounded-corners">
                     <div class="filter">
@@ -109,7 +109,7 @@
     @endif
     <div class="article-wrapper">
         <article class="horizontalBar rounded-corners">
-            <header><a id="bars">Gráfico de distribución anual por Rango de Edad y Sexo</a></header>
+            <header><a id="bars">Distribución de casos de {{ $diseaseFullName }}, por rango de edad y sexo</a></header>
             <section class="toolbox">
                 <section class="filters rounded-corners">
                     <div class="filter">
@@ -135,7 +135,7 @@
     </div>
     <div class="article-wrapper">
         <article class="heatmap rounded-corners">
-            <header><a id="heatmap">Mapa de Calor</a></header>
+            <header><a id="heatmap">Distribución de casos de {{ $diseaseFullName }}, según distritos de residencia en Paraguay, por año</a></header>
             <section class="toolbox rounded-corners">
                 <section class="filters rounded-corners"></section>
                 <section class="export rounded-corners">

@@ -67,12 +67,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const tendenciesChart_v2 = new TendencyChart('tendencia', {cumulative: false, total: true});
     tendenciesChart_v2.setTitleText(`Casos Confirmados de ${DISEASETITLE}`);
-    tendenciesChart_v2.setSubtitleText(`por semana epidemiológica de notificación por año`);
+    tendenciesChart_v2.setSubtitleText(`por semana epidemiológica de notificación, por año`);
     tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     tendenciesChart_v2.setYAxisText(`N&deg; de Casos`);
-    tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
-    if(EPIWEEK >= 1)
-        tendenciesChart_v2.setCurrentWeek(EPIWEEK);
+    tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${(new Date()).toLocaleDateString()}`);
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-pdf"]'), 'application/pdf');
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-svg"]'), 'image/svg+xml');
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -104,11 +102,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             .then(data => {
                 const groupedData = magicFunction(data);
                 tendenciesChart_v2.removeAllSeries();
+                tendenciesChart_v2.removeCurrentWeek();
+
+                if(EPIWEEK >= 1 && (new Date()).getFullYear() <= finalYear){
+                    tendenciesChart_v2.addCurrentWeek(EPIWEEK);
+                }
     
                 _(groupedData).mapValues((yearData, year) =>
                     tendenciesChart_v2.addSeries(yearData, year)
                 ).value();
 
+                // Add grand total (on top of plot)
                 const calculateTotal = (groupedData) => {
                     let grandTotal = 0;
                     for(const [year, yearData] of Object.entries(groupedData)) {
@@ -118,8 +122,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return grandTotal;
                 };
 
-                document.getElementById('total-begining').innerHTML = initialYear;
-                document.getElementById('total-ending').innerHTML = finalYear;
+                // document.getElementById('total-begining').innerHTML = initialYear;
+                // document.getElementById('total-ending').innerHTML = finalYear;
+                document.getElementById('total-disease').innerHTML = DISEASETITLE;
                 document.getElementById('total-total').innerHTML = calculateTotal(groupedData);;
                 document.getElementsByClassName('totals')[0].classList.add('visible');
             });
@@ -141,9 +146,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     childrenChart_v2.setSubtitleText(`por semana epidemiológica de notificación por enfermedades`);
     childrenChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     childrenChart_v2.setYAxisText(`N&deg; de Casos`);
-    childrenChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
-    if(EPIWEEK >= 1)
-        childrenChart_v2.setCurrentWeek(EPIWEEK);
+    childrenChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${(new Date()).toLocaleDateString()}`);
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-pdf"]'), 'application/pdf');
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-svg"]'), 'image/svg+xml');
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -167,6 +170,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         GETParams.append('groupBy[]', 'SemanaEpidemiologica');
 
         childrenChart_v2.removeAllSeries();
+        childrenChart_v2.removeCurrentWeek();
+
+        if(EPIWEEK >= 1 && (new Date()).getFullYear() <= year){
+            childrenChart_v2.addCurrentWeek(EPIWEEK);
+        }
+
         for(const disease_child of DISEASE_CHILDREN){
             const data = await fetch(`${ROOT_URL}/api/v1/diseases/${disease_child.id}/tendencies?` + GETParams).then(res => res.json());
             const groupedData = magicFunction(data);
@@ -187,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     horizontalChart_v2.setTitleText(`Distribución de casos confirmados de ${DISEASETITLE}`);
     horizontalChart_v2.setSubtitleText(`por rango de edad y sexo`);
     horizontalChart_v2.setYAxisText(`Cantidad de Casos`);
-    horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha.`);
+    horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${(new Date()).toLocaleDateString()}`);
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-pdf"]'), 'application/pdf');
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-svg"]'), 'image/svg+xml');
     horizontalChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -215,7 +224,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             .then(data => {
 
                 const categories = _(data).map('GrupoEtareo').uniq().value();
-                const x = _(data).groupBy('Year').mapValues((yearData, year) => _(yearData).groupBy('Sexo').mapValues(v => v.map(o => [o.GrupoEtareo, o.Total])).value()).value();
+                const x = _(data)
+                    .groupBy('Year')
+                    .mapValues((yearData, year) => _(yearData).groupBy('Sexo').mapValues(v => v.map(o => [o.GrupoEtareo, o.Total])).value())
+                    .value();
+                console.log(x);
 
                 horizontalChart_v2.removeAllSeries();
 
@@ -271,6 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 data.push(regionData);
             }
+            console.table(data);
 
             Highcharts.mapChart('map', {
                 chart: {
@@ -300,12 +314,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
 
                 credits: {
-                    text: `Fuente: PNVEV - DGVS | Según los datos de la fecha: dd/mm/yyyy`,
+                    text: `Fuente: PNVEV - DGVS | Según los datos de la fecha: ${(new Date()).toLocaleDateString()}`,
                     position: {
                         align: 'right',
                     },
                     style: {
                         fontSize: '11px',
+                    },
+                },
+
+                tooltip: {
+                    formatter: function(tooltip) {
+                        return `<strong>${this.point.options.name}</strong><br/>Casos: ${this.point.value}`;
                     },
                 },
 
