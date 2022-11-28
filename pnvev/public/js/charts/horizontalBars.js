@@ -69,7 +69,7 @@ class HorizontalBarsChart {
                 text: this.subtitleText,
             },
             xAxis: {
-                categories: [ "20 a 39", "40 a 59", "5 a 19", "60 y mas", "SD" ],
+                type: 'category',
                 labels: {
                     style: chartXLabelStyle,
                 }
