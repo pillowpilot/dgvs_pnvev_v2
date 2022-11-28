@@ -67,12 +67,12 @@ body>main form button[type="submit"] {
 
 <article style="grid-area: regions;">
     <span>Actualizar mapa de departamentos</span>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
                 <label for="name">Departamentos (GeoJSON)</label>
-                <input type="file" id="regions-file-selector" accept=".geojson, .json" >
+                <input type="file" name="file" id="regions-file-selector" accept=".geojson, .json" >
             </div>
         </main>
         <footer>
@@ -88,12 +88,12 @@ body>main form button[type="submit"] {
 
 <article style="grid-area: districts;">
     <span>Actualizar mapa de distritos</span>
-    <form action="" method="post">
+    <form action="{{ route('admin.maps.storeDistrict') }}" method="post" enctype="multipart/form-data">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
                 <label for="name">Distritos (GeoJSON)</label>
-                <input type="file" id="districts-file-selector" accept=".geojson, .json" >
+                <input type="file" name="file" id="districts-file-selector" accept=".geojson, .json" >
             </div>
         </main>
         <footer>
@@ -110,4 +110,23 @@ body>main form button[type="submit"] {
 @stop
 
 @section('scripts')
+<script>
+
+const fileTooBigMessage = `El archivo es demasiado grande. El tamaño máximo es de 3MB.`;
+const checkFileSize = (event, maxSizeInMB, messageElementId, message) => {
+    const file = event.target.files[0];
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if(fileSizeInMB > maxSizeInMB) {
+        document.getElementById(messageElementId).innerHTML = message;
+    }
+};
+
+document.getElementById('regions-file-selector').addEventListener('change', (event) => {
+    checkFileSize(event, 3, 'regionsSubmitStatus', fileTooBigMessage);
+});
+
+document.getElementById('districts-file-selector').addEventListener('change', (event) => {
+    checkFileSize(event, 3, 'districtsSubmitStatus', fileTooBigMessage);
+});
+</script>
 @stop

@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::post('/epiweek-update-data', 'Admin\AdminEpiweekController@store')->name('admin.epiweek.store');
 
     Route::get('/maps', 'Admin\AdminMapsController@index')->name('admin.maps');
-    // Route::post('/maps-update-data', 'Admin\AdminMapsController@store')->name('admin.maps.store');
+    Route::post('/maps-update-district-map', 'Admin\AdminMapsController@storeDistrictMap')->name('admin.maps.storeDistrict');
 
     Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
     Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
@@ -57,6 +57,8 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
     Route::get('/diseases/{id}/map', 'Rest\V1\ChoroplethMapRestController@show');
 
+    Route::get('/districtMap', 'Rest\V1\ChoroplethMapRestController@showDistrictMap');
+    
     Route::get('/homePage', 'Admin\Rest\AdminHomePageRestController@index')->name('rest.homePage');
     Route::get('/epiweek', 'Admin\Rest\AdminEpiweekRestController@index');
     Route::get('/epiweek/{id}', 'Admin\Rest\AdminEpiweekRestController@show');

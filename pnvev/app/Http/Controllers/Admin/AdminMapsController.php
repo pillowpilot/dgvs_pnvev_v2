@@ -36,9 +36,17 @@ class AdminMapsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeDistrictMap(Request $request)
     {
-        //
+        $user = $request->user();
+        $file = $request->file('file');
+        $maxFileSize = 3 * 1024 * 1024; // 3MB
+        if($file->getSize() > $maxFileSize) {
+            return view('admin.maps', ['user' => $user, 'districtsStatusMessageText' => 'Archivo supera el tamaño máximo de 3MB']);
+        }
+        $contents = file_get_contents($file->getRealPath());
+        \App\KeyValueStorage::updateOrCreate(['key' => 'geojsonDistricts'], ['value' => $contents]);
+        return view('admin.maps', ['user' => $user, 'districtsStatusMessageText' => 'Mapa de distritos subido correctamente']);
     }
 
     /**

@@ -224,11 +224,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             .then(data => {
 
                 const categories = _(data).map('GrupoEtareo').uniq().value();
+
                 const x = _(data)
                     .groupBy('Year')
                     .mapValues((yearData, year) => _(yearData).groupBy('Sexo').mapValues(v => v.map(o => [o.GrupoEtareo, o.Total])).value())
                     .value();
-                console.log(x);
 
                 horizontalChart_v2.removeAllSeries();
 
@@ -250,17 +250,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     GETParams.append('groupBy[]', 'RegionAdministrativaId');
 
-    const regions_pr = fetch(`${ROOT_URL}/api/v1/regions`).then(res => res.json());
-    const topo_pr = fetch(DATA_PY_TOPO_JSON_URL).then(res => res.json());
-    const topo2_pr = fetch(`/data/py_geojson_adm2.geojson`).then(res => res.json());
-    const map_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams).then(res => res.json());
+    const topo2_pr = fetch(`${ROOT_URL}/api/v1/districtMap`).then(res => res.json());
     const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
 
-    Promise.all([regions_pr, topo2_pr, map_pr, points_pr])
-        .then(([regions_data, topo_data, map_data, points_data]) => {
-            // const regionIdToMapCode = (id) => regions_data.filter(o => o.id === id)[0].map_code;
-            // const data2 = map_data.map(o => [regionIdToMapCode(o.RegionAdministrativaId), parseInt(o.Total)]);
-
+    Promise.all([topo2_pr, points_pr])
+        .then(([topo_data, points_data]) => {
             const regionNameExtractor = (feature) => feature.properties.ADM2_ES;
             const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
 
@@ -279,8 +273,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const regionData = {
                     name: regionName,
-                    // value: numberOfPoints,
-                    value: Math.random() * 100,
+                    value: numberOfPoints,
+                    // value: Math.random() * 100,
                 };
                 data.push(regionData);
             }
