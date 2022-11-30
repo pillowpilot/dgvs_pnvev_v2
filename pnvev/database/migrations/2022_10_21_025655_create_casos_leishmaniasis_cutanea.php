@@ -13,34 +13,31 @@ class CreateCasosLeishmaniasisCutanea extends Migration
     public function up()
     {
         DB::statement("CREATE OR REPLACE
-            ALGORITHM = UNDEFINED VIEW `dgvsops`.`v_pnvev_casos_leishmaniasis_cutanea` AS
+        ALGORITHM = UNDEFINED VIEW `dgvsops`.`v_pnvev_casos_leishmaniasis_cutanea` AS
+        select
+            9 AS `EnfermedadId`,
+            (
             select
-                9 AS `EnfermedadId`,
-                (select name from dgvsops.pnvev_disease_v2s where id = 9) AS `TipoEnfermedad`,
-                `ff`.`Sexo` AS `Sexo`,
-                `ff`.`Edad` AS `Edad`,
-                (case
-                    when (`ff`.`GrupoEtareo` = '999 SD') then 'SD'
-                    when (`ff`.`GrupoEtareo` = -(1)) then 'SD'
-                    when isnull(`ff`.`GrupoEtareo`) then 'SD'
-                    else `ff`.`GrupoEtareo`
-                end) AS `GrupoEtareo`,
-                `par`.`name` AS `RegionAdministrativa`,
-                `par`.`id` AS `RegionAdministrativaId`,
-                str_to_date(`ff`.`FechaNotificacion`,
-                '%d/%m/%Y') AS `Fecha`,
-                `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
-                year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`
+                `dgvsops`.`pnvev_disease_v2s`.`name`
             from
-                (`dgvsops`.`frm_fleishmaniasis` `ff`
-            join `dgvsops`.`pnvev_administrative_regions` `par` on
-                ((convert(`par`.`forms_name`
-                    using utf8mb4) = convert(`ff`.`Departamento_descContagio`
-                    using utf8mb4))))
+                `dgvsops`.`pnvev_disease_v2s`
             where
-                ((`ff`.`TipoFicha` = 'CUTANEA')
-                    and (`ff`.`ClasificacionFinal` = 'CONFIRMADO') 
-                    and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y') >= 2021)));");
+                (`dgvsops`.`pnvev_disease_v2s`.`id` = 9)) AS `TipoEnfermedad`,
+            `ff`.`Sexo` AS `Sexo`,
+            `ff`.`Edad` AS `Edad`,
+            `ff`.`GrupoEtareo` AS `GrupoEtareo`,
+            'DEPRECATED' AS `RegionAdministrativa`,
+            'DEPRECATED' AS `RegionAdministrativaId`,
+            str_to_date(`ff`.`FechaNotificacion`,
+            '%d/%m/%Y') AS `Fecha`,
+            `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
+            year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`
+        from
+            `dgvsops`.`frm_fleishmaniasis` `ff`
+        where
+            ((`ff`.`TipoFicha` = 'CUTANEA')
+                and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+                    and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2021));");
     }
 
     /**
