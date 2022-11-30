@@ -70,6 +70,7 @@ class DiseaseV2Controller extends Controller
                 'diseaseFullName' => $model->name,
                 'diseaseId' => $id,
                 'diseaseChildren' => $model->children()->get(),
+                'diseaseCaseDescription' => $model->case_description,
 
                 'epiweek' => $current_epiweek,
             ]);

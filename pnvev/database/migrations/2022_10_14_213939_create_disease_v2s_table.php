@@ -18,6 +18,7 @@ class CreateDiseaseV2sTable extends Migration
             $table->string('name');
             $table->string('level');
             $table->integer('order');
+            $table->string('case_description');
         });
     }
 
