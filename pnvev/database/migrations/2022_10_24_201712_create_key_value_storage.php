@@ -14,7 +14,7 @@ class CreateKeyValueStorage extends Migration
     {
         Schema::create('pnvev_key_value', function (Blueprint $table) {
             $table->string('key')->primary();
-            $table->string('value', 10000);
+            $table->mediumText('value');
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
         });
