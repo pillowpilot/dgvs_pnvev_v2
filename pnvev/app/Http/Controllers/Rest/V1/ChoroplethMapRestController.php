@@ -40,6 +40,15 @@ class ChoroplethMapRestController extends Controller
         //
     }
 
+    public function showRegionMap(Request $request)
+    {
+        $regions = \App\KeyValueStorage::where('key', 'geojsonRegions')->first();
+        if($regions) {
+            return response($regions->value, 200)->header('Content-Type', 'application/json');
+        }
+        return response('No se ha subido un mapa de departamentos', 404);
+    }
+
     public function showDistrictMap(Request $request)
     {
         $districts = \App\KeyValueStorage::where('key', 'geojsonDistricts')->first();

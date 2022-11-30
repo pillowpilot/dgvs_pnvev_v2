@@ -67,7 +67,7 @@ body>main form button[type="submit"] {
 
 <article style="grid-area: regions;">
     <span>Actualizar mapa de departamentos</span>
-    <form action="" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.maps.storeRegion') }}" method="post" enctype="multipart/form-data">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
