@@ -1,5 +1,8 @@
 import { TendencyChart } from './charts/tendencies.js';
 import { HorizontalBarsChart } from './charts/horizontalBars.js';
+import { Choropleth } from './charts/map.js';
+
+const currentDate = (new Date()).toLocaleDateString('es-PY', {day: 'numeric', month: 'long', year: 'numeric'});
 
 class YearSelect {
     constructor(url) {
@@ -66,11 +69,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await finalYearSelect.bind($(`article.tendencies select[name="tendencias-finalYear"]`));
 
     const tendenciesChart_v2 = new TendencyChart('tendencia', {cumulative: false, total: true});
-    tendenciesChart_v2.setTitleText(`Casos Confirmados de ${DISEASETITLE}`);
+    tendenciesChart_v2.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
     tendenciesChart_v2.setSubtitleText(`por semana epidemiológica de notificación, por año`);
     tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     tendenciesChart_v2.setYAxisText(`N&deg; de Casos`);
-    tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${(new Date()).toLocaleDateString()}`);
+    tendenciesChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${currentDate}`);
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-pdf"]'), 'application/pdf');
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-svg"]'), 'image/svg+xml');
     tendenciesChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -142,11 +145,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await yearSelect.bind($(`article.tendencies-children select[name="tendencias-2-year"]`));
 
     const childrenChart_v2 = new TendencyChart('tendencia-hijos', {displayTotal: true, cumulative: false});
-    childrenChart_v2.setTitleText(`Casos Confirmados de ${DISEASETITLE}`);
+    childrenChart_v2.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
     childrenChart_v2.setSubtitleText(`por semana epidemiológica de notificación por enfermedades`);
     childrenChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     childrenChart_v2.setYAxisText(`N&deg; de Casos`);
-    childrenChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${(new Date()).toLocaleDateString()}`);
+    childrenChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${currentDate}`);
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-pdf"]'), 'application/pdf');
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-svg"]'), 'image/svg+xml');
     childrenChart_v2.bindExportingButton(document.querySelector('article.tendencies-children button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -193,10 +196,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     await yearSelect.bind($(`select[name="horizontalBar-year"]`));
 
     const horizontalChart_v2 = new HorizontalBarsChart('barHorizontal');
-    horizontalChart_v2.setTitleText(`Distribución de casos confirmados de ${DISEASETITLE}`);
+    horizontalChart_v2.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
     horizontalChart_v2.setSubtitleText(`por rango de edad y sexo`);
     horizontalChart_v2.setYAxisText(`Cantidad de Casos`);
-    horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${(new Date()).toLocaleDateString()}`);
+    horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${currentDate}`);
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-pdf"]'), 'application/pdf');
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-svg"]'), 'image/svg+xml');
     horizontalChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
@@ -240,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-// Load map
+// Load regions map
 document.addEventListener('DOMContentLoaded', function () {
     let GETParams = new URLSearchParams({
         InitialYear: '2022',
@@ -250,10 +253,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     GETParams.append('groupBy[]', 'RegionAdministrativaId');
 
-    const topo2_pr = fetch(`${ROOT_URL}/api/v1/districtMap`).then(res => res.json());
+    const map_pr = fetch(`${ROOT_URL}/api/v1/regionMap`).then(res => res.json());
     const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
 
-    Promise.all([topo2_pr, points_pr])
+    Promise.all([map_pr, points_pr])
+        .then(([topo_data, points_data]) => {
+            const regionNameExtractor = (feature) => feature.properties.ADM1_ES;
+            const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
+
+            const data = [];
+            for(const feature of topo_data.features){
+                const regionName = regionNameExtractor(feature);
+                const regionPolygon = regionPolygonExtractor(feature);
+                
+                var numberOfPoints = 0;
+                for(const point of points_data){
+                    const isInside = geometric.pointInPolygon(point, regionPolygon);
+                    if(isInside){
+                        numberOfPoints++;
+                    }
+                }
+
+                const regionData = {
+                    name: regionName,
+                    value: numberOfPoints,
+                    // value: Math.random() * 100,
+                };
+                data.push(regionData);
+            }
+
+            const map = new Choropleth('map-regions');
+            map.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
+            map.setSubtitleText(`por departamentos`);
+            map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
+            map.setData(data);
+            map.setMapData(topo_data);
+            map.setJoinBy(['ADM1_ES', 'name']);
+            map.draw();
+        });
+});
+
+// Load districts map
+document.addEventListener('DOMContentLoaded', function () {
+    let GETParams = new URLSearchParams({
+        InitialYear: '2022',
+        FinalYear: '2022',
+        InitialEpiweek: 1,
+        FinalEpiweek: 53,
+    });
+    GETParams.append('groupBy[]', 'RegionAdministrativaId');
+
+    const map_pr = fetch(`${ROOT_URL}/api/v1/districtMap`).then(res => res.json());
+    const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
+
+    Promise.all([map_pr, points_pr])
         .then(([topo_data, points_data]) => {
             const regionNameExtractor = (feature) => feature.properties.ADM2_ES;
             const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
@@ -278,65 +331,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 data.push(regionData);
             }
-            console.table(data);
 
-            Highcharts.mapChart('map', {
-                chart: {
-                    map: topo_data
-                },
-
-                title: {
-                    text: 'Demo de Mapa temático proporcional/calor (Columna 1 de la tabla de requerimientos)',
-                },
-
-                subtitle: {
-                    text: '<strong>Paraguay</strong>'
-                },
-
-                mapNavigation: {
-                    enabled: true,
-                    buttonOptions: {
-                        verticalAlign: 'bottom'
-                    }
-                },
-
-                colorAxis: {
-                    minColor: '#e0f7fa', //'#e3973b',
-                    maxColor: '#26a69a', //'#cc332b',//
-                    type: 'linear',
-                    min: 0
-                },
-
-                credits: {
-                    text: `Fuente: PNVEV - DGVS | Según los datos de la fecha: ${(new Date()).toLocaleDateString()}`,
-                    position: {
-                        align: 'right',
-                    },
-                    style: {
-                        fontSize: '11px',
-                    },
-                },
-
-                tooltip: {
-                    formatter: function(tooltip) {
-                        return `<strong>${this.point.options.name}</strong><br/>Casos: ${this.point.value}`;
-                    },
-                },
-
-                series: [{
-                    data: data,
-                    joinBy: ['ADM2_ES', 'name'], // [property name in topojson, property name in data]
-                    name: `${DISEASEFULLNAME}`,
-                    states: {
-                        hover: {
-                            color: '#6d9eeb'
-                        }
-                    },
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name}'
-                    }
-                }]
-            });
+            const map = new Choropleth('map-districts');
+            map.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
+            map.setSubtitleText(`por distritos`);
+            map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
+            map.setData(data);
+            map.setMapData(topo_data);
+            map.setJoinBy(['ADM2_ES', 'name']);
+            map.draw();
         });
 });
