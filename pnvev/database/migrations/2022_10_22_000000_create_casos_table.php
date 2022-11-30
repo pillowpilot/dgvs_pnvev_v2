@@ -20,7 +20,9 @@ class CreateCasosTable extENDs Migration
             union
             select * from dgvsops.v_pnvev_casos_chagas_agudo vpcca 
             union
-            select * from dgvsops.v_pnvev_casos_chagas_cronico vpccc");
+            select * from dgvsops.v_pnvev_casos_chagas_cronico vpccc
+            union
+            select * from dgvsops.v_pnvev_casos_malaria vpclm");
     }
 
     /**
