@@ -19,9 +19,6 @@
                 <input type="text" name="email" placeholder="Ingrese su email">
                 <label for="password">Contraseña</label>
                 <input type="password" name="password" placeholder="Ingrese su contraseña">
-                <div class="remember-me">
-                    <input type="checkbox" name="remember"> Recordarme
-                </div>
                 <input class="submit" type="submit" value="Ingresar">
             </form>
         </section>

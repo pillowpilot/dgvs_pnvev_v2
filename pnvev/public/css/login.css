@@ -40,11 +40,15 @@ main section {
 main section form {
     display: grid;
     gap: 0.75rem;
-    grid-template: 1.5fr 1.5fr 1fr 2fr / min-content 1fr;
+    grid-template: 1.5fr 1.5fr 2fr / min-content 1fr;
 }
 
 main section form label {
     margin: auto 0;
+}
+
+main section form input[type="text"] {
+    height: 1.5rem;
 }
 
 main section form .remember-me {
