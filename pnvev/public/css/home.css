@@ -2,7 +2,7 @@ body main
 {
     flex-grow: 1;
     display: grid;
-    grid-template: 1fr / 350px 1fr 350px;
+    grid-template: 1fr / 1fr 10fr 1fr;
     margin-bottom: 50px;
 }
 
