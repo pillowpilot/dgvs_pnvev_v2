@@ -43,6 +43,33 @@ $app->singleton(
 
 /*
 |--------------------------------------------------------------------------
+| Inicializacion del directorio Storage
+|--------------------------------------------------------------------------
+|
+| Para produccion, se crea el storage temporal en la carpeta temporal
+| del S.O. (linux)
+|
+*/
+
+$storagePath = '/tmp/pnvev_dashboard/storage';  # Ruta de la carpeta temporal
+$required_dirs = [
+	"$storagePath",
+	"$storagePath/app",
+	"$storagePath/framework/cache",
+	"$storagePath/framework/sessions",
+	"$storagePath/framework/views",
+	"$storagePath/logs",
+];
+foreach ($required_dirs as $required_dir) {
+	if (!file_exists($required_dir)) {
+		mkdir($required_dir, 0777, true);
+	}
+}
+$app->useStoragePath($storagePath);
+
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |
