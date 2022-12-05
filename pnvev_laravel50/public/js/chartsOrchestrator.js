@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${currentDate}`);
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-pdf"]'), 'application/pdf');
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-svg"]'), 'image/svg+xml');
-    horizontalChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
+    horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-xls"]'), 'application/vnd.ms-excel');
     horizontalChart_v2.draw();
     const horizontalChart = horizontalChart_v2.getChartObject();
 
