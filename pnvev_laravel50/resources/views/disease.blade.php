@@ -23,6 +23,7 @@
 <script src="{{ asset('js/jquery/select2/select2.full.js') }}"></script>
 <script src="{{ asset('js/highcharts/highcharts.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/exporting.js') }}"></script>
+<script src="{{ asset('js/highcharts/modules/offline-exporting.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/export-data.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/accessibility.js') }}"></script>
 <script src="{{ asset('js/highcharts/modules/no-data-to-display.js') }}"></script>
