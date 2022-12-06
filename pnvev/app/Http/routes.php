@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::get('/homePage', ['as' => 'admin.homePage', 'uses' => 'Admin\AdminHomeController@index']);
     Route::post('/homePage', ['as' => 'admin.homePage.store', 'uses' => 'Admin\AdminHomeController@store']);
     
-    Route::get('/', ['as' => 'admin.index', function() { return redirect()->route('admin.homePage');}]);
+    Route::get('/', ['as' => 'admin.index', 'uses' => 'Admin\AdminHomeController@index']);
 });
 
 // Public pages
