@@ -111,9 +111,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     tendenciesChart_v2.addCurrentWeek(EPIWEEK);
                 }
     
-                _(groupedData).mapValues((yearData, year) =>
-                    tendenciesChart_v2.addSeries(yearData, year)
-                ).value();
+                _(groupedData).mapValues((yearData, year) => {
+                    const yearDataCasted = yearData.map(({x, y}) => ({x: parseInt(x), y: parseInt(y)}));
+                    tendenciesChart_v2.addSeries(yearDataCasted, year)
+                }).value();
 
                 // Add grand total (on top of plot)
                 const calculateTotal = (groupedData) => {
@@ -182,7 +183,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         for(const disease_child of DISEASE_CHILDREN){
             const data = await fetch(`${ROOT_URL}/api/v1/diseases/${disease_child.id}/tendencies?` + GETParams).then(res => res.json());
             const groupedData = magicFunction(data);
-            _(groupedData).mapValues((yearData, year) => childrenChart_v2.addSeries(yearData, disease_child.name)).value();
+            _(groupedData).mapValues((yearData, year) => {
+                const yearDataCasted = yearData.map(({x, y}) => ({x: parseInt(x), y: parseInt(y)}));
+                childrenChart_v2.addSeries(yearDataCasted, disease_child.name)
+            }).value();
         }
     });
 
@@ -202,7 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${currentDate}`);
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-pdf"]'), 'application/pdf');
     horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-svg"]'), 'image/svg+xml');
-    horizontalChart_v2.bindExportingButton(document.querySelector('article.tendencies button[name="export-xls"]'), 'application/vnd.ms-excel');
+    horizontalChart_v2.bindExportingButton(document.querySelector('article.horizontalBar button[name="export-xls"]'), 'application/vnd.ms-excel');
     horizontalChart_v2.draw();
     const horizontalChart = horizontalChart_v2.getChartObject();
 
@@ -236,7 +240,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 horizontalChart_v2.removeAllSeries();
 
                 _(x[$('select[name="horizontalBar-year"]').find(':selected').text()]).mapValues((genderData, gender) => {
-                    horizontalChart_v2.addSeries(genderData, gender);
+                    console.log(genderData);
+                    const genderDataCasted = genderData.map(([x, y]) => [x, parseInt(y)]);
+                    console.log(genderDataCasted);
+                    horizontalChart_v2.addSeries(genderDataCasted, gender);
                 }).value();
 
             });

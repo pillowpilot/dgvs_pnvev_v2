@@ -155,7 +155,7 @@ class TendencyChart {
             }else if(exportFormat === 'text/csv') {
                 this.chart.downloadCSV();
             }else{
-                this.chart.exportChart({
+                this.chart.exportChartLocal({
                     type: exportFormat,
                     filename: `chart`,
                 });

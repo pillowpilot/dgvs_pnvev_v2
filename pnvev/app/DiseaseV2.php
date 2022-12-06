@@ -20,7 +20,7 @@ class DiseaseV2 extends Model
 
     public function leafs()
     {
-        return $this->children()->get()->push($this);
+        return $this->children()->get();
     }
 
     public function scopeRoots($query)

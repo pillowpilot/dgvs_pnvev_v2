@@ -13,8 +13,18 @@
             <span>Ingrese sus datos</span>
         </header>
         <section>
+        @if (count($errors) > 0)
+						<div class="alert alert-danger">
+							<strong>Errores:</strong><br><br>
+							<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
             <form action="{{ route('auth.loginform') }}" method="POST">
-                {!! csrf_field() !!}
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <label for="email">Email</label>
                 <input type="text" name="email" placeholder="Ingrese su email">
                 <label for="password">Contraseña</label>

@@ -84,10 +84,22 @@ class DiseaseController extends Controller
     {
         $model = \App\DiseaseV2::find($id);
         if ($model) {
+            $leafs = $model->leafs();
+            // error_log($leafs);
+
+            $leafs_ids = $leafs->map(function($item, $key) {
+                return $item->id;
+            });
+            $leafs_ids->push($model->id);
+            $leafs_ids = $leafs_ids->toArray();
+
+            // error_log($leafs_ids);
+            // error_log(gettype(array($leafs_ids)));
+
             return response()->json(
                 \App\Caso::select('Year')
                 ->distinct()
-                ->whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
+                ->whereIn('EnfermedadId', $leafs_ids)
                 ->orderBy('Year')
                 ->get());
         }
@@ -97,33 +109,33 @@ class DiseaseController extends Controller
         }
     }
 
-    public function showMaxYear($id)
-    {
-        $model = \App\DiseaseV2::find($id);
-        if ($model) {
-            return response()->json(
-                \App\Caso::whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
-                ->max('Year'));
-        }
-        else
-        {
-            return response()->json(['error' => 'Not found'], 404);
-        }
-    }
+    // public function showMaxYear($id)
+    // {
+    //     $model = \App\DiseaseV2::find($id);
+    //     if ($model) {
+    //         return response()->json(
+    //             \App\Caso::whereIn('EnfermedadId', collect($model->leafs())->map(function ($item, $key) { return $item->id; }))
+    //             ->max('Year'));
+    //     }
+    //     else
+    //     {
+    //         return response()->json(['error' => 'Not found'], 404);
+    //     }
+    // }
 
-    public function showMinYear($id)
-    {
-        $model = \App\DiseaseV2::find($id);
-        if ($model) {
-            return response()->json(
-                \App\Caso::whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
-                ->min('Year'));
-        }
-        else
-        {
-            return response()->json(['error' => 'Not found'], 404);
-        }
-    }
+    // public function showMinYear($id)
+    // {
+    //     $model = \App\DiseaseV2::find($id);
+    //     if ($model) {
+    //         return response()->json(
+    //             \App\Caso::whereIn('EnfermedadId', $model->leafs()->map(function ($item, $key) { return $item->id; }))
+    //             ->min('Year'));
+    //     }
+    //     else
+    //     {
+    //         return response()->json(['error' => 'Not found'], 404);
+    //     }
+    // }
 
     /**
      * Show the form for editing the specified resource.

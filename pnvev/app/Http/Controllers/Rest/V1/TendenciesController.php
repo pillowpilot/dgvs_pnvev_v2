@@ -51,11 +51,17 @@ class TendenciesController extends Controller
         }
 
         $model = \App\DiseaseV2::find($id);
-        error_log($model->leafs()->map(function($model) { return $model->id; }));
+        // error_log($model->leafs()->map(function($model) { return $model->id; }));
+        $leafs = $model->leafs();
+        $leafs_ids = $leafs->map(function($item, $key) {
+            return $item->id;
+        });
+        $leafs_ids->push($model->id);
+        $leafs_ids = $leafs_ids->toArray();
 
         $query = $query
             ->selectRaw('count(*) as Total')
-            ->whereIn('EnfermedadId', $model->leafs()->map(function($model) { return $model->id; }));
+            ->whereIn('EnfermedadId', $leafs_ids);
 
         if ($request->has('GrupoEtareo')) {
             $query = $query

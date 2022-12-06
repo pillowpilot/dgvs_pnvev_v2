@@ -11,57 +11,58 @@
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 // Autentication routes
-Route::get('auth/login', 'Auth\AuthController@getLogin')->name('auth.login');
-Route::post('auth/login', 'Auth\AuthController@postLogin')->name('auth.loginform');
-Route::get('auth/logout', 'Auth\AuthController@getLogout')->name('auth.logout');
+Route::get('auth/login', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
+Route::post('auth/login', ['as' => 'auth.loginform', 'uses' => 'Auth\AuthController@postLogin']);
+Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'Auth\AuthController@getLogout']);
 
 // Admin pages
 Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
-    Route::get('/', function() { return redirect()->route('admin.homePage');})->name('admin.index');
     
-    Route::get('/user', 'Admin\AdminUserController@index')->name('admin.user');
-    Route::post('/user-update-name', 'Admin\AdminUserController@storeName')->name('admin.user.storeName');
-    Route::post('/user-update-email', 'Admin\AdminUserController@storeEmail')->name('admin.user.storeEmail');
-    Route::post('/user-update-password', 'Admin\AdminUserController@storePassword')->name('admin.user.storePassword');
-
-    Route::get('/epiweek', 'Admin\AdminEpiweekController@index')->name('admin.epiweek');
-    Route::post('/epiweek-update-data', 'Admin\AdminEpiweekController@store')->name('admin.epiweek.store');
-
-    Route::get('/maps', 'Admin\AdminMapsController@index')->name('admin.maps');
-    Route::post('/maps-update-district-map', 'Admin\AdminMapsController@storeDistrictMap')->name('admin.maps.storeDistrict');
-    Route::post('/maps-update-region-map', 'Admin\AdminMapsController@storeRegionMap')->name('admin.maps.storeRegion');
-
-    Route::get('/homePage', 'Admin\AdminHomeController@index')->name('admin.homePage');
-    Route::post('/homePage', 'Admin\AdminHomeController@store')->name('admin.homePage.store');
+    Route::get('/user', ['as' => 'admin.user', 'uses' => 'Admin\AdminUserController@index']);
+    Route::post('/user-update-name', ['as' => 'admin.user.storeName', 'uses' => 'Admin\AdminUserController@storeName']);
+    Route::post('/user-update-email', ['as' => 'admin.user.storeEmail', 'uses' => 'Admin\AdminUserController@storeEmail']);
+    Route::post('/user-update-password', ['as' => 'admin.user.storePassword', 'uses' => 'Admin\AdminUserController@storePassword']);
+    
+    Route::get('/epiweek', ['as' => 'admin.epiweek', 'uses' => 'Admin\AdminEpiweekController@index']);
+    Route::post('/epiweek-update-data', ['as' => 'admin.epiweek.store', 'uses' => 'Admin\AdminEpiweekController@store']);
+    
+    Route::get('/maps', ['as' => 'admin.maps', 'uses' => 'Admin\AdminMapsController@index']);
+    Route::post('/maps-update-district-map', ['as' => 'admin.maps.storeDistrict', 'uses' => 'Admin\AdminMapsController@storeDistrictMap']);
+    Route::post('/maps-update-region-map', ['as' => 'admin.maps.storeRegion', 'uses' => 'Admin\AdminMapsController@storeRegionMap']);
+    
+    Route::get('/homePage', ['as' => 'admin.homePage', 'uses' => 'Admin\AdminHomeController@index']);
+    Route::post('/homePage', ['as' => 'admin.homePage.store', 'uses' => 'Admin\AdminHomeController@store']);
+    
+    Route::get('/', ['as' => 'admin.index', function() { return redirect()->route('admin.homePage');}]);
 });
 
 // Public pages
 Route::group(['prefix' => '/v2'], function () {
-    Route::get('/{id}', 'DiseaseV2Controller@show')->name('disease.show');
+    Route::get('/{id}', ['as' => 'disease.show', 'uses' => 'DiseaseV2Controller@show']);
 });
 
 // REST API
 Route::group(['prefix' => 'api/v1'], function () {
-    Route::get('/genders', 'Rest\V1\GenderController@index');
-    Route::get('/genders/{id}', 'Rest\V1\GenderController@show');
-    Route::get('/regions', 'Rest\V1\AdministrativeRegionController@index');
-    Route::get('/regions/{id}', 'Rest\V1\AdministrativeRegionController@show');
-    Route::get('/diseaseFamilies', 'Rest\V1\DiseaseFamilyController@index');
-    Route::get('/diseaseFamilies/{id}', 'Rest\V1\DiseaseFamilyController@show');
-    Route::get('/diseases', 'Rest\V1\DiseaseController@index');
-    Route::get('/diseases/{id}/years', 'Rest\V1\DiseaseController@showWithYears');
-    Route::get('/diseases/{id}/years/max', 'Rest\V1\DiseaseController@showMaxYear');
-    Route::get('/diseases/{id}/years/min', 'Rest\V1\DiseaseController@showMinYear');
-    Route::get('/diseases/{id}/tendencies', 'Rest\V1\TendenciesController@index');
-    Route::get('/diseases/{id}/map', 'Rest\V1\ChoroplethMapRestController@show');
+    Route::get('/genders', ['uses' => 'Rest\V1\GenderController@index']);
+    Route::get('/genders/{id}', ['uses' => 'Rest\V1\GenderController@show']);
+    Route::get('/regions', ['uses' => 'Rest\V1\AdministrativeRegionController@index']);
+    Route::get('/regions/{id}', ['uses' => 'Rest\V1\AdministrativeRegionController@show']);
+    Route::get('/diseaseFamilies', ['uses' => 'Rest\V1\DiseaseFamilyController@index']);
+    Route::get('/diseaseFamilies/{id}', ['uses' => 'Rest\V1\DiseaseFamilyController@show']);
+    Route::get('/diseases', ['uses' => 'Rest\V1\DiseaseController@index']);
+    Route::get('/diseases/{id}/years', ['uses' => 'Rest\V1\DiseaseController@showWithYears']);
+    Route::get('/diseases/{id}/years/max', ['uses' => 'Rest\V1\DiseaseController@showMaxYear']);
+    Route::get('/diseases/{id}/years/min', ['uses' => 'Rest\V1\DiseaseController@showMinYear']);
+    Route::get('/diseases/{id}/tendencies', ['uses' => 'Rest\V1\TendenciesController@index']);
+    Route::get('/diseases/{id}/map', ['uses' => 'Rest\V1\ChoroplethMapRestController@show']);
 
-    Route::get('/districtMap', 'Rest\V1\ChoroplethMapRestController@showDistrictMap');
-    Route::get('/regionMap', 'Rest\V1\ChoroplethMapRestController@showRegionMap');
+    Route::get('/districtMap', ['uses' => 'Rest\V1\ChoroplethMapRestController@showDistrictMap']);
+    Route::get('/regionMap', ['uses' => 'Rest\V1\ChoroplethMapRestController@showRegionMap']);
 
-    Route::get('/homePage', 'Admin\Rest\AdminHomePageRestController@index')->name('rest.homePage');
-    Route::get('/epiweek', 'Admin\Rest\AdminEpiweekRestController@index');
-    Route::get('/epiweek/{id}', 'Admin\Rest\AdminEpiweekRestController@show');
+    Route::get('/homePage', ['as' => 'rest.homePage', 'uses' => 'Admin\Rest\AdminHomePageRestController@index']);
+    Route::get('/epiweek', ['uses' => 'Admin\Rest\AdminEpiweekRestController@index']);
+    Route::get('/epiweek/{id}', ['uses' => 'Admin\Rest\AdminEpiweekRestController@show']);
 });
