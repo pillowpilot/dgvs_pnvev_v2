@@ -23,11 +23,14 @@ class YearSelect {
                 processResults: (data, page) => {
                     const results = data.map((o, i) => ({ id: i, text: o.Year }));
                     return { results: results };
-                }
+                },
             },
             placeholder: {
                 // id: 1,
                 text: this.placeholder,
+            },
+            language: {
+                noResults: () => 'Sin resultados',
             },
         });
     }
