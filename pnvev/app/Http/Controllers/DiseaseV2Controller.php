@@ -73,6 +73,9 @@ class DiseaseV2Controller extends Controller
                 'diseaseCaseDescription' => $model->case_description,
 
                 'epiweek' => $current_epiweek,
+                'tendenciesTitle' => $model->tendencies_title,
+                'childrenTendenciesTitle' => $model->children_tendencies_title,
+                'distributionTitle' => $model->distribution_title,
             ]);
         } else {
             abort(404); // TODO Remove this line and replace with a 404 page

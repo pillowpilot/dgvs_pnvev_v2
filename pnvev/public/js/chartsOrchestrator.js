@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await finalYearSelect.bind($(`article.tendencies select[name="tendencias-finalYear"]`));
 
     const tendenciesChart_v2 = new TendencyChart('tendencia', {cumulative: false, total: true});
-    tendenciesChart_v2.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
+    tendenciesChart_v2.setTitleText(TENDENCIES_TITLE);
     tendenciesChart_v2.setSubtitleText(`por semana epidemiológica de notificación, por año`);
     tendenciesChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     tendenciesChart_v2.setYAxisText(`N&deg; de Casos`);
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await yearSelect.bind($(`article.tendencies-children select[name="tendencias-2-year"]`));
 
     const childrenChart_v2 = new TendencyChart('tendencia-hijos', {displayTotal: true, cumulative: false});
-    childrenChart_v2.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
+    childrenChart_v2.setTitleText(CHILDREN_TENDENCIES_TITLE);
     childrenChart_v2.setSubtitleText(`por semana epidemiológica de notificación por enfermedades`);
     childrenChart_v2.setXAxisText(`Semanas Epidemiológicas`);
     childrenChart_v2.setYAxisText(`N&deg; de Casos`);
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await yearSelect.bind($(`select[name="horizontalBar-year"]`));
 
     const horizontalChart_v2 = new HorizontalBarsChart('barHorizontal');
-    horizontalChart_v2.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
+    horizontalChart_v2.setTitleText(DISTRIBUTION_TITLE);
     horizontalChart_v2.setSubtitleText(`por rango de edad y sexo`);
     horizontalChart_v2.setYAxisText(`Cantidad de Casos`);
     horizontalChart_v2.setCreditsText(`Programa Nacional de Enfermedades Vectoriales - PNVEV/DIVET - DGVS. Actualizado a la fecha: ${currentDate}`);
