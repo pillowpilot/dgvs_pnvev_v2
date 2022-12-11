@@ -16,6 +16,8 @@
     const TENDENCIES_TITLE = '{{ $tendenciesTitle }}';
     const CHILDREN_TENDENCIES_TITLE = '{{ $childrenTendenciesTitle }}';
     const DISTRIBUTION_TITLE = '{{ $distributionTitle }}';
+    const REGIONS_HEATMAP_TITLE = '{{ $regionsHeatmapTitle }}';
+    const DISTRICTS_HEATMAP_TITLE = '{{ $districtsHeatmapTitle }}';
 </script>
 <script src="{{ asset('js/jquery/jquery-3.6.1.js') }}"></script>
 <script src="{{ asset('js/jquery/select2/select2.full.js') }}"></script>
@@ -135,9 +137,17 @@
     </div>
     <div class="article-wrapper">
         <article class="heatmap rounded-corners">
-            <header><a id="heatmap">Distribución de {{ $diseaseCaseDescription }}, según departamentos de residencia en Paraguay, por año</a></header>
+            <header><a id="regions-heatmap">Distribución de {{ $diseaseCaseDescription }}, según departamentos de residencia en Paraguay, por año</a></header>
             <section class="toolbox rounded-corners">
-                <section class="filters rounded-corners"></section>
+                <section class="filters rounded-corners">
+                <div class="filter">
+                        <select name="regions-heatmap-year">
+                        </select>
+                    </div>
+                    <div class="submit">
+                        <button type="button" name="regions-heatmap-submit">Actualizar</button>
+                    </div>
+                </section>
                 <section class="export rounded-corners">
                         <button type="button" name="export-pdf">PDF</button>
                         <button type="button" name="export-svg">SVG</button>
@@ -153,9 +163,17 @@
     </div>
     <div class="article-wrapper">
         <article class="heatmap rounded-corners">
-            <header><a id="heatmap">Distribución de {{ $diseaseCaseDescription }}, según distritos de residencia en Paraguay, por año</a></header>
+            <header><a id="districts-heatmap">Distribución de {{ $diseaseCaseDescription }}, según distritos de residencia en Paraguay, por año</a></header>
             <section class="toolbox rounded-corners">
-                <section class="filters rounded-corners"></section>
+                <section class="filters rounded-corners">
+                <div class="filter">
+                        <select name="districts-heatmap-year">
+                        </select>
+                    </div>
+                    <div class="submit">
+                        <button type="button" name="districts-heatmap-submit">Actualizar</button>
+                    </div>
+                </section>
                 <section class="export rounded-corners">
                         <button type="button" name="export-pdf">PDF</button>
                         <button type="button" name="export-svg">SVG</button>

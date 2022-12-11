@@ -76,6 +76,8 @@ class DiseaseV2Controller extends Controller
                 'tendenciesTitle' => $model->tendencies_title,
                 'childrenTendenciesTitle' => $model->children_tendencies_title,
                 'distributionTitle' => $model->distribution_title,
+                'regionsHeatmapTitle' => $model->regions_heatmap_title,
+                'districtsHeatmapTitle' => $model->districts_heatmap_title,
             ]);
         } else {
             abort(404); // TODO Remove this line and replace with a 404 page

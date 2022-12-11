@@ -254,17 +254,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Load regions map
-document.addEventListener('DOMContentLoaded', function () {
-    let GETParams = new URLSearchParams({
-        InitialYear: '2022',
-        FinalYear: '2022',
-        InitialEpiweek: 1,
-        FinalEpiweek: 53,
-    });
-    GETParams.append('groupBy[]', 'RegionAdministrativaId');
-
+document.addEventListener('DOMContentLoaded', async () => {
     const map_pr = fetch(`${ROOT_URL}/api/v1/regionMap`).then(res => res.json());
     const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
+
+    const yearSelect = new YearSelect(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`);
+    yearSelect.setPlaceholder('Año');
+    await yearSelect.bind($(`select[name="regions-heatmap-year"]`));
+
+    const map = new Choropleth('map-regions');
+    map.setTitleText(REGIONS_HEATMAP_TITLE);
+    map.setSubtitleText(`por departamentos`);
+    map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
 
     Promise.all([map_pr, points_pr])
         .then(([topo_data, points_data]) => {
@@ -292,10 +293,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.push(regionData);
             }
 
-            const map = new Choropleth('map-regions');
-            map.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
-            map.setSubtitleText(`por departamentos`);
-            map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
             map.setData(data);
             map.setMapData(topo_data);
             map.setJoinBy(['ADM1_ES', 'name']);
@@ -304,17 +301,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Load districts map
-document.addEventListener('DOMContentLoaded', function () {
-    let GETParams = new URLSearchParams({
-        InitialYear: '2022',
-        FinalYear: '2022',
-        InitialEpiweek: 1,
-        FinalEpiweek: 53,
-    });
-    GETParams.append('groupBy[]', 'RegionAdministrativaId');
-
+document.addEventListener('DOMContentLoaded', async () => {
     const map_pr = fetch(`${ROOT_URL}/api/v1/districtMap`).then(res => res.json());
     const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
+
+    const yearSelect = new YearSelect(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`);
+    yearSelect.setPlaceholder('Año');
+    await yearSelect.bind($(`select[name="districts-heatmap-year"]`));
+
+    const map = new Choropleth('map-districts');
+    map.setTitleText(DISTRICTS_HEATMAP_TITLE);
+    map.setSubtitleText(`por distritos`);
+    map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
 
     Promise.all([map_pr, points_pr])
         .then(([topo_data, points_data]) => {
@@ -342,10 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.push(regionData);
             }
 
-            const map = new Choropleth('map-districts');
-            map.setTitleText(`${DISEASE_CASE_DESCRIPTION} de ${DISEASETITLE}`);
-            map.setSubtitleText(`por distritos`);
-            map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
             map.setData(data);
             map.setMapData(topo_data);
             map.setJoinBy(['ADM2_ES', 'name']);
