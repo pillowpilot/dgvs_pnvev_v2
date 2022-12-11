@@ -1,6 +1,6 @@
 <header>
     <div class="header-content-centering header-logos">
-        <img src="{{ asset('images/logos-cabecera-2.png') }}" alt="logos">
+        <img src="{{ asset('images/logos-cabecera.svg') }}" alt="logos">
     </div>
     <div class="header-content-centering header-title">
         <h1>Tablero del Programa Nacional de Enfermedades Vectoriales</h1>
