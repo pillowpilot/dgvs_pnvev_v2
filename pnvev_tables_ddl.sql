@@ -29,8 +29,13 @@ CREATE TABLE `pnvev_disease_v2s` (
   `level` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `order` int(11) NOT NULL,
   `case_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `tendencies_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `children_tendencies_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `distribution_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `regions_heatmap_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `districts_heatmap_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 -- pnvev_dashboard.pnvev_epiweek definition
