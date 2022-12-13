@@ -20,6 +20,10 @@ Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'Auth\AuthController
 
 // Admin pages
 Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
+    Route::get('/', ['as' => 'admin.index', 'uses' => function () {
+        $user = \Auth::user();
+        return view('admin.index', ['user' => $user]);
+    }]);
     
     Route::get('/user', ['as' => 'admin.user', 'uses' => 'Admin\AdminUserController@index']);
     Route::post('/user-update-name', ['as' => 'admin.user.storeName', 'uses' => 'Admin\AdminUserController@storeName']);
@@ -36,7 +40,6 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::get('/homePage', ['as' => 'admin.homePage', 'uses' => 'Admin\AdminHomeController@index']);
     Route::post('/homePage', ['as' => 'admin.homePage.store', 'uses' => 'Admin\AdminHomeController@store']);
     
-    Route::get('/', ['as' => 'admin.index', 'uses' => 'Admin\AdminHomeController@index']);
 });
 
 // Public pages
