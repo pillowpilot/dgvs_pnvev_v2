@@ -1,3 +1,694 @@
+-- DROP TABLES
+
+DROP TABLE `pnvev_administrative_regions`;
+DROP TABLE `pnvev_age_groups`;
+DROP TABLE `pnvev_disease_v2s`;
+DROP TABLE `pnvev_epiweek`;
+DROP TABLE `pnvev_genders`;
+DROP TABLE `pnvev_key_value`;
+DROP TABLE `pnvev_password_resets`;
+DROP TABLE `pnvev_users`;
+
+-- pnvev_dashboard.pnvev_administrative_regions definition
+
+CREATE TABLE `pnvev_administrative_regions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `forms_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `map_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_age_groups definition
+
+CREATE TABLE `pnvev_age_groups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL,
+  `family` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_disease_v2s definition
+
+CREATE TABLE `pnvev_disease_v2s` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `level` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL,
+  `case_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `tendencies_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `children_tendencies_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `distribution_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `regions_heatmap_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `districts_heatmap_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_epiweek definition
+
+CREATE TABLE `pnvev_epiweek` (
+  `SemanaEpidemiologica` int(11) NOT NULL,
+  `Inicio` date NOT NULL,
+  `Fin` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_genders definition
+
+CREATE TABLE `pnvev_genders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_key_value definition
+
+CREATE TABLE `pnvev_key_value` (
+  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_password_resets definition
+
+CREATE TABLE `pnvev_password_resets` (
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  KEY `pnvev_password_resets_email_index` (`email`) USING BTREE,
+  KEY `pnvev_password_resets_token_index` (`token`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- pnvev_dashboard.pnvev_users definition
+
+CREATE TABLE `pnvev_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pnvev_users_email_unique` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- VIEWS
+
+-- pnvev_dashboard.v_pnvev_casos_chagas_agudo source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_chagas_agudo` AS
+select
+    10 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 10)) AS `TipoEnfermedad`,
+    `ff`.`Sexo` AS `Sexo`,
+    `ff`.`Edad` AS `Edad`,
+    (case
+        when (`ff`.`GrupoEtareo` = '-1') then '<2'
+        when (`ff`.`GrupoEtareo` not in ('<2', '2 a 4', '5 a 19', '20 a 39', '40 a 59', '60 y mas')) then 'SD'
+        when isnull(`ff`.`GrupoEtareo`) then 'SD'
+        else `ff`.`GrupoEtareo`
+    end) AS `GrupoEtareo`,
+    str_to_date(`ff`.`FechaNotificacion`,
+    '%d/%m/%Y') AS `Fecha`,
+    `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`,
+    `ff`.`LatitudContagio` AS `Latitud`,
+    `ff`.`LongitudContagio` AS `Longitud`
+from
+    `dgvsops`.`frm_fchagas` `ff`
+where
+    ((`ff`.`CaracterizacionCaso` = 'AGUDO')
+        and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+            and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2022));
+
+
+-- pnvev_dashboard.v_pnvev_casos_chagas_cronico source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_chagas_cronico` AS
+select
+    11 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 11)) AS `TipoEnfermedad`,
+    `ff`.`Sexo` AS `Sexo`,
+    `ff`.`Edad` AS `Edad`,
+    (case
+        when (`ff`.`GrupoEtareo` = '-1') then '<2'
+        when (`ff`.`GrupoEtareo` not in ('<2', '2 a 4', '5 a 19', '20 a 39', '40 a 59', '60 y mas')) then 'SD'
+        when isnull(`ff`.`GrupoEtareo`) then 'SD'
+        else `ff`.`GrupoEtareo`
+    end) AS `GrupoEtareo`,
+    str_to_date(`ff`.`FechaNotificacion`,
+    '%d/%m/%Y') AS `Fecha`,
+    `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`,
+    `ff`.`LatitudContagio` AS `Latitud`,
+    `ff`.`LongitudContagio` AS `Longitud`
+from
+    `dgvsops`.`frm_fchagas` `ff`
+where
+    ((`ff`.`CaracterizacionCaso` = 'CRONICO')
+        and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+            and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2022));
+
+
+-- pnvev_dashboard.v_pnvev_casos_fiebre_amarilla_confirmado source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_fiebre_amarilla_confirmado` AS
+select
+    17 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 17)) AS `TipoEnfermedad`,
+    'SD' AS `Sexo`,
+    `pf`.`Edad` AS `Edad`,
+    (case
+        when (replace(`pf`.`GrupoEtareo`, ' años', '') = '-1') then '< 1'
+        when (replace(`pf`.`GrupoEtareo`, ' años', '') not in ('< 1', '1 a 4', '5 a 14', '15 a 19', '20 a 39', '40 a 49', '50 a 59', '60 y mas')) then 'SD'
+        when isnull(`pf`.`GrupoEtareo`) then 'SD'
+        else replace(`pf`.`GrupoEtareo`, ' años', '')
+    end) AS `GrupoEtareo`,
+    str_to_date(`pf`.`PrimeraConsulta`,
+    '%d/%m/%Y') AS `Fecha`,
+    `pf`.`PrimeraConsultaSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`pf`.`PrimeraConsulta`, '%d/%m/%Y')) AS `Year`,
+    `pf`.`Latitud` AS `Latitud`,
+    `pf`.`Longitud` AS `Longitud`
+from
+    `dgvsops`.`pacientes_ficha` `pf`
+where
+    ((`pf`.`id_secciones_ficha` = 12)
+        and (`pf`.`CierreFicha` = 'CONFIRMADO'));
+
+
+-- pnvev_dashboard.v_pnvev_casos_fiebre_amarilla_notificaciones source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_fiebre_amarilla_notificaciones` AS
+select
+    18 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 18)) AS `TipoEnfermedad`,
+    'SD' AS `Sexo`,
+    `pf`.`Edad` AS `Edad`,
+    (case
+        when (replace(`pf`.`GrupoEtareo`, ' años', '') = '-1') then '< 1'
+        when (replace(`pf`.`GrupoEtareo`, ' años', '') not in ('< 1', '1 a 4', '5 a 14', '15 a 19', '20 a 39', '40 a 49', '50 a 59', '60 y mas')) then 'SD'
+        when isnull(`pf`.`GrupoEtareo`) then 'SD'
+        else replace(`pf`.`GrupoEtareo`, ' años', '')
+    end) AS `GrupoEtareo`,
+    str_to_date(`pf`.`PrimeraConsulta`,
+    '%d/%m/%Y') AS `Fecha`,
+    `pf`.`PrimeraConsultaSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`pf`.`PrimeraConsulta`, '%d/%m/%Y')) AS `Year`,
+    `pf`.`Latitud` AS `Latitud`,
+    `pf`.`Longitud` AS `Longitud`
+from
+    `dgvsops`.`pacientes_ficha` `pf`
+where
+    (`pf`.`id_secciones_ficha` = 12);
+
+
+-- pnvev_dashboard.v_pnvev_casos_leishmaniasis_cutanea source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_cutanea` AS
+select
+    9 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 9)) AS `TipoEnfermedad`,
+    `ff`.`Sexo` AS `Sexo`,
+    `ff`.`Edad` AS `Edad`,
+    (case
+        when (`ff`.`GrupoEtareo` = '-1') then '<2'
+        when (`ff`.`GrupoEtareo` not in ('<2', '2 a 4', '5 a 19', '20 a 39', '40 a 59', '60 y mas')) then 'SD'
+        when isnull(`ff`.`GrupoEtareo`) then 'SD'
+        else `ff`.`GrupoEtareo`
+    end) AS `GrupoEtareo`,
+    str_to_date(`ff`.`FechaNotificacion`,
+    '%d/%m/%Y') AS `Fecha`,
+    `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`,
+    `ff`.`LatitudContagio` AS `Latitud`,
+    `ff`.`LongitudContagio` AS `Longitud`
+from
+    `dgvsops`.`frm_fleishmaniasis` `ff`
+where
+    ((`ff`.`TipoFicha` = 'CUTANEA')
+        and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+            and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2021));
+
+
+-- pnvev_dashboard.v_pnvev_casos_leishmaniasis_mucosa source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_mucosa` AS
+select
+    8 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 8)) AS `TipoEnfermedad`,
+    `ff`.`Sexo` AS `Sexo`,
+    `ff`.`Edad` AS `Edad`,
+    (case
+        when (`ff`.`GrupoEtareo` = '-1') then '<2'
+        when (`ff`.`GrupoEtareo` not in ('<2', '2 a 4', '5 a 19', '20 a 39', '40 a 59', '60 y mas')) then 'SD'
+        when isnull(`ff`.`GrupoEtareo`) then 'SD'
+        else `ff`.`GrupoEtareo`
+    end) AS `GrupoEtareo`,
+    str_to_date(`ff`.`FechaNotificacion`,
+    '%d/%m/%Y') AS `Fecha`,
+    `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`,
+    `ff`.`LatitudContagio` AS `Latitud`,
+    `ff`.`LongitudContagio` AS `Longitud`
+from
+    `dgvsops`.`frm_fleishmaniasis` `ff`
+where
+    ((`ff`.`TipoFicha` = 'MUCOSA')
+        and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+            and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2021));
+
+
+-- pnvev_dashboard.v_pnvev_casos_leishmaniasis_visceral source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_visceral` AS
+select
+    7 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 7)) AS `TipoEnfermedad`,
+    `ff`.`Sexo` AS `Sexo`,
+    `ff`.`Edad` AS `Edad`,
+    (case
+        when (`ff`.`GrupoEtareo` = '-1') then '<2'
+        when (`ff`.`GrupoEtareo` not in ('<2', '2 a 4', '5 a 19', '20 a 39', '40 a 59', '60 y mas')) then 'SD'
+        when isnull(`ff`.`GrupoEtareo`) then 'SD'
+        else `ff`.`GrupoEtareo`
+    end) AS `GrupoEtareo`,
+    str_to_date(`ff`.`FechaNotificacion`,
+    '%d/%m/%Y') AS `Fecha`,
+    `ff`.`FechaNotificacionSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) AS `Year`,
+    `ff`.`LatitudContagio` AS `Latitud`,
+    `ff`.`LongitudContagio` AS `Longitud`
+from
+    `dgvsops`.`frm_fleishmaniasis` `ff`
+where
+    ((`ff`.`TipoFicha` = 'VICERALH')
+        and (`ff`.`ClasificacionFinal` = 'CONFIRMADO')
+            and (year(str_to_date(`ff`.`FechaNotificacion`, '%d/%m/%Y')) >= 2020));
+
+
+-- pnvev_dashboard.v_pnvev_casos_malaria source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_malaria` AS
+select
+    2 AS `EnfermedadId`,
+    (
+    select
+        `pnvev_dashboard`.`pnvev_disease_v2s`.`name`
+    from
+        `pnvev_dashboard`.`pnvev_disease_v2s`
+    where
+        (`pnvev_dashboard`.`pnvev_disease_v2s`.`id` = 2)) AS `TipoEnfermedad`,
+    'SD' AS `Sexo`,
+    `pf`.`Edad` AS `Edad`,
+    (case
+        when (replace(`pf`.`GrupoEtareo`, ' años', '') = '-1') then '< 1'
+        when (replace(`pf`.`GrupoEtareo`, ' años', '') not in ('< 1', '1 a 4', '5 a 14', '15 a 19', '20 a 39', '40 a 49', '50 a 59', '60 y mas')) then 'SD'
+        when isnull(`pf`.`GrupoEtareo`) then 'SD'
+        else replace(`pf`.`GrupoEtareo`, ' años', '')
+    end) AS `GrupoEtareo`,
+    str_to_date(`pf`.`InicioFiebre`,
+    '%d/%m/%Y') AS `Fecha`,
+    `pf`.`InicioFiebreSE` AS `SemanaEpidemiologica`,
+    year(str_to_date(`pf`.`InicioFiebre`, '%d/%m/%Y')) AS `Year`,
+    `pf`.`Latitud` AS `Latitud`,
+    `pf`.`Longitud` AS `Longitud`
+from
+    `dgvsops`.`pacientes_ficha` `pf`
+where
+    ((`pf`.`id_secciones_ficha` = 1)
+        and (`pf`.`CierreFicha` = 'CONFIRMADO'));
+-- pnvev_dashboard.v_pnvev_casos_leishmaniasis_tegumentaria source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_tegumentaria` AS
+select
+    `v_pnvev_casos_leishmaniasis_cutanea`.`EnfermedadId` AS `EnfermedadId`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`Sexo` AS `Sexo`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`Edad` AS `Edad`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`GrupoEtareo` AS `GrupoEtareo`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`Fecha` AS `Fecha`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`Year` AS `Year`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`Latitud` AS `Latitud`,
+    `v_pnvev_casos_leishmaniasis_cutanea`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_cutanea`
+union
+select
+    `v_pnvev_casos_leishmaniasis_mucosa`.`EnfermedadId` AS `EnfermedadId`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`Sexo` AS `Sexo`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`Edad` AS `Edad`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`GrupoEtareo` AS `GrupoEtareo`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`Fecha` AS `Fecha`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`Year` AS `Year`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`Latitud` AS `Latitud`,
+    `v_pnvev_casos_leishmaniasis_mucosa`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_mucosa`;
+-- pnvev_dashboard.v_pnvev_casos source
+
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `pnvev_dashboard`.`v_pnvev_casos` AS
+select
+    `vpclt`.`EnfermedadId` AS `EnfermedadId`,
+    `vpclt`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpclt`.`Sexo` AS `Sexo`,
+    `vpclt`.`Edad` AS `Edad`,
+    `vpclt`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpclt`.`Fecha` AS `Fecha`,
+    `vpclt`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpclt`.`Year` AS `Year`,
+    `vpclt`.`Latitud` AS `Latitud`,
+    `vpclt`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_tegumentaria` `vpclt`
+union
+select
+    `vpclv`.`EnfermedadId` AS `EnfermedadId`,
+    `vpclv`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpclv`.`Sexo` AS `Sexo`,
+    `vpclv`.`Edad` AS `Edad`,
+    `vpclv`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpclv`.`Fecha` AS `Fecha`,
+    `vpclv`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpclv`.`Year` AS `Year`,
+    `vpclv`.`Latitud` AS `Latitud`,
+    `vpclv`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_leishmaniasis_visceral` `vpclv`
+union
+select
+    `vpcca`.`EnfermedadId` AS `EnfermedadId`,
+    `vpcca`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpcca`.`Sexo` AS `Sexo`,
+    `vpcca`.`Edad` AS `Edad`,
+    `vpcca`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpcca`.`Fecha` AS `Fecha`,
+    `vpcca`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpcca`.`Year` AS `Year`,
+    `vpcca`.`Latitud` AS `Latitud`,
+    `vpcca`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_chagas_agudo` `vpcca`
+union
+select
+    `vpccc`.`EnfermedadId` AS `EnfermedadId`,
+    `vpccc`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpccc`.`Sexo` AS `Sexo`,
+    `vpccc`.`Edad` AS `Edad`,
+    `vpccc`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpccc`.`Fecha` AS `Fecha`,
+    `vpccc`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpccc`.`Year` AS `Year`,
+    `vpccc`.`Latitud` AS `Latitud`,
+    `vpccc`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_chagas_cronico` `vpccc`
+union
+select
+    `vpcfac`.`EnfermedadId` AS `EnfermedadId`,
+    `vpcfac`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpcfac`.`Sexo` AS `Sexo`,
+    `vpcfac`.`Edad` AS `Edad`,
+    `vpcfac`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpcfac`.`Fecha` AS `Fecha`,
+    `vpcfac`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpcfac`.`Year` AS `Year`,
+    `vpcfac`.`Latitud` AS `Latitud`,
+    `vpcfac`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_fiebre_amarilla_confirmado` `vpcfac`
+union
+select
+    `vpcfan`.`EnfermedadId` AS `EnfermedadId`,
+    `vpcfan`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpcfan`.`Sexo` AS `Sexo`,
+    `vpcfan`.`Edad` AS `Edad`,
+    `vpcfan`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpcfan`.`Fecha` AS `Fecha`,
+    `vpcfan`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpcfan`.`Year` AS `Year`,
+    `vpcfan`.`Latitud` AS `Latitud`,
+    `vpcfan`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_fiebre_amarilla_notificaciones` `vpcfan`
+union
+select
+    `vpcm`.`EnfermedadId` AS `EnfermedadId`,
+    `vpcm`.`TipoEnfermedad` AS `TipoEnfermedad`,
+    `vpcm`.`Sexo` AS `Sexo`,
+    `vpcm`.`Edad` AS `Edad`,
+    `vpcm`.`GrupoEtareo` AS `GrupoEtareo`,
+    `vpcm`.`Fecha` AS `Fecha`,
+    `vpcm`.`SemanaEpidemiologica` AS `SemanaEpidemiologica`,
+    `vpcm`.`Year` AS `Year`,
+    `vpcm`.`Latitud` AS `Latitud`,
+    `vpcm`.`Longitud` AS `Longitud`
+from
+    `pnvev_dashboard`.`v_pnvev_casos_malaria` `vpcm`;
+
+-- DATA
+
+INSERT INTO pnvev_administrative_regions (name,forms_name,map_code) VALUES
+	 ('Alto Paraguay','ALTO PARAGUAY','py-ag'),
+	 ('Alto Parana','ALTO PARANA','py-aa'),
+	 ('Amambay','AMAMBAY','py-am'),
+	 ('Asunción','ASUNCION','py-as'),
+	 ('Boqueron','BOQUERON','py-bq'),
+	 ('Caaguazu','CAAGUAZU','py-cg'),
+	 ('Caazapa','CAAZAPA','py-cz'),
+	 ('Canindeyu','CANINDEYU','py-cy'),
+	 ('Central','CENTRAL','py-ce'),
+	 ('Concepcion','CONCEPCION','py-cn');
+INSERT INTO pnvev_administrative_regions (name,forms_name,map_code) VALUES
+	 ('Cordillera','CORDILLERA','py-cr'),
+	 ('Extranjero','EXTRANJERO',NULL),
+	 ('Guaira','GUAIRA','py-gu'),
+	 ('Itapua','ITAPUA','py-it'),
+	 ('Misiones','MISIONES','py-mi'),
+	 ('Ñeembucu','ÑEEMBUCU','py-ne'),
+	 ('Paraguari','PARAGUARI','py-pg'),
+	 ('Presidente Hayes','PTE. HAYES','py-ph'),
+	 ('San Pedro','SAN PEDRO','py-sp'),
+	 ('Sin Datos','SIN DATOS',NULL);
+INSERT INTO pnvev_age_groups (name,`order`,family) VALUES
+	 ('<2',1,1),
+	 ('2 a 4',2,1),
+	 ('5 a 19',3,1),
+	 ('20 a 39',4,1),
+	 ('40 a 59',5,1),
+	 ('60 y mas',6,1),
+	 ('SD',7,1);
+INSERT INTO pnvev_disease_v2s (parent_id,name,`level`,`order`,case_description,tendencies_title,children_tendencies_title,distribution_title,regions_heatmap_title,districts_heatmap_title) VALUES
+	 (NULL,'Malaria','0',2,'Casos Importados','Casos Importados de Malaria','','Casos Importados de Malaria','Casos Importados de Malaria','Casos Importados de Malaria'),
+	 (NULL,'Leishmaniasis','0',4,'Casos Confirmados','','','','',''),
+	 (NULL,'Chagas','0',5,'Casos Confirmados','','','','',''),
+	 (4,'Tegumentaria','1',1,'Casos Confirmados','Casos Confirmados de Leishmaniasis Tegumentaria','Casos Confirmados de Enfermedades Constituyentes','Casos Confirmados de Leishmaniasis Tegumentaria','Casos Confirmados de Leishmaniasis Tegumentaria','Casos Confirmados de Leishmaniasis Tegumentaria'),
+	 (4,'Visceral','1',2,'Casos Confirmados','Casos Confirmados de Leishmaniasis Visceral','','Casos Confirmados de Leishmaniasis Visceral','Casos Confirmados de Leishmaniasis Visceral','Casos Confirmados de Leishmaniasis Visceral'),
+	 (6,'L. Mucosa','2',1,'Casos Confirmados','','','','',''),
+	 (6,'L. Cutanea','2',2,'Casos Confirmados','','','','',''),
+	 (5,'Agudo','1',1,'Casos Confirmados','Casos Confirmados de Chagas Agudo','Casos Confirmados de Enfermedades Constituyentes','Casos Confirmados de Chagas Agudo','Casos Confirmados de Chagas Agudo','Casos Confirmados de Chagas Agudo'),
+	 (5,'Cronico','1',2,'Casos Confirmados','Casos Confirmados de Chagas Agudo','','Casos Confirmados de Chagas Agudo','Casos Confirmados de Chagas Agudo','Casos Confirmados de Chagas Agudo'),
+	 (10,'C. Connatal','2',1,'Casos Confirmados','','','','','');
+INSERT INTO pnvev_disease_v2s (parent_id,name,`level`,`order`,case_description,tendencies_title,children_tendencies_title,distribution_title,regions_heatmap_title,districts_heatmap_title) VALUES
+	 (10,'C. Vectorial','2',2,'Casos Confirmados','','','','',''),
+	 (10,'C. Transfusional','2',3,'Casos Confirmados','','','','',''),
+	 (10,'C. Oral','2',4,'Casos Confirmados','','','','',''),
+	 (NULL,'Fiebre Amarilla','0',6,'Casos Confirmados','','','','',''),
+	 (16,'Confirmados','1',1,'Casos Confirmados','Casos Confirmados de Fiebre Amarilla','','Casos Confirmados de Fiebre Amarilla','Casos Confirmados de Fiebre Amarilla','Casos Confirmados de Fiebre Amarilla'),
+	 (16,'Notificaciones','1',2,'Casos Notificados','Casos Notificados de Fiebre Amarilla','','Casos Notificados de Fiebre Amarilla','Casos Notificados de Fiebre Amarilla','Casos Notificados de Fiebre Amarilla');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (1,'2022-01-02','2022-01-08'),
+	 (2,'2022-01-09','2022-01-15'),
+	 (3,'2022-01-16','2022-01-22'),
+	 (4,'2022-01-23','2022-01-29'),
+	 (5,'2022-01-30','2022-02-05'),
+	 (6,'2022-02-06','2022-02-12'),
+	 (7,'2022-02-13','2022-02-19'),
+	 (8,'2022-02-20','2022-02-26'),
+	 (9,'2022-02-27','2022-03-05'),
+	 (10,'2022-03-06','2022-03-12');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (11,'2022-03-13','2022-03-19'),
+	 (12,'2022-03-20','2022-03-26'),
+	 (13,'2022-03-27','2022-04-02'),
+	 (14,'2022-04-03','2022-04-09'),
+	 (15,'2022-04-10','2022-04-16'),
+	 (16,'2022-04-17','2022-04-23'),
+	 (17,'2022-04-24','2022-04-30'),
+	 (18,'2022-05-01','2022-05-07'),
+	 (19,'2022-05-08','2022-05-14'),
+	 (20,'2022-05-15','2022-05-21');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (21,'2022-05-22','2022-05-28'),
+	 (22,'2022-05-29','2022-06-04'),
+	 (23,'2022-06-05','2022-06-11'),
+	 (24,'2022-06-12','2022-06-18'),
+	 (25,'2022-06-19','2022-06-25'),
+	 (26,'2022-06-26','2022-07-02'),
+	 (27,'2022-07-03','2022-07-09'),
+	 (28,'2022-07-10','2022-07-16'),
+	 (29,'2022-07-17','2022-07-23'),
+	 (30,'2022-07-24','2022-07-30');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (31,'2022-07-31','2022-08-06'),
+	 (32,'2022-08-07','2022-08-13'),
+	 (33,'2022-08-14','2022-08-20'),
+	 (34,'2022-08-21','2022-08-27'),
+	 (35,'2022-08-28','2022-09-03'),
+	 (36,'2022-09-04','2022-09-10'),
+	 (37,'2022-09-11','2022-09-17'),
+	 (38,'2022-09-18','2022-09-24'),
+	 (39,'2022-09-25','2022-10-01'),
+	 (40,'2022-10-02','2022-10-08');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (41,'2022-10-09','2022-10-15'),
+	 (42,'2022-10-16','2022-10-22'),
+	 (43,'2022-10-23','2022-10-29'),
+	 (44,'2022-10-30','2022-11-05'),
+	 (45,'2022-11-06','2022-11-12'),
+	 (46,'2022-11-13','2022-11-19'),
+	 (47,'2022-11-20','2022-11-26'),
+	 (48,'2022-11-27','2022-12-03'),
+	 (49,'2022-12-04','2022-12-10'),
+	 (50,'2022-12-11','2022-12-17');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (51,'2022-12-18','2022-12-24'),
+	 (52,'2022-12-25','2022-12-31'),
+	 (53,'2023-01-01','2023-01-07'),
+	 (0,'0000-00-00','0000-00-00'),
+	 (1,'2022-01-02','2022-01-08'),
+	 (2,'2022-01-09','2022-01-15'),
+	 (3,'2022-01-16','2022-01-22'),
+	 (4,'2022-01-23','2022-01-29'),
+	 (5,'2022-01-30','2022-02-05'),
+	 (6,'2022-02-06','2022-02-12');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (7,'2022-02-13','2022-02-19'),
+	 (8,'2022-02-20','2022-02-26'),
+	 (9,'2022-02-27','2022-03-05'),
+	 (10,'2022-03-06','2022-03-12'),
+	 (11,'2022-03-13','2022-03-19'),
+	 (12,'2022-03-20','2022-03-26'),
+	 (13,'2022-03-27','2022-04-02'),
+	 (14,'2022-04-03','2022-04-09'),
+	 (15,'2022-04-10','2022-04-16'),
+	 (16,'2022-04-17','2022-04-23');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (17,'2022-04-24','2022-04-30'),
+	 (18,'2022-05-01','2022-05-07'),
+	 (19,'2022-05-08','2022-05-14'),
+	 (20,'2022-05-15','2022-05-21'),
+	 (21,'2022-05-22','2022-05-28'),
+	 (22,'2022-05-29','2022-06-04'),
+	 (23,'2022-06-05','2022-06-11'),
+	 (24,'2022-06-12','2022-06-18'),
+	 (25,'2022-06-19','2022-06-25'),
+	 (26,'2022-06-26','2022-07-02');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (27,'2022-07-03','2022-07-09'),
+	 (28,'2022-07-10','2022-07-16'),
+	 (29,'2022-07-17','2022-07-23'),
+	 (30,'2022-07-24','2022-07-30'),
+	 (31,'2022-07-31','2022-08-06'),
+	 (32,'2022-08-07','2022-08-13'),
+	 (33,'2022-08-14','2022-08-20'),
+	 (34,'2022-08-21','2022-08-27'),
+	 (35,'2022-08-28','2022-09-03'),
+	 (36,'2022-09-04','2022-09-10');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (37,'2022-09-11','2022-09-17'),
+	 (38,'2022-09-18','2022-09-24'),
+	 (39,'2022-09-25','2022-10-01'),
+	 (40,'2022-10-02','2022-10-08'),
+	 (41,'2022-10-09','2022-10-15'),
+	 (42,'2022-10-16','2022-10-22'),
+	 (43,'2022-10-23','2022-10-29'),
+	 (44,'2022-10-30','2022-11-05'),
+	 (45,'2022-11-06','2022-11-12'),
+	 (46,'2022-11-13','2022-11-19');
+INSERT INTO pnvev_epiweek (SemanaEpidemiologica,Inicio,Fin) VALUES
+	 (47,'2022-11-20','2022-11-26'),
+	 (48,'2022-11-27','2022-12-03'),
+	 (49,'2022-12-04','2022-12-10'),
+	 (50,'2022-12-11','2022-12-17'),
+	 (51,'2022-12-18','2022-12-24'),
+	 (52,'2022-12-25','2022-12-31'),
+	 (53,'2023-01-01','2023-01-07'),
+	 (0,'0000-00-00','0000-00-00');
+INSERT INTO pnvev_genders (name,`order`) VALUES
+	 ('Masculino',1),
+	 ('Femenino',2),
+	 ('SD',3);
+INSERT INTO pnvev_users (name,email,password,remember_token,created_at,updated_at) VALUES
+	 ('Administrator','admin','$2y$10$T5yoKyE5soVeKn0I5St0y.L.gtZkwajVGcqzeiiADcGJvHOY4/YZG',NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+
 INSERT INTO pnvev_key_value (`key`,value,created_at,updated_at) VALUES
 	 ('geojsonDistricts','{
 "type": "FeatureCollection",
