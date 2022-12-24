@@ -1,13 +1,13 @@
 -- DROP TABLES
 
-DROP TABLE `pnvev_administrative_regions`;
-DROP TABLE `pnvev_age_groups`;
-DROP TABLE `pnvev_disease_v2s`;
-DROP TABLE `pnvev_epiweek`;
-DROP TABLE `pnvev_genders`;
-DROP TABLE `pnvev_key_value`;
-DROP TABLE `pnvev_password_resets`;
-DROP TABLE `pnvev_users`;
+DROP TABLE IF EXISTS `pnvev_administrative_regions`;
+DROP TABLE IF EXISTS `pnvev_age_groups`;
+DROP TABLE IF EXISTS `pnvev_disease_v2s`;
+DROP TABLE IF EXISTS `pnvev_epiweek`;
+DROP TABLE IF EXISTS `pnvev_genders`;
+DROP TABLE IF EXISTS `pnvev_key_value`;
+DROP TABLE IF EXISTS `pnvev_password_resets`;
+DROP TABLE IF EXISTS `pnvev_users`;
 
 -- pnvev_dashboard.pnvev_administrative_regions definition
 
