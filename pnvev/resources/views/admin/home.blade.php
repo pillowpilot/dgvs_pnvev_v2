@@ -1,47 +1,10 @@
 @extends('layouts.admin', ['user' => $user])
 
 @section('stylesheets')
+<link rel="stylesheet" href="{{ asset('css_v2/home.css') }}">
+
 <style>
-/* Main */
-body>main {
-    grid-area: main;
-    display: grid;
-    grid-template-areas:
-        "left form right";
-    grid-template-columns: 1fr 10fr 1fr;
-    padding: 1rem 0;
-}
 
-body>main>form {
-    grid-area: form;
-    display: grid;
-    grid-template-areas:
-        "editor"
-        "submit";
-    grid-template-rows: 1fr 75px;
-}
-
-body>main form>footer {
-    grid-area: submit;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-
-body>main form button[type="submit"] {
-    padding: 0.5rem 1.5rem;
-    background-color: #2071cc;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.tox-tinymce {
-    height: 100% !important;
-}
 </style>
 @stop
 
@@ -63,6 +26,7 @@ body>main form button[type="submit"] {
 @section('scripts')
 <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
 <script>
+    const EDITOR_INITIAL_CONTENT = `{!! $editorInitialContent !!}`;
     const REST_HOMEPAGE_CONTENT_URL = "{{ route('rest.homePage') }}";
     document.addEventListener('DOMContentLoaded', () => {
     const editor = tinymce.init({
@@ -71,11 +35,7 @@ body>main form button[type="submit"] {
         content_css: "{{ asset('css/editor.css') }}",
         setup: (editor) => {
             editor.on('change', () => editor.save());
-            fetch(REST_HOMEPAGE_CONTENT_URL)
-                .then(res => res.text())
-                .then(data => {
-                    editor.on('init', () => editor.setContent(data));
-                });
+            editor.on('init', () => editor.setContent(EDITOR_INITIAL_CONTENT));
         },
         plugins: [
             'advlist', 'autolink', 'link', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',

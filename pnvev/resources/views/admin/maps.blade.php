@@ -1,66 +1,7 @@
 @extends('layouts.admin', ['user' => $user])
 
 @section('stylesheets')
-<style>
-/* Main */
-body>main {
-    /* grid-area: main; */
-    display: grid;
-    grid-template-areas:
-        "left regions right"
-        "left districts right";
-    grid-template-columns: 1fr 10fr 1fr;
-    gap: 3rem;
-    padding: 1rem 0;
-}
-
-body>main>article {
-    display: grid;
-    grid-template-areas:
-        "title"
-        "form";
-    grid-template-rows: 2.5rem 1fr;
-    gap: 1rem;
-    max-height: 12rem;
-}
-
-body>main>article>span {
-    font-size: 2rem;
-    font-weight: 600;
-    border-bottom: 1px solid #ccc;
-}
-
-body>main>article>form {
-    display: grid;
-    grid-template-areas:
-        "main"
-        "footer";
-    grid-template-rows: 1fr 4rem;
-    gap: 1rem;
-    align-items: center;
-}
-
-body>main>article>form .inputs {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-body>main>article>form>main>label {
-    margin-right: 1rem;
-}
-
-body>main form button[type="submit"] {
-    padding: 0.5rem 1.5rem;
-    background-color: #2071cc;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('css_v2/maps.css') }}">
 @stop
 
 @section('main')

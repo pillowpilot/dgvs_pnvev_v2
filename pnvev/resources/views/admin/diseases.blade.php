@@ -17,7 +17,7 @@
         <button id="reset-table">Restaurar</button>
         <label for="file-selector">Cargar desde archivo CVS:</label>
         <input type="file" id="file-selector" accept=".csv, .txt" >
-        <form action="{{ route('admin.epiweek.store') }}" method="post" id="table-data-form">
+        <form action="{{ route('admin.diseases.store') }}" method="post" id="table-data-form">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <button id="submit">Guardar</button>
             <span class="submissionStatus" id="submitStatus">
@@ -39,25 +39,17 @@
     const postURL = "{{ route('admin.epiweek') }}";
     const data = {!! $json !!};
     const columnsDefinitions = [
-        {title: "SemanaEpidemiologica", field: "SemanaEpidemiologica", editor: "input"},
-        // {title: "Inicio", field: "Inicio", editor: "input"},
-        // {title: "Fin", field: "Fin", editor: "input"},
-        {title: "Inicio", field: "Inicio", editor:"date", editorParams:{
-            // min:"01/01/2020", // the minimum allowed value for the date picker
-            // max:"02/12/2030", // the maximum allowed value for the date picker
-            format:"yyyy-MM-dd", // the format of the date value stored in the cell
-            elementAttributes:{
-                title:"slide bar to choose option" // custom tooltip
-            }
-        }},
-        {title: "Fin", field: "Fin", editor:"date", editorParams:{
-            // min:"01/01/2020", // the minimum allowed value for the date picker
-            // max:"02/12/2030", // the maximum allowed value for the date picker
-            format:"yyyy-MM-dd", // the format of the date value stored in the cell
-            elementAttributes:{
-                title:"slide bar to choose option" // custom tooltip
-            }
-        }},
+        {title: "Id", field: "id", editor: "input"},
+        {title: "Id Padre", field: "parent_id", editor: "input"},
+        {title: "Nombre", field: "name", editor: "input"},
+        {title: "Nivel", field: "level", editor: "input"},
+        {title: "Orden", field: "order", editor: "input"},
+        {title: "Descripcion Caso", field: "case_description", editor: "input"},
+        {title: "Titulo Tendencias", field: "tendencies_title", editor: "input"},
+        {title: "Titulo Tendencias Hijos", field: "children_tendencies_title", editor: "input"},
+        {title: "Titulo Distribucion", field: "distribution_title", editor: "input"},
+        {title: "Titulo Mapa Departamentos", field: "regions_heatmap_title", editor: "input"},
+        {title: "Titulo Mapa Distritos", field: "districts_heatmap_title", editor: "input"},
     ];
     document.addEventListener('DOMContentLoaded', () => {
         const elementId = '#table-container';

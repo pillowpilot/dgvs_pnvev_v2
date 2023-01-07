@@ -1,0 +1,25 @@
+@charset 'utf-8';
+@use './admin';
+
+main {
+    article {
+        display: grid;
+        grid-template-areas:
+            "left content right"
+            "left footer right";
+        grid-template-columns: 1fr 10fr 1fr;
+        grid-template-rows: 1fr 3rem;
+        gap: 1rem; 
+
+        main {
+            grid-area: content;
+            padding-top: 2rem;  
+        }
+    }
+}
+
+div#container {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+}
