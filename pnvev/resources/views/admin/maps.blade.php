@@ -1,14 +1,14 @@
 @extends('layouts.admin', ['user' => $user])
 
 @section('stylesheets')
-<link rel="stylesheet" href="{{ asset('css_v2/maps.css') }}">
+<link rel="stylesheet" href="{{ asset('css_v2/user.css') }}">
 @stop
 
 @section('main')
 
-<article style="grid-area: regions;">
-    <span>Actualizar mapa de departamentos</span>
-    <form action="{{ route('admin.maps.storeRegion') }}" method="post" enctype="multipart/form-data">
+<article>
+    <span class="article-title">Actualizar mapa de departamentos</span>
+    <form class="article-content" action="{{ route('admin.maps.storeRegion') }}" method="post" enctype="multipart/form-data">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
@@ -17,19 +17,21 @@
             </div>
         </main>
         <footer>
-            <button type="submit">Guardar</button>
+            <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="regionsSubmitStatus">
                 @if(isset($regionsStatusMessageText))
                 {{ $regionsStatusMessageText }}
+                @else
+                Aqui va un mensaje de error!
                 @endif
             </span>
         </footer>
     </form>
 </article>
 
-<article style="grid-area: districts;">
-    <span>Actualizar mapa de distritos</span>
-    <form action="{{ route('admin.maps.storeDistrict') }}" method="post" enctype="multipart/form-data">
+<article>
+    <span class="article-title">Actualizar mapa de distritos</span>
+    <form class="article-content" action="{{ route('admin.maps.storeDistrict') }}" method="post" enctype="multipart/form-data">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
@@ -38,7 +40,7 @@
             </div>
         </main>
         <footer>
-            <button type="submit">Guardar</button>
+            <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="districtsSubmitStatus">
                 @if(isset($districtsStatusMessageText))
                 {{ $districtsStatusMessageText }}

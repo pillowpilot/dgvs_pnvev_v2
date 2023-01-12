@@ -2,31 +2,32 @@
 
 @section('stylesheets')
 <link rel="stylesheet" href="{{ asset('css/tabulator/tabulator.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css_v2/table_manager.css') }}">
+<link rel="stylesheet" href="{{ asset('css_v2/user.css') }}">
 @stop
 
 @section('main')
 
 <article>
-    <main>
+    <span class="article-title">Modificar semana epidemiológica</span>
+    <main class="article-content">
         <div id="table-container"></div>
+        <footer>
+            <button class="admin-submit-button" id="add-row">Agregar fila al final</button>
+            <button class="admin-submit-button" id="clear-table">Limpiar</button>
+            <button class="admin-submit-button" id="reset-table">Restaurar</button>
+            <label for="file-selector">Cargar desde archivo CVS:</label>
+            <input type="file" id="file-selector" accept=".csv, .txt" >
+            <form action="{{ route('admin.epiweek.store') }}" method="post" id="table-data-form">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <button class="admin-submit-button" id="submit">Guardar</button>
+                <span class="submissionStatus" id="submitStatus">
+                    @if(isset($statusMessageText))
+                    {{ $statusMessageText }}
+                    @endif
+                </span>
+            </form>
+        </footer>
     </main>
-    <footer>
-        <button id="add-row">Agregar fila al final</button>
-        <button id="clear-table">Limpiar</button>
-        <button id="reset-table">Restaurar</button>
-        <label for="file-selector">Cargar desde archivo CVS:</label>
-        <input type="file" id="file-selector" accept=".csv, .txt" >
-        <form action="{{ route('admin.epiweek.store') }}" method="post" id="table-data-form">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <button id="submit">Guardar</button>
-            <span class="submissionStatus" id="submitStatus">
-                @if(isset($statusMessageText))
-                {{ $statusMessageText }}
-                @endif
-            </span>
-        </form>
-    </footer>
 </article>
 
 @stop

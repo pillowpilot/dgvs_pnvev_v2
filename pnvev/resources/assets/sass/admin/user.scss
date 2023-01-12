@@ -1,41 +1,33 @@
 @charset 'utf-8';
 @use './admin';
+@use '../components/button';
 
 body {
-    main {
-        /* grid-area: main; */
+    > main {
         display: grid;
-        grid-template-areas:
-            "left userform right"
-            "left emailform right"
-            "left passform right";
+        grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
         grid-template-columns: 1fr 10fr 1fr;
         gap: 3rem;
         padding: 1rem 0;
 
-        article {
-            display: grid;
-            grid-template-areas:
-                "title"
-                "form";
-            grid-template-rows: 2.5rem 1fr;
-            gap: 1rem;
-            max-height: 12rem;
+        > article {
+            grid-column-start: 2; // Put every article in the center column
 
-            span {
+            display: flex;
+            flex-direction: column;
+
+            .article-title {
                 font-size: 2rem;
                 font-weight: 600;
                 border-bottom: 1px solid #ccc;
             }
 
-            form {
-                display: grid;
-                grid-template-areas:
-                    "main"
-                    "footer";
-                grid-template-rows: 1fr 4rem;
-                gap: 1rem;
-                align-items: center;
+            .article-content {
+                flex-grow: 1;
+                padding: 0.75rem 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
 
                 .inputs {
                     display: grid;
@@ -44,18 +36,11 @@ body {
                     align-items: center;
                 }
 
-                main label {
-                    margin-right: 1rem;
-                }
-                
-                button[type="submit"] {
-                    padding: 0.5rem 1.5rem;
-                    background-color: #2071cc;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    font-weight: 600;
-                    cursor: pointer;
+                footer {
+                    display: flex;
+                    justify-content: left;
+                    align-items: center;
+                    gap: 1rem;
                 }
             }
         }

@@ -6,9 +6,9 @@
 
 @section('main')
 
-<article style="grid-area: userform;">
-    <span>Cambiar Nombre</span>
-    <form action="{{ route('admin.user.storeName') }}" method="post">
+<article>
+    <span class="article-title">Cambiar Nombre</span>
+    <form class="article-content" action="{{ route('admin.user.storeName') }}" method="post">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
@@ -17,7 +17,7 @@
             </div>
         </main>
         <footer>
-            <button type="submit">Guardar</button>
+            <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="nameSubmitStatus">
                 @if(isset($nameStatusMessageText))
                 {{ $nameStatusMessageText }}
@@ -27,9 +27,9 @@
     </form>
 </article>
 
-<article style="grid-area: emailform;">
-    <span>Cambiar Email</span>
-    <form action="{{ route('admin.user.storeEmail') }}" method="post">
+<article>
+    <span class="article-title">Cambiar Email</span>
+    <form class="article-content" action="{{ route('admin.user.storeEmail') }}" method="post">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
@@ -38,7 +38,7 @@
             </div>
         </main>
         <footer>
-            <button type="submit">Guardar</button>
+            <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="emailSubmitStatus">
                 @if(isset($emailStatusMessageText))
                 {{ $emailStatusMessageText }}
@@ -48,9 +48,9 @@
     </form>
 </article>
 
-<article style="grid-area: passform;">
-    <span>Cambiar Contraseña</span>
-    <form action="{{ route('admin.user.storePassword') }}" method="post">
+<article>
+    <span class="article-title">Cambiar Contraseña</span>
+    <form class="article-content" action="{{ route('admin.user.storePassword') }}" method="post">
         <main>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="inputs">
@@ -63,7 +63,7 @@
             </div>
         </main>
         <footer>
-            <button type="submit">Guardar</button>
+            <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="passwordSubmitStatus">
                 @if(isset($passwordStatusMessageText))
                 {{ $passwordStatusMessageText }}
