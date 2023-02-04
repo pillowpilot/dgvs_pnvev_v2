@@ -1,48 +1,33 @@
 @extends('layouts.admin', ['user' => $user])
 
 @section('stylesheets')
-<link rel="stylesheet" href="{{ asset('css_v2/home.css') }}">
-
-<style>
-
-</style>
+<link rel="stylesheet" href="{{ asset('css_v2/user.css') }}">
 @stop
 
 @section('main')
-<form action="{{ route('admin.homePage.store') }}" method="post">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <textarea name="value" id="value"></textarea>
-    <footer>
-        <button type="submit">Guardar</button>
-        <span id="submitStatus">
-            @if(isset($submitStatus))
-            Guardado correctamente.
-            @endif
-        </span>
-    </footer>
-</form>
+<article>
+    <span class="article-title">Modificar contenido de la pagina principal</span>
+    <form class="article-content" action="{{ route('admin.homePage.store') }}" method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <textarea name="value" id="value"></textarea>
+        <footer>
+            <button class="admin-submit-button" type="submit">Guardar</button>
+            <span class="submissionStatus" id="submitStatus">
+                @if(isset($submitStatus))
+                Guardado correctamente.
+                @endif
+            </span>
+        </footer>
+    </form>
+</article>
 @stop
 
 @section('scripts')
-<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
 <script>
     const EDITOR_INITIAL_CONTENT = `{!! $editorInitialContent !!}`;
     const REST_HOMEPAGE_CONTENT_URL = "{{ route('rest.homePage') }}";
-    document.addEventListener('DOMContentLoaded', () => {
-    const editor = tinymce.init({
-        selector: 'textarea#value',
-        language: 'es_MX',
-        content_css: "{{ asset('css/editor.css') }}",
-        setup: (editor) => {
-            editor.on('change', () => editor.save());
-            editor.on('init', () => editor.setContent(EDITOR_INITIAL_CONTENT));
-        },
-        plugins: [
-            'advlist', 'autolink', 'link', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
-            'visualblocks', 'visualchars', 'fullscreen', 'insertdatetime',
-            'media', 'table', 'template', 'help'
-        ],
-        });
-    });
+    const CONTENT_CSS = "{{ asset('css/editor.css') }}";
 </script>
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('js_v2/admin.js') }}" defer></script>
 @stop
