@@ -2,7 +2,6 @@
 
 @section('stylesheets')
 <link rel="stylesheet" href="{{ asset('css_v2/user.css') }}">
-<link rel="stylesheet" data-name="vs/editor/editor.main" href="../js/vs/editor/editor.main.css"/>
 @stop
 
 @section('main')
@@ -12,7 +11,7 @@
     <span class="article-title">Modificando la vista: {{ $viewToDisplay->TABLE_NAME }}</span>
     <form class="article-content" action="{{ route('admin.dbviews.store') }}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <div id="view-editor-container"></div>
+        <div id="view-editor-container" style="font-size:1rem;"></div>
         <input type="hidden" name="submissionType" value="save">
         <footer>
             <button class="admin-submit-button" type="submit">Guardar</button>
@@ -38,32 +37,11 @@
 @stop
 
 @section('scripts')
-<script src="{{ asset('js/jquery/jquery-3.6.1.js') }}"></script>
-<script src="{{ asset('js/jquery/select2/select2.full.js') }}"></script>
-<script>
-    var require = { paths: { vs: '../js/vs' } };
-</script>
-<script src="{{ asset('js/vs/loader.js') }}"></script>
-<script src="{{ asset('js/vs/editor/editor.main.nls.js') }}"></script>
-<script src="{{ asset('js/vs/editor/editor.main.js') }}"></script>
 @if (isset($viewToDisplay))
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        var editor = monaco.editor.create(document.getElementById('view-editor-container'), {
-            value: "{!! $viewToDisplay->VIEW_DEFINITION !!}",
-            language: 'sql',
-	        theme: 'vs-dark',
-            wordWrap: 'wordWrapColumn',
-            wordWrapColumn: 120,
-            wordWrapMinified: true,
-            // try "same", "indent" or "none"
-            wrappingIndent: 'same',
-            autoIndent: true,
-            formatOnPaste: true,
-            formatOnType: true
-        });
-        
-    });
+    const VIEW_EDITOR_CONTAINER_ID = 'view-editor-container';
+    const VIEW_DEFINITION = "{!! $viewToDisplay->VIEW_DEFINITION !!}";
 </script>
+<script src="{{ asset('js_v2/dbviews.js') }}" defer></script>
 @endif
 @stop
