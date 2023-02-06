@@ -19,6 +19,9 @@
         <footer>
             <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="nameSubmitStatus">
+                @if($errors->has('name'))
+                {{ $errors->first('name') }}
+                @endif
                 @if(isset($nameStatusMessageText))
                 {{ $nameStatusMessageText }}
                 @endif
@@ -40,6 +43,9 @@
         <footer>
             <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="emailSubmitStatus">
+                @if($errors->has('email'))
+                {{ $errors->first('email') }}
+                @endif
                 @if(isset($emailStatusMessageText))
                 {{ $emailStatusMessageText }}
                 @endif
@@ -65,6 +71,12 @@
         <footer>
             <button class="admin-submit-button" type="submit">Guardar</button>
             <span class="submissionStatus" id="passwordSubmitStatus">
+                @if($errors->has('password_new'))
+                {{ $errors->first('password_new') }}
+                @endif
+                @if($errors->has('password_old'))
+                {{ $errors->first('password_old') }}
+                @endif
                 @if(isset($passwordStatusMessageText))
                 {{ $passwordStatusMessageText }}
                 @endif
