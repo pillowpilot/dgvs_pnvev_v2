@@ -37,7 +37,7 @@
             <a href="{{ route('admin.diseases') }}">
                 <li>Modificar enfermedades</li>
             </a>
-            <a href="{{ route('admin.dbviews') }}">
+            <a href="{{ route('admin.dbviewsSelector') }}">
                 <li>Modificar vistas de casos</li>
             </a>
             <a href="{{ route('home') }}">
