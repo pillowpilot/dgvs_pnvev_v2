@@ -23,22 +23,22 @@
     <aside>
         <ul>
             <a href="{{ route('admin.homePage') }}">
-                <li>Modificar Pagina Principal</li>
+                <li>Pagina Principal</li>
             </a>
             <a href="{{ route('admin.epiweek') }}">
-                <li>Modificar Calendario</li>
-            </a>
-            <a href="{{ route('admin.user') }}">
-                <li>Modificar Perfil</li>
+                <li>Calendario</li>
             </a>
             <a href="{{ route('admin.maps') }}">
-                <li>Actualizar Mapas</li>
+                <li>Mapas</li>
             </a>
             <a href="{{ route('admin.diseases') }}">
-                <li>Modificar enfermedades</li>
+                <li>Enfermedades</li>
             </a>
             <a href="{{ route('admin.dbviewsSelector') }}">
-                <li>Modificar vistas de casos</li>
+                <li>Vistas de Casos</li>
+            </a>
+            <a href="{{ route('admin.user') }}">
+                <li>Usuario</li>
             </a>
             <a href="{{ route('home') }}">
                 <li>Volver</li>
