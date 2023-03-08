@@ -21,30 +21,15 @@ php ./pnvev/artisan migrate:refresh --seed
 
 If seeding (or migration) fails, try: composer dump-autoload
 
-TO Deploy
+PHP version on production server: 5.4.16
 
-frm_fleishmaniasis y epiweek deben de estar listos en la DB con root: (sin contraseña)
+Set Database
+------------
 
-cd /home/ubuntu/dgvs_pnvev_v2
-git pull
-sudo -i
-cd /opt/lampp/htdocs/
-rm -r dgvs_pnvev_v2
-cp -r /home/ubuntu/dgvs_pnvev_v2 .
-chown -R daemon:daemon dgvs_pnvev_v2
-chmod +x dgvs_pnvev_v2
-cd dgvs_pnvev_v2
-sh install-composer.sh
-cd pnvev
-php ../composer.phar install # Accept if asks to keep running as root
-cp .env.example .env
-php artisan key:generate
-nano .env # Replace APP_ENV=local for APP_ENV=production
-php artisan migrate:refresh --seed # Yes to everything
+1. Set default credentials: `root:` (empty password).
 
-TO prepare the database
-default credentials= root: (empty password)
-
+2. Create database and populate:
+```
 mysql -u root -p
 CREATE DATABASE dgvsops;
 USE dgvsops;
@@ -54,10 +39,51 @@ source /home/ubuntu/dgvs_pnvev_v2/frm_fleishmaniasis_DDL.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fleishmaniasis_DATA.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fchagas_DDL.sql
 source /home/ubuntu/dgvs_pnvev_v2/frm_fchagas_DATA.sql
+```
 
-### Manually create an user
-- Run `php artisan tinker`.
-- Type 
+Deployment
+----------
+
+frm_fleishmaniasis y epiweek deben de estar listos en la DB con root: (sin contraseña)
+
+**Database must be populated by this point.**
+
+1. Update local repo:
+```
+cd /home/ubuntu/dgvs_pnvev_v2
+git pull
+```
+2. Copy local repo into the webserver dir:
+```
+sudo -i
+cd /opt/lampp/htdocs/
+rm -r dgvs_pnvev_v2
+cp -r /home/ubuntu/dgvs_pnvev_v2 .
+```
+3. Set proper permissions:
+```
+chown -R daemon:daemon dgvs_pnvev_v2
+chmod +x dgvs_pnvev_v2
+```
+4. Install dependencies:
+```
+cd dgvs_pnvev_v2
+sh install-composer.sh
+cd pnvev
+php ../composer.phar install # Accept if asks to keep running as root
+```
+5. Run post scripts:
+```
+cp .env.example .env
+php artisan key:generate
+nano .env # Replace APP_ENV=local for APP_ENV=production
+php artisan migrate:refresh --seed # Yes to everything
+```
+
+Manually create an user
+-----------------------
+1. Run `php artisan tinker`.
+2. Type 
 ```
 $u = new App\User();
 $u->name = 'Administrator';
