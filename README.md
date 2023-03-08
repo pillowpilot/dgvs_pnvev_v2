@@ -23,6 +23,11 @@ If seeding (or migration) fails, try: composer dump-autoload
 
 PHP version on production server: 5.4.16
 
+Usefull commands
+----------------
+- Run `npm run dev` to compile and generate all files to serve.
+- Run `php artisan serve` to run the development server.
+
 Set Database
 ------------
 
