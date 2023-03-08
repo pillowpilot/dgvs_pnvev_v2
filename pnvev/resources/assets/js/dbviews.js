@@ -13,3 +13,16 @@ editor.session.setMode("ace/mode/mysql");
 editor.setShowPrintMargin(false);
 const formattedViewDefinition = format(VIEW_DEFINITION);
 editor.setValue(formattedViewDefinition);
+
+const form = document.getElementById(VIEW_EDITOR_FORM_ID);
+const editorValueField = document.getElementById(VIEW_EDITOR_VALUE_FIELD);
+
+form.onsubmit = (e) => {
+    
+    console.log(e);
+    console.log(editor.getValue());
+
+    editorValueField.setAttribute('value', editor.getValue());
+    
+    return true; // Continue 
+};

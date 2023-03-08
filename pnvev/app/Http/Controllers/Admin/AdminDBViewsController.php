@@ -10,9 +10,20 @@ class AdminDBViewsController extends Controller {
 
 	public function getListOfViewsAndDefinitions()
 	{
-		return \DB::select("SELECT TABLE_NAME, VIEW_DEFINITION  FROM information_schema.VIEWS WHERE TABLE_SCHEMA LIKE '" 
-			. env('DB_DATABASE') 
-			. "';");
+		$results = \DB::select(
+			"SELECT TABLE_NAME, VIEW_DEFINITION 
+			 FROM information_schema.VIEWS 
+			 WHERE TABLE_SCHEMA 
+			 LIKE '" . env('DB_DATABASE') . "';");
+
+		return $results;
+	}
+
+	public function modifyViewDefinition($viewName, $newDefinition)
+	{
+		// Use CREATE OR REPLACE VIEW instead of ALTER VIEW
+		// See: https://stackoverflow.com/q/47207029
+		\DB::statement("CREATE OR REPLACE VIEW " . $viewName . " AS (" . $newDefinition . ")");
 	}
 
 	/**
@@ -54,17 +65,20 @@ class AdminDBViewsController extends Controller {
 	 */
 	public function store(Request $request)
 	{
-		$user = $request->user();
 		$viewName = Session::get('viewName');
-		$views = $this->getListOfViewsAndDefinitions();
-		error_log(json_encode($views));
+		$newViewDefinition = $request['_editorValue'];
 		error_log($viewName);
+		error_log($newViewDefinition);
+
+		$this->modifyViewDefinition($viewName, $newViewDefinition);
+
+		$user = $request->user();
+		$views = $this->getListOfViewsAndDefinitions();
 
 		$viewToDisplay = array_values(
 			array_filter($views, 
 				function ($view) use ($viewName) { return $view->TABLE_NAME == $viewName; }
 			))[0];
-		error_log(json_encode($viewToDisplay));
 
 		error_log('Saving...');
 		return view('admin.dbviewsEditor', ['user' => $user, 'viewToDisplay' => $viewToDisplay]);
