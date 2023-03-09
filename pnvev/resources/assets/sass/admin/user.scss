@@ -47,6 +47,11 @@ body {
     }
 }
 
+// See: https://stackoverflow.com/a/70120008
+.tox-tinymce{
+    height: 90% !important;
+  }
+
 #view-editor-container {
     width: 100%;
     height: 100%;
