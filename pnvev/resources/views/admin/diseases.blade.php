@@ -2,7 +2,7 @@
 
 @section('stylesheets')
 <link rel="stylesheet" href="{{ asset('css/tabulator/tabulator.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css_v2/user.css') }}">
+<link rel="stylesheet" href="{{ asset('css_v2/admin.css') }}">
 @stop
 
 @section('main')
