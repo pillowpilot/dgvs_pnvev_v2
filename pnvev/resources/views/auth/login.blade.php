@@ -12,17 +12,17 @@
         <header>
             <span>Ingrese sus datos</span>
         </header>
-        <section>
         @if (count($errors) > 0)
-						<div class="alert alert-danger">
-							<strong>Errores:</strong><br><br>
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
+            <section>
+                <strong>Errores:</strong>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </section>
+		@endif
+        <section>
             <form action="{{ route('auth.loginform') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <label for="email">Email</label>
