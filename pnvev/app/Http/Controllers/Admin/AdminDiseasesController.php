@@ -74,6 +74,7 @@ class AdminDiseasesController extends Controller
                 \DB::table($tableName)->delete();
                 foreach($data as $row) {
                     $row = (array) $row;
+                    $row['parent_id'] = $row['parent_id'] == '' || $row['parent_id'] == 'null'? null: $row['parent_id'];
                     \DB::table($tableName)->insert($row);
                 }
             });
