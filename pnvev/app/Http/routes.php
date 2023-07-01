@@ -43,9 +43,12 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
     Route::get('/diseases', ['as' => 'admin.diseases', 'uses' => 'Admin\AdminDiseasesController@index']);
     Route::post('/diseases', ['as' => 'admin.diseases.store', 'uses' => 'Admin\AdminDiseasesController@store']);
 
-    Route::get('/viewselector', ['as' => 'admin.dbviewsSelector', 'uses' => 'Admin\AdminDBViewsController@index']);
-    Route::get('/vieweditor', ['as' => 'admin.dbviewsEditor', 'uses' => 'Admin\AdminDBViewsController@editor']);
-    Route::post('/viewsave', ['as' => 'admin.dbviews.store', 'uses' => 'Admin\AdminDBViewsController@store']);
+    // Route::get('/viewselector', ['as' => 'admin.dbviewsSelector', 'uses' => 'Admin\AdminDBViewsController@index']);
+    // Route::get('/vieweditor', ['as' => 'admin.dbviewsEditor', 'uses' => 'Admin\AdminDBViewsController@editor']);
+    // Route::post('/viewsave', ['as' => 'admin.dbviews.store', 'uses' => 'Admin\AdminDBViewsController@store']);
+
+    Route::get('/importer', ['as' => 'admin.importer', 'uses' => 'Admin\AdminImporterController@index']);
+    Route::post('/importer', ['as' => 'admin.importer.store', 'uses' => 'Admin\AdminImporterController@store']);
 });
 
 // Public pages

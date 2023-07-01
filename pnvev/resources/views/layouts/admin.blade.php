@@ -34,8 +34,8 @@
             <a href="{{ route('admin.diseases') }}">
                 <li>Enfermedades</li>
             </a>
-            <a href="{{ route('admin.dbviewsSelector') }}">
-                <li>Vistas de Casos</li>
+            <a href="{{ route('admin.importer') }}">
+                <li>Importar casos</li>
             </a>
             <a href="{{ route('admin.user') }}">
                 <li>Usuario</li>
