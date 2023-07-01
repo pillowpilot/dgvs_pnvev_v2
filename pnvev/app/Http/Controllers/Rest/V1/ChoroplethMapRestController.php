@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Caso;
+
 class ChoroplethMapRestController extends Controller
 {
     /**
@@ -66,11 +68,38 @@ class ChoroplethMapRestController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = [
-            [-58.038802, -23.805951],
-        ];
+        // error_log($request);
+        // error_log($id);
 
-        return response()->json($data);
+        $initialYear = $request->input('InitialYear'); // Required
+        $finalYear = 2022; // $request->input('FinalYear'); // Required
+        $initialEpiweek = $request->input('InitialEpiweek'); // Required
+        $finalEpiweek = $request->input('FinalEpiweek'); // Required
+
+        // select Latitud, Longitud from pnvev_casos where Year = $initialYear and SemanaEpidemiologica between (1, 53) and EnfermedadId = ?;
+        $model = \App\DiseaseV2::find($id);
+        // error_log($model->leafs()->map(function($model) { return $model->id; }));
+        $leafs = $model->leafs();
+        $leafs_ids = $leafs->map(function($item, $key) {
+            return $item->id;
+        });
+        $leafs_ids->push($model->id);
+        $leafs_ids = $leafs_ids->toArray();
+
+        $query = Caso::query();
+        $query->addSelect(['Latitud', 'Longitud']);
+
+        $query = $query
+            ->whereIn('EnfermedadId',$leafs_ids)
+            ->where('Year', '=', $initialYear)
+            ->where('SemanaEpidemiologica', '>=', 1)
+            ->where('SemanaEpidemiologica', '<=', 53);
+
+        // error_log($query->toSql());
+
+        $results = $query->get();
+
+        return response()->json($results);
     }
 
     /**
