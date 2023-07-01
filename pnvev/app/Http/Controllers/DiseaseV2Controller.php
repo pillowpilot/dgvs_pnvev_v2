@@ -30,6 +30,8 @@ class DiseaseV2Controller extends Controller
         } else {
             $current_epiweek = -1;
         }
+
+        error_log(json_encode($model));
         
         return view('disease', [
             'activeDisease' => $model,
