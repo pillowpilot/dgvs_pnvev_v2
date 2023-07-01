@@ -136,7 +136,7 @@
         </article>
     </div>
     <div class="article-wrapper">
-        <article class="heatmap rounded-corners">
+        <article class="region-heatmap heatmap rounded-corners">
             <header><a id="regions-heatmap">Distribución de {{ $diseaseCaseDescription }}, según departamentos de residencia en Paraguay, por año</a></header>
             <section class="toolbox rounded-corners">
                 <section class="filters rounded-corners">
@@ -162,7 +162,7 @@
         </article>
     </div>
     <div class="article-wrapper">
-        <article class="heatmap rounded-corners">
+        <article class="district-heatmap heatmap rounded-corners">
             <header><a id="districts-heatmap">Distribución de {{ $diseaseCaseDescription }}, según distritos de residencia en Paraguay, por año</a></header>
             <section class="toolbox rounded-corners">
                 <section class="filters rounded-corners">
