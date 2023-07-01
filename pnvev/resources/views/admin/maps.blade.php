@@ -21,8 +21,6 @@
             <span class="submissionStatus" id="regionsSubmitStatus">
                 @if(isset($regionsStatusMessageText))
                 {{ $regionsStatusMessageText }}
-                @else
-                Aqui va un mensaje de error!
                 @endif
             </span>
         </footer>
