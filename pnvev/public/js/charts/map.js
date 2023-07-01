@@ -27,6 +27,28 @@ class Choropleth {
         this.joinBy = joinBy;
     }
 
+    bindExportingButton(btnElement, exportFormat) {
+        btnElement.addEventListener('click', () => {
+            if(exportFormat === 'application/vnd.ms-excel') {
+                this.chart.downloadXLS();
+            }else if(exportFormat === 'text/csv') {
+                this.chart.downloadCSV();
+            }else{
+                this.chart.exportChart({
+                    type: exportFormat,
+                    filename: `chart`,
+                    scale: 1,
+                    chartOptions: {
+                        // chart: {
+                        //   width: 800, // Adjust the width as needed
+                        //   height: 600 // Adjust the height as needed
+                        // }
+                      }
+                });
+            }
+        });
+    }
+
     generateChartOptions() {
         let options = {
             chart: {
