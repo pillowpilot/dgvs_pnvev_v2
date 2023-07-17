@@ -116,14 +116,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     
                 _(groupedData).mapValues((yearData, year) => {
                     const yearDataCasted = yearData.map(({x, y}) => ({x: parseInt(x), y: parseInt(y)}));
-                    tendenciesChart_v2.addSeries(yearDataCasted, year)
+                    tendenciesChart_v2.addSeries(yearDataCasted, parseInt(year))
                 }).value();
 
                 // Add grand total (on top of plot)
                 const calculateTotal = (groupedData) => {
                     let grandTotal = 0;
                     for(const [year, yearData] of Object.entries(groupedData)) {
-                        const total = yearData.reduce((acc, {y}) => acc + y, 0);
+                        const total = yearData.reduce((acc, {y}) => acc + parseInt(y), 0);
                         grandTotal += total;
                     }
                     return grandTotal;
@@ -229,23 +229,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         GETParams.append('groupBy[]', 'Sexo');
         GETParams.append('groupBy[]', 'GrupoEtareo');
 
+        const categoriesPriorities = {
+            "SD": 0,
+            "< 2": 5,
+            "2 a 4": 10,
+            "5 a 19": 20,
+            "20 a 39": 30,
+            "40 a 49": 35,
+            "40 a 59": 40,
+            "60 y mas": 50
+        };
+
         fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/tendencies?` + GETParams)
             .then(res => res.json())
             .then(data => {
 
                 const categories = _(data).map('GrupoEtareo').uniq().value();
+                categories.sort((a, b) => categoriesPriorities[a] < categoriesPriorities[b]);
+                console.log(categories);
 
+                console.log(data);
                 const x = _(data)
                     .groupBy('Year')
                     .mapValues((yearData, year) => _(yearData).groupBy('Sexo').mapValues(v => v.map(o => [o.GrupoEtareo, o.Total])).value())
                     .value();
+                console.log(x);
 
                 horizontalChart_v2.removeAllSeries();
 
                 _(x[$('select[name="horizontalBar-year"]').find(':selected').text()]).mapValues((genderData, gender) => {
                     console.log(genderData);
                     const genderDataCasted = genderData.map(([x, y]) => [x, parseInt(y)]);
+                    // Add dummy values to sort categories
+                    for(let i = 0; i < categories.length; i++)
+                        if(!genderDataCasted.map(p => p[0]).find(o => o === categories[i]))
+                            genderDataCasted.push([categories[i], 0]);
+                    
+                    genderDataCasted.sort((a, b) => {
+                        const x = categories.indexOf(a[0]);
+                        const y = categories.indexOf(b[0]);
+                        // console.log(x, a, 'v.', y, b, ' = ', x < y);
+                        return x < y; 
+                    });
                     console.log(genderDataCasted);
+                    
                     horizontalChart_v2.addSeries(genderDataCasted, gender);
                 }).value();
 
@@ -255,8 +282,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Load regions map
 document.addEventListener('DOMContentLoaded', async () => {
-    const map_pr = fetch(`${ROOT_URL}/api/v1/regionMap`).then(res => res.json());
-    const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
+    const topo_data = await fetch(`${ROOT_URL}/api/v1/regionMap`).then(res => res.json());
+    console.log(topo_data);
 
     const yearSelect = new YearSelect(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`);
     yearSelect.setPlaceholder('Año');
@@ -266,44 +293,66 @@ document.addEventListener('DOMContentLoaded', async () => {
     map.setTitleText(REGIONS_HEATMAP_TITLE);
     map.setSubtitleText(`por departamentos`);
     map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
+    map.bindExportingButton(document.querySelector('article.region-heatmap button[name="export-pdf"]'), 'application/pdf');
+    map.bindExportingButton(document.querySelector('article.region-heatmap button[name="export-svg"]'), 'image/svg+xml');
+    map.bindExportingButton(document.querySelector('article.region-heatmap button[name="export-xls"]'), 'application/vnd.ms-excel');
+    map.draw();
 
-    Promise.all([map_pr, points_pr])
-        .then(([topo_data, points_data]) => {
-            const regionNameExtractor = (feature) => feature.properties.ADM1_ES;
-            const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
+    $('button[name="regions-heatmap-submit"]').on('click', (e) => {
+        const year = yearSelect.getValue();
 
-            const data = [];
-            for(const feature of topo_data.features){
-                const regionName = regionNameExtractor(feature);
-                const regionPolygon = regionPolygonExtractor(feature);
-                
-                var numberOfPoints = 0;
-                for(const point of points_data){
-                    const isInside = geometric.pointInPolygon(point, regionPolygon);
-                    if(isInside){
-                        numberOfPoints++;
+        if(year === '') console.log('Debe seleccionar un año');
+
+        if(year === '') return;
+
+        let GETParams = new URLSearchParams({
+            InitialYear: year,
+            InitialEpiweek: 1,
+            FinalEpiweek: 53,
+        });
+
+        fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map?` + GETParams)
+            .then(res => res.json())
+            .then(points_data => {
+                points_data = _(points_data).map((o) => [o.Longitud, o.Latitud]).value();
+                console.log(points_data);
+
+                const regionNameExtractor = (feature) => feature.properties.ADM1_ES;
+                const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
+
+                const data = [];
+                for(const feature of topo_data.features){
+                    const regionName = regionNameExtractor(feature);
+                    const regionPolygon = regionPolygonExtractor(feature);
+                    
+                    var numberOfPoints = 0;
+                    for(const point of points_data){
+                        const isInside = geometric.pointInPolygon(point, regionPolygon);
+                        if(isInside){
+                            numberOfPoints++;
+                        }
                     }
+
+                    const regionData = {
+                        name: regionName,
+                        value: numberOfPoints,
+                        // value: Math.random() * 100,
+                    };
+                    data.push(regionData);
                 }
 
-                const regionData = {
-                    name: regionName,
-                    value: numberOfPoints,
-                    // value: Math.random() * 100,
-                };
-                data.push(regionData);
-            }
-
-            map.setData(data);
-            map.setMapData(topo_data);
-            map.setJoinBy(['ADM1_ES', 'name']);
-            map.draw();
-        });
+                map.setData(data);
+                map.setMapData(topo_data);
+                map.setJoinBy(['ADM1_ES', 'name']);
+                map.draw();
+            });
+    });
 });
 
 // Load districts map
 document.addEventListener('DOMContentLoaded', async () => {
-    const map_pr = fetch(`${ROOT_URL}/api/v1/districtMap`).then(res => res.json());
-    const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
+    const topo_data = await fetch(`${ROOT_URL}/api/v1/districtMap`).then(res => res.json());
+    // const points_pr = fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map`).then(res => res.json());
 
     const yearSelect = new YearSelect(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/years`);
     yearSelect.setPlaceholder('Año');
@@ -313,36 +362,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     map.setTitleText(DISTRICTS_HEATMAP_TITLE);
     map.setSubtitleText(`por distritos`);
     map.setCreditsText(`Fuente: PNVEV - DGVS | Según los datos de la fecha: ${currentDate}`);
+    map.bindExportingButton(document.querySelector('article.district-heatmap button[name="export-pdf"]'), 'application/pdf');
+    map.bindExportingButton(document.querySelector('article.district-heatmap button[name="export-svg"]'), 'image/svg+xml');
+    map.bindExportingButton(document.querySelector('article.district-heatmap button[name="export-xls"]'), 'application/vnd.ms-excel');
+    map.draw();
 
-    Promise.all([map_pr, points_pr])
-        .then(([topo_data, points_data]) => {
-            const regionNameExtractor = (feature) => feature.properties.ADM2_ES;
-            const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
+    $('button[name="districts-heatmap-submit"]').on('click', (e) => {
+        const year = yearSelect.getValue();
 
-            const data = [];
-            for(const feature of topo_data.features){
-                const regionName = regionNameExtractor(feature);
-                const regionPolygon = regionPolygonExtractor(feature);
-                
-                var numberOfPoints = 0;
-                for(const point of points_data){
-                    const isInside = geometric.pointInPolygon(point, regionPolygon);
-                    if(isInside){
-                        numberOfPoints++;
+        if(year === '') console.log('Debe seleccionar un año');
+
+        if(year === '') return;
+
+        let GETParams = new URLSearchParams({
+            InitialYear: year,
+            InitialEpiweek: 1,
+            FinalEpiweek: 53,
+        });
+
+        fetch(`${ROOT_URL}/api/v1/diseases/${DISEASE_ID}/map?` + GETParams)
+            .then(res => res.json())
+            .then(points_data => {
+                points_data = _(points_data).map((o) => [o.Longitud, o.Latitud]).value();
+                console.log('>>', points_data);
+
+                const regionNameExtractor = (feature) => feature.properties.ADM2_ES;
+                const regionPolygonExtractor = (feature) => feature.geometry.coordinates[0][0];
+
+                const data = [];
+                for(const feature of topo_data.features){
+                    const regionName = regionNameExtractor(feature);
+                    const regionPolygon = regionPolygonExtractor(feature);
+                    
+                    var numberOfPoints = 0;
+                    for(const point of points_data){
+                        const isInside = geometric.pointInPolygon(point, regionPolygon);
+                        if(isInside){
+                            numberOfPoints++;
+                        }
                     }
+
+                    const regionData = {
+                        name: regionName,
+                        value: numberOfPoints,
+                        // value: Math.random() * 100,
+                    };
+                    data.push(regionData);
                 }
 
-                const regionData = {
-                    name: regionName,
-                    value: numberOfPoints,
-                    // value: Math.random() * 100,
-                };
-                data.push(regionData);
-            }
-
-            map.setData(data);
-            map.setMapData(topo_data);
-            map.setJoinBy(['ADM2_ES', 'name']);
-            map.draw();
-        });
+                map.setData(data);
+                map.setMapData(topo_data);
+                map.setJoinBy(['ADM2_ES', 'name']);
+                map.draw();
+            });
+    });
 });
