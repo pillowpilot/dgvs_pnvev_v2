@@ -78,7 +78,8 @@ class HorizontalBarsChart {
                 title: {
                     text: this.yAxisText,
                     style: chartYTitleStyle,
-                }
+                },
+                allowDecimals: false,
             },
             plotOptions: {
                 series: {
